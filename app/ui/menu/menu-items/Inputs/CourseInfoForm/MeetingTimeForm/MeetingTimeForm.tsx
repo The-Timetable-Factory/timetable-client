@@ -1,5 +1,5 @@
 import React from "react";
-import { meetingTime, daysSelection } from "../../../../../interfaces/coursesInterfaces";
+import { meetingTime, daysSelection } from "../../../../../../lib/interfaces/coursesInterfaces";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';

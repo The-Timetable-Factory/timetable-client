@@ -1,8 +1,8 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { useDarkModeContext } from "../ui/context/dark-mode-context";
+import { useDarkModeContext } from "../../ui/context/dark-mode-context";
 import Grid from "@mui/material/Grid";
-import Menu from '../ui/menu/menu'
+import Menu from '../../ui/menu/menu'
 export default function Page() {
     const { darkMode } = useDarkModeContext()
 

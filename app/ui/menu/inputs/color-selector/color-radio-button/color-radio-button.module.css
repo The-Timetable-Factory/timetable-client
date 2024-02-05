@@ -7,10 +7,6 @@
     cursor: pointer;
 }
 
-/* input[type="radio"] {
-    display: none;
-} */
-
-.radio {
+input[type="radio"] {
     display: none;
 }

@@ -57,14 +57,14 @@ export default function Footer() {
                         marginTop: 4
                     }}>
                     <Typography variant="body2" color="text.primary" align="center">
-                        Keep Updated With
+                        Tutorial
 
                     </Typography>
 
                     <Link
                         href="https://youtu.be/EQz99Z4ZECY"
                     >
-                        <IconButton >
+                        <IconButton color="info" >
                             <YouTubeIcon />
                         </IconButton>
                     </Link>

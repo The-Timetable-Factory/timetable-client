@@ -20,7 +20,7 @@ export default function LandingPage() {
                     <Grid item xs={12} md={6} className="center">
                         <div style={{ padding: "0vw 4vw 10vw 8vw", textAlign: "left" }}>
                             <Typography variant="h3" sx={{ py: "10vh", }}> Timetables That Perfectly Fit Your Iphone and Ipad Lockscreen</Typography>
-                            <Button variant="contained" color="info" size="large" onClick={() => router.push('/timetable')}> Create Now</Button>
+                            <Button variant="contained" color="info" size="large" onClick={() => router.push('/timetables')}> Create Now</Button>
                         </div>
                     </Grid>
                     <Grid item xs={12} md={6} style={{ display: "flex", alignItems: "center" }}>

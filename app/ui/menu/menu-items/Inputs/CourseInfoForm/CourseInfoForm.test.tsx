@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { renderWithProviders } from '../../../../utils/test-utils';
 import CourseInfoForm from './CourseInfoForm';
-import { courseInfo, generateEmptyMeetingTime } from '../../../../interfaces/coursesInterfaces';
+import { courseInfo, generateEmptyMeetingTime } from '../../../../../lib/interfaces/coursesInterfaces';
 import { initialIphoneState } from '../../../../store/settings-slice';
 import { initialTimetableState } from '../../../../store/timetable-slice';
 import { initialPagesState } from '../../../../store/pages-slice';

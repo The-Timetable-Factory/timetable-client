@@ -1,5 +1,5 @@
 import React from "react";
-import { useDarkModeContext } from "../../../../context/dark-mode-context";
+import { useDarkModeContext } from "../../../context/dark-mode-context";
 import IconButton from "@mui/material/IconButton";
 import ColorizeIcon from '@mui/icons-material/Colorize';
 

@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useCollapseContext } from "../../../../context/collapseContext";
 
 // import interfaces
-import { courseInfo, meetingTime, generateEmptyMeetingTime } from "../../../../interfaces/coursesInterfaces";
+import { courseInfo, meetingTime, generateEmptyMeetingTime } from "../../../../../lib/interfaces/coursesInterfaces";
 
 // import MUI components
 import TextField from "@mui/material/TextField";

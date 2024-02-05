@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./colorRadioButton.module.css";
-import { useDarkModeContext } from "../../../../../context/dark-mode-context";
+import { useDarkModeContext } from "../../../../context/dark-mode-context";
 
 interface ColorRadioButtonProps {
     // name of the radio button

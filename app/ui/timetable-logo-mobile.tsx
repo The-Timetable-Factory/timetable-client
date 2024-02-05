@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import Button from "@mui/material/IconButton"
 import Link from "next/link";
 
-export default function TimetableLogo() {
+export default function TimetableLogoMobile() {
     const { darkMode, setDarkMode } = useDarkModeContext();
     const router = useRouter()
 
@@ -17,7 +17,6 @@ export default function TimetableLogo() {
 
             {/* Display the School Is Factory logo based on dark mode */}
             <div onClick={() => router.push('/')} style={{ display: "flex", flexDirection: "row", cursor: "pointer" }}>
-
                 {darkMode ? (
                     <Image
                         src={TimetableFactoryBrownLogo}
@@ -30,11 +29,6 @@ export default function TimetableLogo() {
                         alt="School Is Factory Black Logo"
                         height={48} style={{}} />
                 )}
-                {/* Branding and title */}
-                <div className="center" style={{ cursor: "pointer" }}>
-                    <Typography variant="h4" sx={{ fontSize: "1.8rem", lineHeight: 1 }}>Timetable Factory</Typography>
-                    <Typography variant="caption" sx={{ lineHeight: 1 }}>By SCHOOL IS FACTORY</Typography>
-                </div>
             </div>
 
         </>
