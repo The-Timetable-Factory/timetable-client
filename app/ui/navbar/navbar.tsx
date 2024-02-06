@@ -24,8 +24,9 @@ import TimetableLogoMobile from "../timetable-logo-mobile";
 export default function Navbar() {
     // Access the darkMode state and setDarkMode function from the DarkModeContext
     const { darkMode } = useDarkModeContext();
-    const deviceWidth = window.innerWidth
-    if (window.innerWidth > 600) {
+    let isDesktop;
+    if (typeof window !== "undefined") {
+        isDesktop = window.innerWidth > 600
 
     }
 
@@ -39,12 +40,12 @@ export default function Navbar() {
                     boxShadow: "0px 0px 0px",
                     borderStyle: "none none solid none",
                     borderColor: `${darkMode ? "#232323" : "#C2B8A3"}`,
-                    borderWidth: "1px"
+                    borderWidth: "0px"
                 }}
             >
                 <Toolbar>
                     {
-                        window.innerWidth > 600 ? <TimetableLogo /> : <TimetableLogoMobile />
+                        isDesktop ? <TimetableLogo /> : <TimetableLogoMobile />
                     }
                     <Link href="/about">
                         <IconButton color="info" data-testid="info">

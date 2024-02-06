@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import SettingCSS from "./DisplaySettings.module.css"
 import GridSizing from "./GridSizing/GridSizing";
-import DaysSelection from "../../Inputs/DaysSelection/DaysSelection";
+import DaysSelection from "../../../inputs/DaysSelection/DaysSelection";
 import Typography from "@mui/material/Typography";
 // import { useSelector } from "react-redux";
 import Alert from "@mui/material/Alert"

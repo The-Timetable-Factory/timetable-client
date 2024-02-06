@@ -2,10 +2,14 @@
 import PickADisplay from "./menu-items/pick-a-display/PickADisplay";
 import SelectATheme from "./menu-items/select-a-theme/SelectATheme";
 import Styling from "./menu-items/styling/Styling"
+import CourseInfoForm from "./inputs/course-info-form/course-info-form"
 import Collapsible from "./collapsible/Collapsible";
-import DevicesIcon from '@mui/icons-material/Devices';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import StyleIcon from '@mui/icons-material/Style';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
+import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
+import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
 
 export default function Menu() {
     return (
@@ -14,21 +18,28 @@ export default function Menu() {
                 <Collapsible
                     title={"Pick A Display"}
                     component={<PickADisplay />}
-                    icon={<DevicesIcon sx={{ position: "absolute", right: "4%" }} />}
+                    icon={<DevicesOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
                     backgroundColor="#DAD6CE"
                     isCourse={false} />
 
                 <Collapsible
                     title={"Select A Theme"}
                     component={<SelectATheme />}
-                    icon={<StyleIcon sx={{ position: "absolute", right: "4%" }} />}
+                    icon={<StyleOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
                     backgroundColor="#DAD6CE"
                     isCourse={false} />
 
                 <Collapsible
                     title={"Styling"}
                     component={<Styling />}
-                    icon={<ColorLensIcon sx={{ position: "absolute", right: "4%" }} />}
+                    icon={<ColorLensOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
+                    backgroundColor="#DAD6CE"
+                    isCourse={false} />
+
+                <Collapsible
+                    title={"Add A Course"}
+                    component={<CourseInfoForm />}
+                    icon={<AddCircleOutlineOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
                     backgroundColor="#DAD6CE"
                     isCourse={false} />
 

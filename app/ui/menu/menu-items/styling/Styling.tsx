@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import ColorSelector from "../Inputs/ColorSelector/ColorSelector";
+import ColorSelector from "../../inputs/color-selector/color-selector";
 import { SESAME } from "@/app/lib/data/theme-constants";
 import YesNoRadio from "./yes-no-radio/YesNoRadio";
 

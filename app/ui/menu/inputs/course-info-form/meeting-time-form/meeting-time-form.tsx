@@ -1,5 +1,5 @@
 import React from "react";
-import { meetingTime, daysSelection } from "../../../../../../lib/interfaces/coursesInterfaces";
+import { meetingTime, daysSelection } from "@/app/lib/interfaces/coursesInterfaces";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -10,7 +10,7 @@ import dayjs, { Dayjs } from "dayjs";
 import MeetingTimeFormCSS from './meetingTimeForm.module.css'
 import DaysSelection from "../../DaysSelection/DaysSelection";
 import { Typography } from "@mui/material";
-import { useDarkModeContext } from "../../../../../context/DarkModeContext";
+import { useDarkModeContext } from "../../../../context/dark-mode-context";
 
 export interface MeetingTimeFormProps {
     key: number,

@@ -3,8 +3,8 @@ import { capitalize } from "@mui/material";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup';
-import { daysSelection } from "../../../../../lib/interfaces/coursesInterfaces";
-import { DaysRange } from "../../../../../lib/interfaces/settingsInterfaces";
+import { daysSelection } from "@/app/lib/interfaces/coursesInterfaces";
+import { DaysRange } from "@/app/lib/interfaces/settingsInterfaces";
 
 interface daysSelectionProps<T extends daysSelection | DaysRange> {
     days: T,
@@ -25,7 +25,7 @@ function DaysSelection<T extends daysSelection | DaysRange>(props: daysSelection
 
     return (
         <>
-            <FormGroup row className="centerR">
+            <FormGroup row>
                 {Object.keys(days).map((day) => (
                     <FormControlLabel
                         key={day}
