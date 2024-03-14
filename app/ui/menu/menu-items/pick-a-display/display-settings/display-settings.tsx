@@ -1,95 +1,84 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import SettingCSS from "./DisplaySettings.module.css"
-import GridSizing from "./GridSizing/GridSizing";
-import DaysSelection from "../../../inputs/DaysSelection/DaysSelection";
+import GridSizing from "./grid-sizing/grid-sizing";
+import DaysSelection from "../../../inputs/day-selection/day-selection";
 import Typography from "@mui/material/Typography";
-// import { useSelector } from "react-redux";
 import Alert from "@mui/material/Alert"
-// import { settingsActions } from "../../../../store/settings-slice";
-// import { RootState, useDispatch } from "../../../../store/index"
 // import { getTimetable } from "../../../../store/timetable-action";
-import Widgets from "./Widgets/Widgets";
+import Widgets from "./widgets/widgets";
 // import { getPages } from "../../../../store/pages-action";
-// import { useCollapseContext } from "../../../context/collapseContext";
+import { useIphoneSettingsStore } from "@/app/lib/store/iphone-settings-store";
+import { useIpadSettingsStore } from "@/app/lib/store/ipad-settings-store";
+import { useLetterSettingsStore } from "@/app/lib/store/letter-settings-store";
+import { useA4SettingsStore } from "@/app/lib/store/a4-settings-store";
+import { DaysRange } from "@/app/lib/interfaces/settings-interfaces";
 
 interface SettingsProps {
-    device: string
+    display: string
 }
 
 export default function Settings(props: SettingsProps) {
-
-    // const [device, useDevice] = useState("iphone")
-    const initialIpadDays = {
-        mon: true,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: true,
-        sun: true
+    let displaySettingsStore: any;
+    switch (props.display) {
+        case "iphone":
+            displaySettingsStore = useIphoneSettingsStore
+            break;
+        case "ipad":
+            displaySettingsStore = useIpadSettingsStore
+            break;
+        case "letter":
+            displaySettingsStore = useLetterSettingsStore
+            break;
+        case "a4":
+            displaySettingsStore = useA4SettingsStore
+            break;
+        default:
+            throw new Error("Invalid device type")
     }
-    const [daysRange, useDaysRange] = useState(initialIpadDays)
-    const [courseGridWidth, useCourseGridWidth] = useState(49)
-    const [courseGridHeight, useCourseGridHeight] = useState(49)
-    const [widgets, useWidgets] = useState(false)
 
-    // const dispatch = useDispatch();
-    // const device = useSelector((state: RootState) => state.settings.device)
-    // const daysRange = useSelector((state: RootState) => state.settings.daysRange)
-    // const courseGridWidth = useSelector((state: RootState) => state.settings.courseGridWidth)
-    // const courseGridHeight = useSelector((state: RootState) => state.settings.courseGridHeight)
-    // const widgets = useSelector((state: RootState) => state.settings.widgets)
+
+    const daysRange = displaySettingsStore((state: any) => state.daysRange)
+    const courseGridWidth = displaySettingsStore((state: any) => state.courseGridWidth)
+    const courseGridHeight = displaySettingsStore((state: any) => state.courseGridHeight)
+    const widgets = displaySettingsStore((state: any) => state.widgets)
     const [errorMessage, setErrorMessage] = useState<string>('')
 
-    // useEffect(() => {
-    //     dispatch(settingsActions.fetchSettings(device))
-    // }, [dispatch, device])
-
-    function handleDaysChange(name: string) {
-        // dispatch(settingsActions.setDaysRange(value))
+    function handleDaysChange(name: string, value: DaysRange) {
+        displaySettingsStore.setState({ daysRange: value })
     }
 
-    // function handleDaysChange(name: string, value: DaysRange) {
-    //     // dispatch(settingsActions.setDaysRange(value))
-    // }
-
     const handleCourseGridWidthChange = useCallback((value: number) => {
-        // dispatch(settingsActions.setCourseGridWidth(value))
+        displaySettingsStore.setState({ courseGridWidth: value })
     }, [])
 
     const handleCourseGridHeightChange = useCallback((value: number) => {
-        // dispatch(settingsActions.setCourseGridHeight(value))
+        displaySettingsStore.setState({ courseGridHeight: value })
     }, [])
 
-
     function handleWidgetsChange(value: boolean) {
-        // dispatch(settingsActions.setWidgets(value))
+        displaySettingsStore.setState({ widgets: value })
     }
 
     function resetToDefault() {
-        // dispatch(settingsActions.resetToDefault())
+
     }
 
     function onSubmit() {
-        // dispatch(settingsActions.sendSettings())
-        // dispatch(getPages())
-        // dispatch(getTimetable())
-        // setCollapse(true)
+
     }
 
     return (
         <>
             <div className="center menuItemInnerInput" data-testid="setting">
 
-                <Typography variant="h6">{props.device} Display Settings</Typography>
+                <Typography variant="h6">{props.display} Display Settings</Typography>
 
                 {errorMessage && <Alert severity="error" onClose={() => { setErrorMessage("") }}>{errorMessage}</Alert>}
                 <DaysSelection days={daysRange} handleChange={handleDaysChange} />
 
                 <table className={SettingCSS.table}>
                     <tbody>
-
                         <tr>
                             <th>
                                 <Typography variant="body1">Grid Width: </Typography>
@@ -110,7 +99,7 @@ export default function Settings(props: SettingsProps) {
                         </tr>
 
                         {
-                            props.device === "iphone" &&
+                            props.display === "iphone" &&
                             <tr>
                                 <th>
                                     <Typography variant="body1">Widgets: </Typography>

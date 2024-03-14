@@ -5,15 +5,15 @@ interface DarkModeContextType {
     setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined)
+export const DarkMode = createContext<DarkModeContextType | undefined>(undefined)
 
-export function useDarkModeContext() {
-    const darkModeContext = useContext(DarkModeContext)
+export function useDarkMode() {
+    const darkMode = useContext(DarkMode)
 
-    if (darkModeContext === undefined) {
-        throw new Error("useDarkModeContext must be used with a DarkModeContext")
+    if (darkMode === undefined) {
+        throw new Error("useDarkMode must be used with a DarkModeContext")
     }
 
-    return darkModeContext;
+    return darkMode;
 
 }

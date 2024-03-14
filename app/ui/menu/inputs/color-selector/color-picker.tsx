@@ -1,5 +1,5 @@
 import React from "react";
-import { useDarkModeContext } from "../../../context/dark-mode-context";
+import { useDarkMode } from "../../../context/dark-mode-context";
 import IconButton from "@mui/material/IconButton";
 import ColorizeIcon from '@mui/icons-material/Colorize';
 
@@ -14,7 +14,7 @@ interface ColorPickerProps {
 }
 
 export default function ColorPicker(props: ColorPickerProps) {
-    const { darkMode } = useDarkModeContext();
+    const { darkMode } = useDarkMode();
 
     const shadowColor = darkMode ? "#DAD6CE66" : "#00000066"
     const iconColor = darkMode ? "#DAD6CE44" : "#00000044"

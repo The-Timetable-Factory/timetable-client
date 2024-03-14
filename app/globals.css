@@ -1,6 +1,57 @@
+html::-webkit-scrollbar {
+    width: 1vw;
+    /* scrollbar-color: #C2B8A3 #E6DDC6; */
+}
+
+html::-webkit-scrollbar-thumb {
+    background-color: #A1988299;
+    border-radius: 100px;
+}
+
+html::-webkit-scrollbar-track {
+    background-color: #DAD6CE99;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background-color: #A19882;
+}
+
+div::-webkit-scrollbar {
+    width: 0.6vw;
+    /* scrollbar-color: #C2B8A3 #E6DDC6; */
+}
+
+div::-webkit-scrollbar-thumb {
+    background-color: #A19882;
+    border-radius: 100px;
+}
+
+div::-webkit-scrollbar-track {
+    background-color: #DAD6CE11;
+}
+
+div::-webkit-scrollbar-thumb:hover {
+    background-color: #A19882;
+}
+
 body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table {
+    z-index: 3;
+}
+
+th {
+    font-family: 'DM Serif Display', serif;
+}
+
+form {
+    justify-content: center;
 }
 
 .center {
@@ -30,4 +81,18 @@ body {
     border-radius: 20px;
     padding: 2% 4%;
     margin: 10px 0px;
+}
+
+/* Container for DownloadImage, SaveAsPDF */
+.downloadContainer {
+    display: "flex";
+    flex-direction: "row";
+    border: 1px solid black;
+    border-radius: 100px;
+    margin: 10px;
+    background-color: "transparent";
+}
+
+.downloadContainerDarkMode {
+    border: 1px solid #DAD6CE;
 }

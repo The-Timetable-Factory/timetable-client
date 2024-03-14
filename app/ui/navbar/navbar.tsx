@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import DarkModeToggle from "./dark-mode-toggle";
-import { useDarkModeContext } from "../context/dark-mode-context";
+import { useDarkMode } from "../context/dark-mode-context";
 import { Icon, Toolbar } from "@mui/material";
 import TimetableLogo from "../timetable-logo";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -23,7 +23,7 @@ import TimetableLogoMobile from "../timetable-logo-mobile";
  */
 export default function Navbar() {
     // Access the darkMode state and setDarkMode function from the DarkModeContext
-    const { darkMode } = useDarkModeContext();
+    const { darkMode } = useDarkMode();
     let isDesktop;
     if (typeof window !== "undefined") {
         isDesktop = window.innerWidth > 600

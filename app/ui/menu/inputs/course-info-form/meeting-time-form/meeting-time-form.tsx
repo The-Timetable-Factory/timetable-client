@@ -1,5 +1,5 @@
 import React from "react";
-import { meetingTime, daysSelection } from "@/app/lib/interfaces/coursesInterfaces";
+import { meetingTime, daysSelection } from "@/app/lib/interfaces/courses-interfaces";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -8,9 +8,9 @@ import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import TextField from '@mui/material/TextField';
 import dayjs, { Dayjs } from "dayjs";
 import MeetingTimeFormCSS from './meetingTimeForm.module.css'
-import DaysSelection from "../../DaysSelection/DaysSelection";
+import DaysSelection from "../../day-selection/day-selection";
 import { Typography } from "@mui/material";
-import { useDarkModeContext } from "../../../../context/dark-mode-context";
+import { useDarkMode } from "../../../../context/dark-mode-context";
 
 export interface MeetingTimeFormProps {
     key: number,
@@ -27,7 +27,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
     const startTime = dayjs(props.meetingTime.startTime);
     const endTime = dayjs(props.meetingTime.endTime);
     const days = props.meetingTime.days;
-    const { darkMode } = useDarkModeContext()
+    const { darkMode } = useDarkMode()
 
     console.log("Meeting Time Form Rendered")
 

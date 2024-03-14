@@ -7,21 +7,21 @@ import Box from "@mui/material/Box";
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import RedditIcon from '@mui/icons-material/Reddit';
-import { useDarkModeContext } from "../context/dark-mode-context";
+import { useDarkMode } from "../context/dark-mode-context";
 import { CssBaseline } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 
 
 export default function Footer() {
-    const { darkMode } = useDarkModeContext()
+    const { darkMode } = useDarkMode()
     return (
         <>
             <Box
                 className="center"
                 sx={{
-                    borderStyle: "solid none none none",
-                    borderWidth: "1px",
-                    borderColor: `${darkMode ? "#232323" : "#C2B8A3"}`,
+                    // borderStyle: "solid none none none",
+                    // borderWidth: "1px",
+                    // borderColor: `${darkMode ? "#232323" : "#C2B8A3"}`,
                     p: 3,
                     flexShrink: 0
                 }}

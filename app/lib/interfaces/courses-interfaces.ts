@@ -26,6 +26,23 @@ export interface courseInfo {
     existed: boolean
 }
 
+export interface CourseGridInfos {
+    courseCode: string;
+    backgroundColor: string;
+    format: string;
+    location: string;
+    startTime: Dayjs;
+    endTime: Dayjs;
+    displayStartTime: Dayjs;
+    displayEndTime: Dayjs;
+    height: number;
+}
+
+export interface haveCourseGrid {
+    rowspan: number,
+    courseGridInfos: CourseGridInfos[]
+}
+
 const initialDaysSelection: daysSelection = {
     mon: false,
     tue: false,

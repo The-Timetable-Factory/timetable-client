@@ -1,4 +1,4 @@
-import { ThemeState } from '../interfaces/themeInterfaces';
+import { ThemeState } from '../interfaces/theme-interfaces';
 
 export const MILK_TEA: ThemeState = {
     TITLE: 'Milk Tea',

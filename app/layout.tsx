@@ -4,6 +4,8 @@ import "./globals.css";
 import UltimateProvider from "./ultimate-provider";
 import Navbar from "./ui/navbar/navbar";
 import Footer from "./ui/footer/footer";
+import { SessionProvider } from "next-auth/react"
+import { auth } from "../auth"
 
 export const metadata: Metadata = {
   metadataBase: new URL('http://localhost:3000'),
@@ -15,24 +17,31 @@ export const metadata: Metadata = {
     type: "website",
     description: "Stylish Timetable Wallpapers for Iphone. Organize Your Class Schedule on Your Lock Screen.",
     images: '/app/opengraph-image.png'
+  },
+  icons: {
+    icon: '/app/favicon.ico',
   }
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
+  const session = await auth()
   return (
+
     <html lang="en" suppressHydrationWarning>
-      <UltimateProvider>
-        <body>
-          <Navbar />
-          {children}
-        </body>
-        <Footer />
-      </UltimateProvider>
+      <SessionProvider session={session}>
+
+        <UltimateProvider >
+          <body>
+            <Navbar />
+            {children}
+          </body>
+          <Footer />
+        </UltimateProvider>
+      </SessionProvider>
     </html>
   );
 }

@@ -5,8 +5,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
-import { useDarkModeContext } from "../../../../context/dark-mode-context";
-import { ThemeState } from "../../../../../lib/interfaces/themeInterfaces"
+import { useDarkMode } from "../../../../context/dark-mode-context";
+import { ThemeState } from "../../../../../lib/interfaces/theme-interfaces"
 
 
 interface ColorPalletesProps {
@@ -19,10 +19,12 @@ export default function ColorPalattes(props: ColorPalletesProps) {
     const checked = props.checked
     const { TITLE, SUBTITLE, COLORS } = props.theme
 
-    const { darkMode } = useDarkModeContext()
+    console.log("Checked" + checked)
+
+    const { darkMode } = useDarkMode()
 
     function handleChecked() {
-        console.log(checked)
+        props.handleChange(TITLE)
     }
 
     return (

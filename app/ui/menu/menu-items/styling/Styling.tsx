@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { use, useState } from "react"
 import FormControl from "@mui/material/FormControl"
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -7,38 +7,48 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ColorSelector from "../../inputs/color-selector/color-selector";
-import { SESAME } from "@/app/lib/data/theme-constants";
+import { SESAME } from "@/app/lib/constants/theme-constants";
 import YesNoRadio from "./yes-no-radio/YesNoRadio";
+import Collapsible from "../../collapsible/Collapsible";
+import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
+import { useStylingStore } from "@/app/lib/store/styling-store";
 
 export default function Styling() {
-    const [title, setTitle] = useState("")
-    const [backgroundColor, setBackgroundColor] = useState("#123456")
-    const [headerColor, setHeaderColor] = useState("#654321")
-    const [clockType, setClockType] = useState(false)
-    const [displayTime, setDisplayTime] = useState(true)
+
+    const title = useStylingStore((state: any) => state.title)
+    const backgroundColor = useStylingStore((state: any) => state.backgroundColor)
+    const headerColor = useStylingStore((state: any) => state.headerColor)
+    const clockType = useStylingStore((state: any) => state.clockType)
+    const displayTime = useStylingStore((state: any) => state.displayTime)
+
 
     function handleSubmit() {
 
     }
 
     function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setTitle(event.target.value)
+        useStylingStore.setState({ title: event.target.value })
+        // setTitle(event.target.value)
     }
 
     function handleBackgroundColorChange(value: string) {
-        setBackgroundColor(value)
+        // setBackgroundColor(value)
+        useStylingStore.setState({ backgroundColor: value })
     }
 
     function handleHeaderColorChange(value: string) {
-        setHeaderColor(value)
+        // setHeaderColor(value)
+        useStylingStore.setState({ headerColor: value })
     }
 
     function handleClockTypeChange(value: boolean) {
-        setClockType(value)
+        // setClockType(value)
+        useStylingStore.setState({ clockType: value })
     }
 
     function handleDisplayTimeChange(value: boolean) {
 
+        useStylingStore.setState({ displayTime: value })
     }
 
     function resetToDefault() {
@@ -46,7 +56,12 @@ export default function Styling() {
     }
     return (
         <>
-            <div className="menuItemContainer center">
+            <Collapsible
+                title="Styling"
+                icon={<ColorLensOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
+                backgroundColor="#DAD6CE"
+                isCourse={false}
+            >
                 <form onSubmit={handleSubmit}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <table>
@@ -124,7 +139,8 @@ export default function Styling() {
                     <Button variant="outlined" type="submit" color="info">Submit</Button>
                 </form>
 
-            </div>
+            </Collapsible>
+
         </>
     )
 }

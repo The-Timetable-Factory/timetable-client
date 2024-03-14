@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import { useDarkModeContext } from "../context/dark-mode-context";
+import { useDarkMode } from "../context/dark-mode-context";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
  */
 function DarkModeToggle() {
     // Access the darkMode state and setDarkMode function from the DarkModeContext
-    const { darkMode, setDarkMode } = useDarkModeContext();
+    const { darkMode, setDarkMode } = useDarkMode();
 
     return (
         <>

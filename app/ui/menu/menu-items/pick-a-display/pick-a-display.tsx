@@ -2,7 +2,10 @@
 import React from "react";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
-import DisplaySettings from "./DisplaySettings/DisplaySettings"
+import DisplaySettings from "./display-settings/display-settings"
+import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
+import Collapsible from "../../collapsible/Collapsible";
+import { useDisplayStore } from "@/app/lib/store/display-store";
 // import { settingsActions } from "../../../../store/settings-slice";
 // import { getTimetable } from "../../../../store/timetable-action";
 // import { RootState, useDispatch } from '../../../../store';
@@ -15,7 +18,7 @@ export default function PickADisplay() {
     // const dispatch = useDispatch()
     // const device = useSelector((state: RootState) => state.settings.device)
     const devices = ["iphone", "ipad", "letter", "a4"]
-    const [device, setDevice] = React.useState("iphone")
+    const display = useDisplayStore((state: any) => state.display)
 
     // console.log("Pick A Display Rendered")
 
@@ -23,16 +26,22 @@ export default function PickADisplay() {
         // dispatch(settingsActions.fetchSettings(deviceType))
         // dispatch(getPages())
         // dispatch(getTimetable())
-        setDevice(deviceType)
+        useDisplayStore.setState({ display: deviceType })
     }
 
     return (
         <>
-            <div className="center menuItemContainer">
+
+            <Collapsible
+                title="Pick A Display"
+                icon={<DevicesOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
+                backgroundColor="#DAD6CE"
+                isCourse={false}
+            >
 
                 <div className="centerR " data-testid="pickADisplay">
 
-                    <ToggleButtonGroup aria-label="select device" color="info" value={device}>
+                    <ToggleButtonGroup aria-label="select device" color="info" value={display}>
                         {
                             devices.map((deviceType) => {
                                 return (
@@ -52,8 +61,8 @@ export default function PickADisplay() {
                     </ToggleButtonGroup>
 
                 </div>
-                <DisplaySettings device={device} />
-            </div>
+                <DisplaySettings display={display} />
+            </Collapsible>
         </>
     )
 

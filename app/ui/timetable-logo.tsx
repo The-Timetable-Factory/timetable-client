@@ -3,13 +3,13 @@ import Typography from "@mui/material/Typography";
 import Image from 'next/image'
 import TimetableFactoryBlackLogo from "../../public/timetable-factory-logo-black.png";
 import TimetableFactoryBrownLogo from "../../public/timetable-factory-logo-brown.png";
-import { useDarkModeContext } from "./context/dark-mode-context";
+import { useDarkMode } from "./context/dark-mode-context";
 import { useRouter } from 'next/navigation'
 import Button from "@mui/material/IconButton"
 import Link from "next/link";
 
 export default function TimetableLogo() {
-    const { darkMode, setDarkMode } = useDarkModeContext();
+    const { darkMode, setDarkMode } = useDarkMode();
     const router = useRouter()
 
     return (

@@ -1,22 +1,20 @@
 'use client';
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, PropsWithChildren } from "react";
 import IconButton from '@mui/material/IconButton';
 
 //import context
 import { CollapseContext } from "../../context/collapseContext";
-import { useDarkModeContext } from "../../context/dark-mode-context";
+import { useDarkMode } from "../../context/dark-mode-context";
 
 //import MUI component
 import Typography from "@mui/material/Typography";
 // import style
 import style from "./collapsible.module.css"
 
-interface CollapsibleProps {
+interface CollapsibleProps extends PropsWithChildren {
     // Title of the collapsible button
     title: string,
     // Component to be displayed when the collapsible button is clicked
-    component: JSX.Element,
-    // Icon to be displayed beside the title
     icon: unknown,
     // Background color of the collapsible button
     backgroundColor: string
@@ -28,7 +26,7 @@ interface CollapsibleProps {
 
 export default function Collapsible(props: CollapsibleProps) {
     // get the dark mode state
-    const { darkMode } = useDarkModeContext()
+    const { darkMode } = useDarkMode()
     // get the background color of the collapsible button
     const backgroundColor = props.backgroundColor
     // state to keep track of the collapse state
@@ -83,9 +81,10 @@ export default function Collapsible(props: CollapsibleProps) {
                 {/* Collapsible Component */}
                 {!collapse &&
                     <div
-
-                        data-testid="collapsibleContent">
-                        {props.component}
+                        className="center menuItemContainer"
+                        data-testid="collapsibleContent"
+                    >
+                        {props.children}
                     </div>}
             </CollapseContext.Provider>
 
