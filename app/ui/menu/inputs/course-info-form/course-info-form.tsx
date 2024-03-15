@@ -1,20 +1,19 @@
 'use client'
 
 import React, { useState, useCallback, useReducer } from "react";
-
 import { courseInfo, meetingTime, generateEmptyMeetingTime } from "@/app/lib/interfaces/courses-interfaces";
-
 import { SESAME } from "@/app/lib/constants/theme-constants";
 
 import MeetingTimeForm from "./meeting-time-form/meeting-time-form";
 import ColorSelector from "../../inputs/color-selector/color-selector";
 import { useCoursesStore } from "@/app/lib/store/courses-store";
+import { useTimetableStore } from "@/app/lib/store/timetable-store";
 
 // import MUI components
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography";
-import Alert from "@mui/material/Alert"
+
 
 interface CourseCodeState {
     courseCode: string,
@@ -47,9 +46,11 @@ export default function CourseInfoForm(props: courseInfo) {
 
     const { id, existed, } = props
     const [courseCodeState, dispatchCourseCode] = useReducer(courseCodeReducer, { courseCode: props.courseCode || '', courseCodeError: null });
-    // const [courseCode, setCourseCode] = useState<string>(props.courseCode)
     const [backgroundColor, setBackgroundColor] = useState<string>(props.backgroundColour)
     const [meetingTimeSchedules, setMeetingTimeSchedules] = useState<Array<meetingTime>>(props.meetingTimes)
+    const test = useCoursesStore((state: any) => state.test)
+    const removeCourse = useCoursesStore((state: any) => state.removeCourse)
+    const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
 
     function handleBackgroundColorChange(value: string) {
         setBackgroundColor(value)
@@ -79,9 +80,15 @@ export default function CourseInfoForm(props: courseInfo) {
         })
     }, []);
 
-    function handleSubmit() {
-        dispatchCourseCode({ type: 'handleCheck' })
+    function handleRemoveCourse() {
+        removeCourse(id)
+    }
 
+    function handleSubmit() {
+        console.log("handle submit")
+        dispatchCourseCode({ type: 'handleCheck' })
+        test({ courseCode: courseCodeState.courseCode, backgroundColour: backgroundColor, meetingTimes: meetingTimeSchedules, existed: true })
+        updateTimetable()
     }
     return (
         <>
@@ -130,6 +137,8 @@ export default function CourseInfoForm(props: courseInfo) {
             ))}
 
             <Button variant='outlined' color="info" onClick={handleAddMeetingTime} sx={{ margin: '4px' }}>Add Another Meeting Time</Button>
+
+            {existed && <Button color="error" variant="outlined" onClick={handleRemoveCourse} sx={{ margin: '4px' }}>Remove Course</Button>}
 
             <Button type="submit" variant="outlined" color="info" onClick={handleSubmit} sx={{ margin: '4px' }}>Submit</Button>
         </>

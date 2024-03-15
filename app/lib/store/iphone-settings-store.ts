@@ -12,7 +12,18 @@ const initialIphoneDays = {
     sun: false
 }
 
-export const useIphoneSettingsStore = create(
+interface IphoneSettingsState {
+    daysRange: DaysRange,
+    courseGridWidth: number,
+    courseGridHeight: number,
+    widgets: boolean,
+    setDaysRange: (newDaysRange: DaysRange) => void,
+    setCourseGridWidth: (newWidth: number) => void,
+    setCourseGridHeight: (newHeight: number) => void,
+    setWidgets: (newWidgets: boolean) => void
+}
+
+export const useIphoneSettingsStore = create<IphoneSettingsState>()(
     persist((set, get) => ({
         daysRange: initialIphoneDays,
         courseGridWidth: 49,
@@ -28,7 +39,7 @@ export const useIphoneSettingsStore = create(
             set(() => ({ courseGridHeight: newHeight }))
         },
         setWidgets: (newWidgets: boolean) => {
-            set(() => ({ widget: newWidgets }))
+            set(() => ({ widgets: newWidgets }))
         }
     }),
         { name: 'iphone-display-settings' }

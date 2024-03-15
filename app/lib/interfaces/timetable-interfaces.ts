@@ -66,6 +66,10 @@ function generateEmptyTimetableHours(startTime: Dayjs, endTime: Dayjs) {
 export function generateEmptyTimetableInfos(daysRange: DaysRange, startTime: Dayjs, endTime: Dayjs) {
     const emptyTimetableInfos = {} as Record<keyof daysSelection, timetableHours>;
 
+    console.log("daysRange", daysRange)
+    console.log(daysRange.mon)
+    console.log(daysRange.mon === true)
+
     if (daysRange.mon) {
         emptyTimetableInfos.mon = generateEmptyTimetableHours(startTime, endTime);
     }

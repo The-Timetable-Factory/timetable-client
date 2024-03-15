@@ -12,7 +12,16 @@ const initialIpadDays = {
     sun: true
 }
 
-export const useIpadSettingsStore = create(
+interface IpadSettingsState {
+    daysRange: DaysRange,
+    courseGridWidth: number,
+    courseGridHeight: number,
+    setDaysRange: (newDaysRange: DaysRange) => void,
+    setCourseGridWidth: (newWidth: number) => void,
+    setCourseGridHeight: (newHeight: number) => void
+}
+
+export const useIpadSettingsStore = create<IpadSettingsState>()(
     persist((set, get) => ({
         daysRange: initialIpadDays,
         courseGridWidth: 90,

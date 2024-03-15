@@ -12,7 +12,16 @@ const initialA4Days = {
     sun: true
 }
 
-export const useA4SettingsStore = create(
+interface A4SettingsState {
+    daysRange: DaysRange,
+    courseGridWidth: number,
+    courseGridHeight: number,
+    setDaysRange: (newDaysRange: DaysRange) => void,
+    setCourseGridWidth: (newWidth: number) => void,
+    setCourseGridHeight: (newHeight: number) => void
+}
+
+export const useA4SettingsStore = create<A4SettingsState>()(
     persist((set, get) => ({
         daysRange: initialA4Days,
         courseGridWidth: 76,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer } from "react";
 import { meetingTime, daysSelection } from "@/app/lib/interfaces/courses-interfaces";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,6 +12,31 @@ import DaysSelection from "../../day-selection/day-selection";
 import { Typography } from "@mui/material";
 import { useDarkMode } from "../../../../context/dark-mode-context";
 
+interface DaysSelectionState {
+    daysSelection: daysSelection
+    daysSelectionError: string | null;
+}
+
+interface DaysSelectionHandleChangeAction {
+    type: 'handleChange',
+    newDaysSelection: daysSelection
+}
+
+interface DaysSelectionAction {
+    type: 'handleCheck'
+}
+
+function daysSelectionReducer(state: DaysSelectionState, action: DaysSelectionHandleChangeAction | DaysSelectionAction) {
+    switch (action.type) {
+        case 'handleChange':
+            return { ...state, daysSelection: action.newDaysSelection, daysSelectionError: Object.values(action.newDaysSelection).includes(true) ? null : state.daysSelectionError }
+        case 'handleCheck':
+            return { ...state, daysSelectionError: Object.values(state.daysSelection).includes(true) ? null : 'Please select at least one day' }
+        default:
+            return state
+    }
+}
+
 export interface MeetingTimeFormProps {
     key: number,
     id: number,
@@ -21,7 +46,10 @@ export interface MeetingTimeFormProps {
     handleMeetingTimeSchedulesChange: (index: number, meetingTime: meetingTime) => void
 }
 
+
+
 function MeetingTimeForm(props: MeetingTimeFormProps) {
+    const [daysSelectionState, dispatchDaysSelection] = useReducer(daysSelectionReducer, { daysSelection: props.meetingTime.days, daysSelectionError: null });
     const courseType = props.meetingTime.courseType;
     const location = props.meetingTime.location;
     const startTime = dayjs(props.meetingTime.startTime);
@@ -29,7 +57,6 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
     const days = props.meetingTime.days;
     const { darkMode } = useDarkMode()
 
-    console.log("Meeting Time Form Rendered")
 
     const handleChange = (name: string, value: string | Dayjs | daysSelection) => {
         const newMeetingTime: meetingTime = {
@@ -41,6 +68,10 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
             [name]: value
         }
         props.handleMeetingTimeSchedulesChange(props.id, newMeetingTime)
+    }
+
+    function handleCheck() {
+        dispatchDaysSelection({ type: 'handleCheck' })
     }
 
     return (

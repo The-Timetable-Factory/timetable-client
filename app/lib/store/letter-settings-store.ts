@@ -12,7 +12,16 @@ const initialLetterDays = {
     sun: true
 }
 
-export const useLetterSettingsStore = create(
+interface LetterSettingsState {
+    daysRange: DaysRange,
+    courseGridWidth: number,
+    courseGridHeight: number,
+    setDaysRange: (newDaysRange: DaysRange) => void,
+    setCourseGridWidth: (newWidth: number) => void,
+    setCourseGridHeight: (newHeight: number) => void
+}
+
+export const useLetterSettingsStore = create<LetterSettingsState>()(
     persist((set, get) => ({
         daysRange: initialLetterDays,
         courseGridWidth: 76,

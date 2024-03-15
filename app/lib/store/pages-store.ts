@@ -3,6 +3,9 @@ import { useStylingStore } from './styling-store'
 import { useDisplayStore } from './display-store'
 import { useIphoneSettingsStore } from './iphone-settings-store'
 import { getDisplayConstant } from '../utils/developer-display'
+import { useIpadSettingsStore } from './ipad-settings-store'
+import { useLetterSettingsStore } from './letter-settings-store'
+import { useA4SettingsStore } from './a4-settings-store'
 import dayjs, { Dayjs } from "dayjs"
 
 
@@ -41,13 +44,16 @@ export const usePagesStore = create((set) => ({
         }
     ],
     setPagesStore: () => {
+        // Get start time and end time from styling store
         const startTime = (useStylingStore.getState() as { startTime: Dayjs }).startTime;
         const endTime = (useStylingStore.getState() as { endTime: Dayjs }).endTime;
         const startTimeHour = startTime.hour();
         const endTimeHour = endTime.hour() + 1; // End time is inclusive, e.g. End time is 18:00, it should be 18:00 - 19:00
         const title = (useStylingStore.getState() as { title: string }).title;
-        const courseGridHeight = (useStylingStore.getState() as { courseGridHeight: number }).courseGridHeight;
+
+
         const display = (useDisplayStore.getState() as { display: string }).display;
+        const courseGridHeight = (useIphoneSettingsStore.getState() as { courseGridHeight: number }).courseGridHeight;
         let widgets: boolean;
         display === "iphone" ? widgets = (useIphoneSettingsStore.getState() as { widgets: boolean }).widgets : widgets = false;
 
@@ -82,8 +88,5 @@ export const usePagesStore = create((set) => ({
 
         set(() => ({ numberOfPages: numberOfPages, pages: pages }))
 
-
-
-        // set(() => ({ numberOfPages: newNumberOfPages, pages: newPages }))
     }
 }))
