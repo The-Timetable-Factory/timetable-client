@@ -16,15 +16,15 @@ import { useStylingStore } from "@/app/lib/store/styling-store";
 export default function Styling() {
 
     const title = useStylingStore((state: any) => state.title)
+    const startTime = useStylingStore((state: any) => state.startTime)
+    const endTime = useStylingStore((state: any) => state.endTime)
     const backgroundColor = useStylingStore((state: any) => state.backgroundColor)
     const headerColor = useStylingStore((state: any) => state.headerColor)
     const clockType = useStylingStore((state: any) => state.clockType)
     const displayTime = useStylingStore((state: any) => state.displayTime)
 
 
-    function handleSubmit() {
 
-    }
 
     function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
         useStylingStore.setState({ title: event.target.value })
@@ -54,6 +54,10 @@ export default function Styling() {
     function resetToDefault() {
 
     }
+
+    function handleSubmit() {
+
+    }
     return (
         <>
             <Collapsible
@@ -62,82 +66,91 @@ export default function Styling() {
                 backgroundColor="#DAD6CE"
                 isCourse={false}
             >
-                <form onSubmit={handleSubmit}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <table>
-                            <tbody>
 
-                                <tr>
-                                    <th>
-                                        <Typography variant="body1">Title: </Typography>
-                                    </th>
-                                    <td>
-                                        <TextField label="(optional)" onChange={handleTitleChange} value={title} sx={{ m: "8px", maxWidth: "160px" }} />
-                                    </td>
-                                </tr>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <table>
+                        <tbody>
 
-                                <tr>
-                                    <th>
-                                        <Typography variant="body1">Start Time: </Typography>
-                                    </th>
-                                    <td>
-                                        <DesktopTimePicker minutesStep={60} skipDisabled={true} sx={{ m: 1 }} />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <Typography variant="body1">End Time:</Typography>
-                                    </th>
-                                    <td>
+                            <tr>
+                                <th>
+                                    <Typography variant="body1">Title: </Typography>
+                                </th>
+                                <td>
+                                    <TextField label="(optional)" onChange={handleTitleChange} value={title} sx={{ m: "8px", maxWidth: "160px" }} />
+                                </td>
+                            </tr>
 
-                                        <DesktopTimePicker minutesStep={60} skipDisabled={true} sx={{ m: 1 }} />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th >
-                                        <Typography variant="body1">Background Color: </Typography>
+                            <tr>
+                                <th>
+                                    <Typography variant="body1">Start Time: </Typography>
+                                </th>
+                                <td>
+                                    <DesktopTimePicker
+                                        value={startTime}
+                                        maxTime={endTime}
+                                        minutesStep={60}
+                                        skipDisabled={true}
+                                        sx={{ m: 1 }} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <Typography variant="body1">End Time:</Typography>
+                                </th>
+                                <td>
 
-                                    </th>
-                                    <td>
-                                        <ColorSelector name="backgroundColor" options={SESAME.COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
+                                    <DesktopTimePicker
+                                        value={endTime}
+                                        minTime={startTime}
+                                        minutesStep={60}
+                                        skipDisabled={true}
+                                        sx={{ m: 1 }} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th >
+                                    <Typography variant="body1">Background Color: </Typography>
 
-                                    </td>
-                                </tr>
+                                </th>
+                                <td>
+                                    <ColorSelector name="backgroundColor" options={SESAME.COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
 
-                                <tr>
-                                    <th>
-                                        <Typography variant="body1">Header Color: </Typography>
+                                </td>
+                            </tr>
 
-                                    </th>
-                                    <td >
-                                        <ColorSelector name="textColor" options={SESAME.COLORS} handleChange={handleHeaderColorChange} value={headerColor} direction="row" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <Typography variant="body1">Clock Type: </Typography>
-                                    </th>
-                                    <td>
-                                        <YesNoRadio value={clockType} handleChange={handleClockTypeChange} />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <Typography variant="body1">Display Time: </Typography>
-                                    </th>
-                                    <td>
-                                        <YesNoRadio value={displayTime} handleChange={handleDisplayTimeChange} />
-                                    </td>
-                                </tr>
+                            <tr>
+                                <th>
+                                    <Typography variant="body1">Header Color: </Typography>
+
+                                </th>
+                                <td >
+                                    <ColorSelector name="textColor" options={SESAME.COLORS} handleChange={handleHeaderColorChange} value={headerColor} direction="row" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <Typography variant="body1">Clock Type: </Typography>
+                                </th>
+                                <td>
+                                    <YesNoRadio value={clockType} handleChange={handleClockTypeChange} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <Typography variant="body1">Display Time: </Typography>
+                                </th>
+                                <td>
+                                    <YesNoRadio value={displayTime} handleChange={handleDisplayTimeChange} />
+                                </td>
+                            </tr>
 
 
-                            </tbody>
-                        </table>
-                    </LocalizationProvider>
+                        </tbody>
+                    </table>
+                </LocalizationProvider>
 
-                    <Button variant="outlined" color="info" onClick={resetToDefault} sx={{ margin: '4px' }}>Reset to default</Button>
-                    <Button variant="outlined" type="submit" color="info">Submit</Button>
-                </form>
+                <Button variant="outlined" color="info" onClick={resetToDefault} sx={{ margin: '4px' }}>Reset to default</Button>
+
 
             </Collapsible>
 

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import dayjs, { Dayjs } from "dayjs"
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 interface StylingState {
     title: string,
@@ -51,5 +51,16 @@ export const useStylingStore = create<StylingState>()(
             set(() => ({ displayTime: newDisplayTime }))
         },
     }),
-        { name: 'styling' }
+        {
+            name: 'styling',
+            storage: createJSONStorage(() => localStorage, {
+                reviver: (key, value) => {
+                    const styling = value as StylingState; // Add type assertion here
+                    styling.startTime = dayjs(styling.startTime);
+                    styling.endTime = dayjs(styling.endTime);
+                    return styling;
+                }
+            })
+        }
+
     ))

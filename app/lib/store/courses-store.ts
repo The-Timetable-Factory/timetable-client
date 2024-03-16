@@ -40,14 +40,14 @@ export const useCoursesStore = create<CoursesState>()(
     }),
         {
             name: 'courses',
-            onRehydrateStorage: (state) => {
-                for (let course of state.courses) {
-                    for (let meetingTime of course.meetingTimes) {
-                        meetingTime.startTime = dayjs(meetingTime.startTime)
-                        meetingTime.endTime = dayjs(meetingTime.endTime)
-                    }
-                }
-            },
+            // onRehydrateStorage: (state) => {
+            //     for (let course of state.courses) {
+            //         for (let meetingTime of course.meetingTimes) {
+            //             meetingTime.startTime = dayjs(meetingTime.startTime)
+            //             meetingTime.endTime = dayjs(meetingTime.endTime)
+            //         }
+            //     }
+            // },
             storage: createJSONStorage(() => localStorage, {
                 reviver: (key, value) => {
                     const courses = value as courseInfo[]; // Add type assertion here

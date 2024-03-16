@@ -1,11 +1,15 @@
 'use client'
 
 import React, { useState, useCallback, useReducer } from "react";
-import { courseInfo, meetingTime, generateEmptyMeetingTime } from "@/app/lib/interfaces/courses-interfaces";
-import { SESAME } from "@/app/lib/constants/theme-constants";
 
+// import interfaces
+import { courseInfo, meetingTime, generateEmptyMeetingTime } from "@/app/lib/interfaces/courses-interfaces";
+
+// import components
 import MeetingTimeForm from "./meeting-time-form/meeting-time-form";
 import ColorSelector from "../../inputs/color-selector/color-selector";
+
+//import stores
 import { useCoursesStore } from "@/app/lib/store/courses-store";
 import { useTimetableStore } from "@/app/lib/store/timetable-store";
 
@@ -14,6 +18,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography";
 
+import { SESAME } from "@/app/lib/constants/theme-constants";
 
 interface CourseCodeState {
     courseCode: string,
@@ -48,6 +53,7 @@ export default function CourseInfoForm(props: courseInfo) {
     const [courseCodeState, dispatchCourseCode] = useReducer(courseCodeReducer, { courseCode: props.courseCode || '', courseCodeError: null });
     const [backgroundColor, setBackgroundColor] = useState<string>(props.backgroundColour)
     const [meetingTimeSchedules, setMeetingTimeSchedules] = useState<Array<meetingTime>>(props.meetingTimes)
+    const [meetingTimeSchedulesErrors, setMeetingTimeSchedulesErrors] = useState<Array<string | null>>(new Array(meetingTimeSchedules.length).fill(null))
     const test = useCoursesStore((state: any) => state.test)
     const removeCourse = useCoursesStore((state: any) => state.removeCourse)
     const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
@@ -84,9 +90,38 @@ export default function CourseInfoForm(props: courseInfo) {
         removeCourse(id)
     }
 
-    function handleSubmit() {
-        console.log("handle submit")
+    function validateCourseInfoForm() {
+        let error = false;
         dispatchCourseCode({ type: 'handleCheck' })
+        if (courseCodeState.courseCodeError !== null) {
+            error = true;
+        }
+
+        meetingTimeSchedules.forEach((meetingTime, index) => {
+            if (Object.values(meetingTime.days).every(day => day === false)) {
+                setMeetingTimeSchedulesErrors(prev => {
+                    const newErrors = [...prev]
+                    newErrors[index] = 'Please select at least one day'
+                    return newErrors
+                })
+                error = true
+            }
+            else {
+                meetingTimeSchedulesErrors[index] = null
+            }
+
+            if (meetingTime.startTime.isAfter(meetingTime.endTime)) {
+                error = true
+            }
+        })
+        return error
+    }
+
+    function handleSubmit() {
+        const error = validateCourseInfoForm()
+        if (error) {
+            return
+        }
         test({ courseCode: courseCodeState.courseCode, backgroundColour: backgroundColor, meetingTimes: meetingTimeSchedules, existed: true })
         updateTimetable()
     }
@@ -133,6 +168,7 @@ export default function CourseInfoForm(props: courseInfo) {
                     meetingTime={meetingTime}
                     handleRemoveMeetingTime={handleRemoveMeetingTime}
                     handleMeetingTimeSchedulesChange={handleMeetingTimeSchedulesChange}
+                    daysSelectionError={meetingTimeSchedulesErrors[index]}
                 />
             ))}
 
