@@ -5,6 +5,8 @@ import { isColorDark } from "@/app/lib/utils/color"
 import iPhoneImg from "@/app/assets/images/iphone.png"
 import style from "./timetable-background.module.css"
 import { useDisplayStore } from "@/app/lib/store/display-store"
+import { useStylingStore } from "@/app/lib/store/styling-store"
+import useStore from "@/app/lib/hooks/useStore"
 import Image from "next/image"
 
 interface TimetableBackgroundProps extends PropsWithChildren {
@@ -15,7 +17,9 @@ export default function TimetableBackground(props: TimetableBackgroundProps) {
     const display = useDisplayStore((state: any) => state.display) //TODO: get from settings
     const widgets = false //TODO: get from settings
 
-    const backgroundColor = "#DAD6CE" //TODO: get from settings
+    // const backgroundColor = useStylingStore((state: any) => state.backgroundColor)
+    // const backgroundColor = useStore(useStylingStore, (state: any) => state.backgroundColor)
+    const backgroundColor = useStore(useStylingStore, (state: any) => state.backgroundColor)
 
     const { ASPECT_RATIO, BORDER_RADIUS, HEIGHT, WIDTH, SCALE, WATERMARK_POSITION, DEVICE_IMAGES } = getDisplayConstant(display, widgets)
 
@@ -39,7 +43,7 @@ export default function TimetableBackground(props: TimetableBackgroundProps) {
                         <img
                             key={display}
                             className={style.dateTime}
-                            src={isColorDark(backgroundColor) ? DEVICE_IMAGES.DATE_TIME.SRC.WHITE : DEVICE_IMAGES.DATE_TIME.SRC.BLACK}
+                            src={backgroundColor && isColorDark(backgroundColor) ? DEVICE_IMAGES.DATE_TIME.SRC.WHITE : DEVICE_IMAGES.DATE_TIME.SRC.BLACK}
                             style={DEVICE_IMAGES?.DATE_TIME.STYLE}
                             alt={`${display} date time`} />
                         {/* </div> */}
@@ -66,7 +70,7 @@ export default function TimetableBackground(props: TimetableBackgroundProps) {
                     {props.children}
                     <p
                         className={style.name}
-                        style={{ color: isColorDark(backgroundColor) ? "#FFFFFF" : "#000000", bottom: WATERMARK_POSITION }}>
+                        style={{ color: backgroundColor && isColorDark(backgroundColor) ? "#FFFFFF" : "#000000", bottom: WATERMARK_POSITION }}>
                         by thetimetablefactory.com
                     </p>
                 </div>

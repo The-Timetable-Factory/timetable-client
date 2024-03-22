@@ -34,7 +34,18 @@ function generatePages(startTime: any, endTime: any, numberOfRows: number): any 
 
 }
 
-export const usePagesStore = create((set) => ({
+interface PagesState {
+    numberOfPages: number,
+    pages: {
+        pageNumber: number,
+        startTime: Dayjs,
+        endTime: Dayjs
+    }[],
+    setPagesStore: () => void
+
+}
+
+export const usePagesStore = create<PagesState>((set) => ({
     numberOfPages: 2,
     pages: [
         {
@@ -53,7 +64,8 @@ export const usePagesStore = create((set) => ({
 
 
         const display = (useDisplayStore.getState() as { display: string }).display;
-        const courseGridHeight = (useIphoneSettingsStore.getState() as { courseGridHeight: number }).courseGridHeight;
+        const displaySettingsStore = display === "iphone" ? useIphoneSettingsStore : display === "ipad" ? useIpadSettingsStore : display === "letter" ? useLetterSettingsStore : useA4SettingsStore;
+        const courseGridHeight = (displaySettingsStore.getState() as { courseGridHeight: number }).courseGridHeight;
         let widgets: boolean;
         display === "iphone" ? widgets = (useIphoneSettingsStore.getState() as { widgets: boolean }).widgets : widgets = false;
 
@@ -79,13 +91,6 @@ export const usePagesStore = create((set) => ({
          */
 
         let pages = generatePages(startTime, endTime, numberOfRows)
-
-        const pagesInfo = {
-            numberOfPages: numberOfPages,
-            currPage: 1,
-            pages: pages
-        }
-
         set(() => ({ numberOfPages: numberOfPages, pages: pages }))
 
     }

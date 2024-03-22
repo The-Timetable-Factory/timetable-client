@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import dayjs from 'dayjs'
 import { courseInfo } from '@/app/lib/interfaces/courses-interfaces'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { meetingTime } from '@/app/lib/interfaces/courses-interfaces'
 
 interface CoursesState {
     courses: courseInfo[],
@@ -11,10 +12,8 @@ interface CoursesState {
 
 export const useCoursesStore = create<CoursesState>()(
     persist((set, get) => ({
-        courses: [] as courseInfo[],
+        courses: [],
         test: (newCourse: courseInfo) => {
-            console.log('add courses store test')
-            console.log(newCourse)
             if (newCourse.existed) {
                 console.log('existed')
                 set((state: any) => {
@@ -24,7 +23,8 @@ export const useCoursesStore = create<CoursesState>()(
                     return { courses: newCourses }
                 })
             } else {
-
+                console.log('not existed')
+                newCourse.existed = true
                 set((state: any) => {
                     return { courses: [...state.courses, newCourse] }
 
@@ -36,30 +36,28 @@ export const useCoursesStore = create<CoursesState>()(
                 const newCourses = state.courses.filter((c: courseInfo) => c.id !== courseId)
                 return { courses: newCourses }
             })
-        }
+        },
     }),
         {
             name: 'courses',
-            // onRehydrateStorage: (state) => {
-            //     for (let course of state.courses) {
-            //         for (let meetingTime of course.meetingTimes) {
-            //             meetingTime.startTime = dayjs(meetingTime.startTime)
-            //             meetingTime.endTime = dayjs(meetingTime.endTime)
-            //         }
-            //     }
-            // },
             storage: createJSONStorage(() => localStorage, {
-                reviver: (key, value) => {
-                    const courses = value as courseInfo[]; // Add type assertion here
-                    for (let course of courses) {
-                        for (let meetingTime of course.meetingTimes) {
-                            meetingTime.startTime = dayjs(meetingTime.startTime);
-                            meetingTime.endTime = dayjs(meetingTime.endTime);
-                        }
+                reviver: (key, value: any) => {
+                    if (value && value.type === 'dayjs') {
+                        console.log('dayjs reviver')
+                        console.log(value.value)
+                        return dayjs(value.value)
                     }
-                    return courses;
+                    return value
+
+                },
+                replacer: (key, value) => {
+                    if (key === 'startTime' || key === 'endTime') {
+                        console.log('startTime endTime replacer' + value)
+                        return { type: 'dayjs', value: value }
+                    }
+
+                    return value
                 }
             })
         }
     ))
-

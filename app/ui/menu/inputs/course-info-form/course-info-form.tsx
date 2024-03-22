@@ -12,6 +12,7 @@ import ColorSelector from "../../inputs/color-selector/color-selector";
 //import stores
 import { useCoursesStore } from "@/app/lib/store/courses-store";
 import { useTimetableStore } from "@/app/lib/store/timetable-store";
+import { useThemeStore } from "@/app/lib/store/theme-store";
 
 // import MUI components
 import TextField from "@mui/material/TextField";
@@ -57,6 +58,9 @@ export default function CourseInfoForm(props: courseInfo) {
     const test = useCoursesStore((state: any) => state.test)
     const removeCourse = useCoursesStore((state: any) => state.removeCourse)
     const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
+    const COLORS = useThemeStore((state: any) => state.theme.COLORS)
+    const USED_COLORS = useThemeStore((state: any) => state.theme.USED_COLORS)
+
 
     function handleBackgroundColorChange(value: string) {
         setBackgroundColor(value)
@@ -122,7 +126,7 @@ export default function CourseInfoForm(props: courseInfo) {
         if (error) {
             return
         }
-        test({ courseCode: courseCodeState.courseCode, backgroundColour: backgroundColor, meetingTimes: meetingTimeSchedules, existed: true })
+        test({ id: props.id, courseCode: courseCodeState.courseCode, backgroundColour: backgroundColor, meetingTimes: meetingTimeSchedules, existed: props.existed })
         updateTimetable()
     }
     return (
@@ -152,7 +156,7 @@ export default function CourseInfoForm(props: courseInfo) {
 
                         </td>
                         <td>
-                            <ColorSelector name={props.id} options={SESAME.COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
+                            <ColorSelector name={props.id} options={COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
                         </td>
                     </tr>
                 </tbody>

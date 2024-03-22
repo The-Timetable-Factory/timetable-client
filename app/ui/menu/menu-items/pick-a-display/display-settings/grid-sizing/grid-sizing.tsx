@@ -7,24 +7,29 @@ import Typography from "@mui/material/Typography";
 interface GridSizingProps {
     title: string,
     value: number,
-    handleChange: (value: number) => void
+    increase: () => void,
+    decrease: () => void
 }
 
 function GridSizing(props: GridSizingProps) {
 
     function incrementSize() {
-        props.handleChange(props.value + 1)
+        props.increase()
     }
 
     function decrementSize() {
-        props.handleChange(props.value - 1)
+        props.decrease()
     }
 
     return (
         <>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 
-                <IconButton data-testid="remove-button" onClick={decrementSize} sx={{ border: 'solid black 1px', borderRadius: '10px', margin: '10px' }} size="small">
+                <IconButton
+                    data-testid="remove-button"
+                    onClick={decrementSize}
+                    sx={{ border: 'solid black 1px', borderRadius: '10px', margin: '10px' }}
+                    size="small">
                     <RemoveIcon />
                 </IconButton>
 

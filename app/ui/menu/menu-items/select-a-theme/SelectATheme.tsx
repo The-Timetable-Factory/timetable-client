@@ -4,16 +4,17 @@ import ColorPalattes from "./color-palettes/ColorPalettes";
 import { THEMES } from "../../../../lib/constants/theme-constants";
 import { getTheme } from "../../../../lib/utils/styling-theme";
 import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
-import { themeStore } from "@/app/lib/store/theme-store";
+import { useThemeStore } from "@/app/lib/store/theme-store";
 import { ThemeState } from "@/app/lib/interfaces/theme-interfaces";
 
 export default function SelectATheme() {
 
-    const { TITLE } = themeStore((state: any) => state.theme)
-    const updateTheme = themeStore((state: any) => state.updateTheme)
+    const TITLE = useThemeStore((state: any) => state.theme.TITLE)
+    const setThemeColors = useThemeStore((state: any) => state.setThemeColors)
 
     function handleChecked(value: string) {
-        updateTheme(getTheme(value))
+        console.log(value + "from SelectATheme")
+        setThemeColors(value)
     }
 
 

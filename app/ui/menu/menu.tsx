@@ -1,4 +1,4 @@
-
+'use client'
 
 // import menu items
 import PickADisplay from "./menu-items/pick-a-display/pick-a-display";
@@ -13,9 +13,13 @@ import CourseInfoForm from "./inputs/course-info-form/course-info-form";
 import Collapsible from "./collapsible/Collapsible";
 import EditIcon from '@mui/icons-material/Edit';
 
+import useStore from "@/app/lib/hooks/useStore";
+
 
 export default function Menu() {
+    // const courses = useStore(useCoursesStore, (state: any) => state.courses)
     const courses = useCoursesStore((state: any) => state.courses)
+    console.log("courses " + courses)
 
     return (
         <>
@@ -39,7 +43,8 @@ export default function Menu() {
                             >
                                 <CourseInfoForm
                                     key={course.id}
-                                    {...course} />
+                                    {...course}
+                                />
                             </Collapsible>
                         )
                     })

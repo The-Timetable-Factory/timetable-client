@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { DaysRange, TimetableSettings } from "@/app/lib/interfaces/settings-interfaces";
 import { persist } from 'zustand/middleware'
+import { useTimetableStore } from './timetable-store';
 
 const initialIphoneDays = {
     mon: true,
@@ -18,8 +19,10 @@ interface IphoneSettingsState {
     courseGridHeight: number,
     widgets: boolean,
     setDaysRange: (newDaysRange: DaysRange) => void,
-    setCourseGridWidth: (newWidth: number) => void,
-    setCourseGridHeight: (newHeight: number) => void,
+    increaseCourseGridWidth: () => void,
+    decreaseCourseGridWidth: () => void,
+    increaseCourseGridHeight: () => void,
+    decreaseCourseGridHeight: () => void,
     setWidgets: (newWidgets: boolean) => void
 }
 
@@ -31,12 +34,20 @@ export const useIphoneSettingsStore = create<IphoneSettingsState>()(
         widgets: false,
         setDaysRange: (newDaysRange: DaysRange) => {
             set(() => ({ daysRange: newDaysRange }))
+            useTimetableStore.getState().updateTimetable()
         },
-        setCourseGridWidth: (newWidth: number) => {
-            set(() => ({ courseGridWidth: newWidth }))
+
+        increaseCourseGridWidth: () => {
+            set(state => ({ courseGridWidth: state.courseGridWidth + 1 }))
         },
-        setCourseGridHeight: (newHeight: number) => {
-            set(() => ({ courseGridHeight: newHeight }))
+        decreaseCourseGridWidth: () => {
+            set(state => ({ courseGridWidth: state.courseGridWidth - 1 }))
+        },
+        increaseCourseGridHeight: () => {
+            set(state => ({ courseGridHeight: state.courseGridHeight + 1 }))
+        },
+        decreaseCourseGridHeight: () => {
+            set(state => ({ courseGridHeight: state.courseGridHeight - 1 }))
         },
         setWidgets: (newWidgets: boolean) => {
             set(() => ({ widgets: newWidgets }))

@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import TimetableTd from "./timetable-td/timetable-td";
 import { timetableHours, timetableInfos } from "@/app/lib/interfaces/timetable-interfaces"
 import TimetableCSS from "./timetable.module.css"
@@ -14,6 +14,9 @@ import { useLetterSettingsStore } from "@/app/lib/store/letter-settings-store";
 import { useA4SettingsStore } from "@/app/lib/store/a4-settings-store";
 import { usePagesStore } from "@/app/lib/store/pages-store";
 import { useTimetableStore } from "@/app/lib/store/timetable-store";
+import { ClockType } from "@/app/lib/interfaces/styling-interfaces";
+import useStore from "@/app/lib/hooks/useStore";
+import { useCoursesStore } from "@/app/lib/store/courses-store";
 
 
 
@@ -54,11 +57,15 @@ export default function Timetable(props: TimetableProps) {
         default:
             throw new Error("Invalid display type")
     }
+    useEffect(() => {
+        useTimetableStore.getState().updateTimetable()
+    }, [])
 
     const currPage = props.currPage
-    const title = useStylingStore((state: any) => state.title)
+    const title = useStore(useStylingStore, (state: any) => state.title)
+    // console.log("Title from timetable", title)
+    // const title = useStylingStore((state: any) => state.title)
     // const timetable = useSelector((state: RootState) => state.timetable[currPage - 1])
-
     const startTime = usePagesStore((state: any) => state.pages[currPage - 1].startTime)
     const endTime = usePagesStore((state: any) => state.pages[currPage - 1].endTime)
     const headerColor = useStylingStore((state: any) => state.headerColor)
@@ -69,6 +76,7 @@ export default function Timetable(props: TimetableProps) {
     const widgets = displaySettingsStore((state: any) => state.widgets)
     const TOP = getDisplayConstant(display, widgets).TOP
     const hours = generateHours(startTime, endTime)
+
 
     return (
         <>
@@ -96,11 +104,17 @@ export default function Timetable(props: TimetableProps) {
 
                     {hours.map(time => (
                         <tr className={TimetableCSS.tr} key={time.hour()} style={{ height: courseGridHeight }}>
-                            <th className={TimetableCSS.th} style={{ backgroundColor: headerColor, width: 32 }}>{clockType === "12 Hour" ? time.format("hh:mm \n A") : time.format("HH:mm")}</th>
+                            <th className={TimetableCSS.th} style={{ backgroundColor: headerColor, width: 32 }}>{clockType === ClockType.TWELVE_HOUR ? time.format("hh:mm \n A") : time.format("HH:mm")}</th>
                             {Object.keys(timetable).map((day) => {
                                 const timetableHour = timetable[day as keyof timetableInfos]![time.hour() as unknown as keyof timetableHours];
                                 return (
-                                    timetableHour && <TimetableTd key={day} time={time} {...timetableHour.timetableTdProps} />
+                                    timetableHour &&
+                                    <TimetableTd
+                                        key={day}
+                                        time={time}
+                                        {...timetableHour.timetableTdProps}
+                                        courseGridHeight={courseGridHeight}
+                                        courseGridWidth={courseGridWidth} />
                                 );
                             })}
                         </tr>

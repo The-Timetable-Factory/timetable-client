@@ -24,6 +24,7 @@ export default function ColorPalattes(props: ColorPalletesProps) {
     const { darkMode } = useDarkMode()
 
     function handleChecked() {
+        console.log(TITLE + "from ColorPalettes")
         props.handleChange(TITLE)
     }
 
@@ -48,7 +49,9 @@ export default function ColorPalattes(props: ColorPalletesProps) {
                                 {
                                     COLORS.map(color => {
                                         return (
-                                            <div style={{ width: "40px", height: "40px", backgroundColor: color, border: "none", padding: 0 }}>
+                                            <div
+                                                key={color}
+                                                style={{ width: "40px", height: "40px", backgroundColor: color, border: "none", padding: 0 }}>
 
                                             </div>
                                         )

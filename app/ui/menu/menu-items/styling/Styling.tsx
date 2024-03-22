@@ -1,34 +1,67 @@
+'use client'
 import React, { use, useState } from "react"
-import FormControl from "@mui/material/FormControl"
+// import MUI components
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
+import { ClockType } from "@/app/lib/interfaces/styling-interfaces";
+
+// import MUI date picker components
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+// import components
 import ColorSelector from "../../inputs/color-selector/color-selector";
-import { SESAME } from "@/app/lib/constants/theme-constants";
+
 import YesNoRadio from "./yes-no-radio/YesNoRadio";
 import Collapsible from "../../collapsible/Collapsible";
-import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
+
+// import stores
 import { useStylingStore } from "@/app/lib/store/styling-store";
+import { useThemeStore } from "@/app/lib/store/theme-store";
+import useStore from "@/app/lib/hooks/useStore";
+
+import { Dayjs } from "dayjs";
 
 export default function Styling() {
 
-    const title = useStylingStore((state: any) => state.title)
+    const title = useStore(useStylingStore, (state: any) => state.title)
     const startTime = useStylingStore((state: any) => state.startTime)
     const endTime = useStylingStore((state: any) => state.endTime)
-    const backgroundColor = useStylingStore((state: any) => state.backgroundColor)
+    const backgroundColor = useStore(useStylingStore, (state: any) => state.backgroundColor)
     const headerColor = useStylingStore((state: any) => state.headerColor)
     const clockType = useStylingStore((state: any) => state.clockType)
-    const displayTime = useStylingStore((state: any) => state.displayTime)
-
-
+    const displayTime = useStylingStore((state: any) => state.displayTime) === true ? "Yes" : "No"
+    const resetToDefault = useStylingStore((state: any) => state.resetToDefault)
+    const COLORS = useThemeStore((state: any) => state.theme.COLORS)
+    const setStartTime = useStylingStore((state: any) => state.setStartTime)
+    const setEndTime = useStylingStore((state: any) => state.setEndTime)
 
 
     function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
         useStylingStore.setState({ title: event.target.value })
         // setTitle(event.target.value)
+    }
+
+    function validateStartTimeEndTime() {
+        if (startTime.isAfter(endTime)) {
+            return false
+        }
+        return true
+    }
+
+    function handleStartTimeChange(value: Dayjs | null) {
+        if (value && validateStartTimeEndTime()) {
+            setStartTime(value)
+        }
+    }
+
+    function handleEndTimeChange(value: Dayjs | null) {
+        if (value && validateStartTimeEndTime()) {
+            setEndTime(value)
+        }
     }
 
     function handleBackgroundColorChange(value: string) {
@@ -41,23 +74,22 @@ export default function Styling() {
         useStylingStore.setState({ headerColor: value })
     }
 
-    function handleClockTypeChange(value: boolean) {
+    function handleClockTypeChange(value: ClockType) {
         // setClockType(value)
         useStylingStore.setState({ clockType: value })
     }
 
-    function handleDisplayTimeChange(value: boolean) {
-
-        useStylingStore.setState({ displayTime: value })
+    function handleDisplayTimeChange(value: string) {
+        let displayTime;
+        if (value === "Yes") {
+            displayTime = true
+        }
+        else {
+            displayTime = false
+        }
+        useStylingStore.setState({ displayTime: displayTime })
     }
 
-    function resetToDefault() {
-
-    }
-
-    function handleSubmit() {
-
-    }
     return (
         <>
             <Collapsible
@@ -90,6 +122,7 @@ export default function Styling() {
                                         maxTime={endTime}
                                         minutesStep={60}
                                         skipDisabled={true}
+                                        onChange={handleStartTimeChange}
                                         sx={{ m: 1 }} />
                                 </td>
                             </tr>
@@ -104,7 +137,10 @@ export default function Styling() {
                                         minTime={startTime}
                                         minutesStep={60}
                                         skipDisabled={true}
+                                        onChange={handleEndTimeChange}
                                         sx={{ m: 1 }} />
+
+                                    {startTime.isAfter(endTime) && <Typography variant="caption" color="error">Start time must be before end time.</Typography>}
                                 </td>
                             </tr>
                             <tr>
@@ -113,7 +149,7 @@ export default function Styling() {
 
                                 </th>
                                 <td>
-                                    <ColorSelector name="backgroundColor" options={SESAME.COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
+                                    <ColorSelector name="backgroundColor" options={COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
 
                                 </td>
                             </tr>
@@ -124,7 +160,7 @@ export default function Styling() {
 
                                 </th>
                                 <td >
-                                    <ColorSelector name="textColor" options={SESAME.COLORS} handleChange={handleHeaderColorChange} value={headerColor} direction="row" />
+                                    <ColorSelector name="textColor" options={COLORS} handleChange={handleHeaderColorChange} value={headerColor} direction="row" />
                                 </td>
                             </tr>
                             <tr>
@@ -132,7 +168,11 @@ export default function Styling() {
                                     <Typography variant="body1">Clock Type: </Typography>
                                 </th>
                                 <td>
-                                    <YesNoRadio value={clockType} handleChange={handleClockTypeChange} />
+                                    <YesNoRadio
+                                        value={clockType}
+                                        optionA={ClockType.TWELVE_HOUR}
+                                        optionB={ClockType.TWENTY_FOUR_HOUR}
+                                        handleChange={(value: string) => handleClockTypeChange(value as ClockType)} />
                                 </td>
                             </tr>
                             <tr>
@@ -140,7 +180,11 @@ export default function Styling() {
                                     <Typography variant="body1">Display Time: </Typography>
                                 </th>
                                 <td>
-                                    <YesNoRadio value={displayTime} handleChange={handleDisplayTimeChange} />
+                                    <YesNoRadio
+                                        value={displayTime}
+                                        optionA="Yes"
+                                        optionB="No"
+                                        handleChange={(value: string) => handleDisplayTimeChange(value)} />
                                 </td>
                             </tr>
 

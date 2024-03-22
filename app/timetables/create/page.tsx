@@ -6,6 +6,7 @@ import Menu from '../../ui/menu/menu';
 import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetable-carousel";
 import TimetableBackground from "@/app/ui/main-content/timetable/timetable-background/timetable-background";
 import Timetable from "@/app/ui/main-content/timetable/timetable";
+import { useStylingStore } from "@/app/lib/store/styling-store";
 export default function Page() {
     const { darkMode } = useDarkMode()
 
@@ -18,6 +19,7 @@ export default function Page() {
                     display="flex"
                     alignItems="center"
                 >
+
 
                     {/* <TimetableCarousel /> */}
                     <TimetableBackground id={1}>
@@ -36,3 +38,19 @@ export default function Page() {
         </div>
     )
 }
+{/* <table style={{ border: '1px black solid', borderCollapse: 'collapse' }}>
+    <tbody>
+        <tr>
+            <td style={{ height: '100px', width: '100px', position: 'relative' }}>
+                <div style={{ height: '70%', width: '100%', backgroundColor: 'pink', border: '1px black solid' }}>
+
+                </div>
+            </td>
+            <td style={{ height: '100px', width: '100px' }}>
+                <div style={{ height: '100%', width: '100%', backgroundColor: 'pink', border: '1px black solid' }}>
+
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table> */}

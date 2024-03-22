@@ -36,10 +36,13 @@ export default async function RootLayout({
 
         <UltimateProvider >
           <body>
-            <Navbar />
-            {children}
+            <main>
+
+              <Navbar />
+              {children}
+            </main>
+            <Footer />
           </body>
-          <Footer />
         </UltimateProvider>
       </SessionProvider>
     </html>
