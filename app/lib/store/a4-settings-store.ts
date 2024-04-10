@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { DaysRange } from "@/app/lib/interfaces/settings-interfaces";
 import { persist } from 'zustand/middleware'
+import { useTimetableStore } from './timetable-store';
 
 const initialA4Days = {
     mon: true,
@@ -12,19 +13,38 @@ const initialA4Days = {
     sun: true
 }
 
-export const useA4SettingsStore = create(
+interface A4SettingsState {
+    daysRange: DaysRange,
+    courseGridWidth: number,
+    courseGridHeight: number,
+    setDaysRange: (newDaysRange: DaysRange) => void,
+    increaseCourseGridWidth: () => void,
+    decreaseCourseGridWidth: () => void,
+    increaseCourseGridHeight: () => void,
+    decreaseCourseGridHeight: () => void,
+
+}
+
+export const useA4SettingsStore = create<A4SettingsState>()(
     persist((set, get) => ({
         daysRange: initialA4Days,
         courseGridWidth: 76,
         courseGridHeight: 49,
         setDaysRange: (newDaysRange: DaysRange) => {
             set(() => ({ daysRange: newDaysRange }))
+            useTimetableStore.getState().updateTimetable()
         },
-        setCourseGridWidth: (newWidth: number) => {
-            set(() => ({ courseGridWidth: newWidth }))
+        increaseCourseGridWidth: () => {
+            set(state => ({ courseGridWidth: state.courseGridWidth + 1 }))
         },
-        setCourseGridHeight: (newHeight: number) => {
-            set(() => ({ courseGridHeight: newHeight }))
+        decreaseCourseGridWidth: () => {
+            set(state => ({ courseGridWidth: state.courseGridWidth - 1 }))
+        },
+        increaseCourseGridHeight: () => {
+            set(state => ({ courseGridHeight: state.courseGridHeight + 1 }))
+        },
+        decreaseCourseGridHeight: () => {
+            set(state => ({ courseGridHeight: state.courseGridHeight - 1 }))
         },
     }),
         { name: 'a4-display-settings' }

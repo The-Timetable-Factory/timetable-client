@@ -1,16 +1,29 @@
+'use client'
 import React from "react";
+
+// import interfaces
 import { meetingTime, daysSelection } from "@/app/lib/interfaces/courses-interfaces";
+// import components
+import DaysSelection from "../../day-selection/day-selection";
+
+// import MUI components
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
+import Typography from "@mui/material/Typography";
+import TextField from '@mui/material/TextField';
+
+// import MUI date picker components
+import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
-import TextField from '@mui/material/TextField';
-import dayjs, { Dayjs } from "dayjs";
+
+// import styles
 import MeetingTimeFormCSS from './meetingTimeForm.module.css'
-import DaysSelection from "../../day-selection/day-selection";
-import { Typography } from "@mui/material";
+
+// import context
 import { useDarkMode } from "../../../../context/dark-mode-context";
+
 
 export interface MeetingTimeFormProps {
     key: number,
@@ -19,6 +32,7 @@ export interface MeetingTimeFormProps {
     handleRemoveMeetingTime: (index: number) => void,
     meetingTime: meetingTime;
     handleMeetingTimeSchedulesChange: (index: number, meetingTime: meetingTime) => void
+    daysSelectionError: string | null;
 }
 
 function MeetingTimeForm(props: MeetingTimeFormProps) {
@@ -29,7 +43,6 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
     const days = props.meetingTime.days;
     const { darkMode } = useDarkMode()
 
-    console.log("Meeting Time Form Rendered")
 
     const handleChange = (name: string, value: string | Dayjs | daysSelection) => {
         const newMeetingTime: meetingTime = {
@@ -42,6 +55,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
         }
         props.handleMeetingTimeSchedulesChange(props.id, newMeetingTime)
     }
+
 
     return (
         <>
@@ -57,7 +71,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
 
                 </div>
 
-                <DaysSelection days={days} handleChange={handleChange} />
+                <DaysSelection days={days} handleChange={handleChange} error={props.daysSelectionError} />
 
                 <table>
                     <tbody>
@@ -72,6 +86,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
                                         minutesStep={5}
                                         skipDisabled={true}
                                         value={startTime}
+                                        maxTime={endTime}
                                         onChange={(newValue) => newValue !== null && handleChange("startTime", newValue)}
                                         sx={{
                                             m: 1, "&.Mui-selected: hover": {
@@ -91,10 +106,12 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
                                         minutesStep={5}
                                         skipDisabled={true}
                                         value={endTime}
+                                        minTime={startTime}
                                         onChange={(newValue) => newValue !== null && handleChange("endTime", newValue)}
                                         sx={{ m: 1 }}
                                         data-testid="end-time"
                                     />
+                                    {startTime.isAfter(endTime) && <Typography variant="caption" color="error">Start time must be before end time.</Typography>}
                                 </td>
                             </tr>
                         </LocalizationProvider>

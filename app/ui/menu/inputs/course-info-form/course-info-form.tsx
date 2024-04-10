@@ -2,19 +2,24 @@
 
 import React, { useState, useCallback, useReducer } from "react";
 
+// import interfaces
 import { courseInfo, meetingTime, generateEmptyMeetingTime } from "@/app/lib/interfaces/courses-interfaces";
 
-import { SESAME } from "@/app/lib/constants/theme-constants";
-
+// import components
 import MeetingTimeForm from "./meeting-time-form/meeting-time-form";
 import ColorSelector from "../../inputs/color-selector/color-selector";
+
+//import stores
 import { useCoursesStore } from "@/app/lib/store/courses-store";
+import { useTimetableStore } from "@/app/lib/store/timetable-store";
+import { useThemeStore } from "@/app/lib/store/theme-store";
 
 // import MUI components
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography";
-import Alert from "@mui/material/Alert"
+
+import { SESAME } from "@/app/lib/constants/theme-constants";
 
 interface CourseCodeState {
     courseCode: string,
@@ -47,9 +52,15 @@ export default function CourseInfoForm(props: courseInfo) {
 
     const { id, existed, } = props
     const [courseCodeState, dispatchCourseCode] = useReducer(courseCodeReducer, { courseCode: props.courseCode || '', courseCodeError: null });
-    // const [courseCode, setCourseCode] = useState<string>(props.courseCode)
     const [backgroundColor, setBackgroundColor] = useState<string>(props.backgroundColour)
     const [meetingTimeSchedules, setMeetingTimeSchedules] = useState<Array<meetingTime>>(props.meetingTimes)
+    const [meetingTimeSchedulesErrors, setMeetingTimeSchedulesErrors] = useState<Array<string | null>>(new Array(meetingTimeSchedules.length).fill(null))
+    const test = useCoursesStore((state: any) => state.test)
+    const removeCourse = useCoursesStore((state: any) => state.removeCourse)
+    const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
+    const COLORS = useThemeStore((state: any) => state.theme.COLORS)
+    const USED_COLORS = useThemeStore((state: any) => state.theme.USED_COLORS)
+
 
     function handleBackgroundColorChange(value: string) {
         setBackgroundColor(value)
@@ -79,9 +90,44 @@ export default function CourseInfoForm(props: courseInfo) {
         })
     }, []);
 
-    function handleSubmit() {
-        dispatchCourseCode({ type: 'handleCheck' })
+    function handleRemoveCourse() {
+        removeCourse(id)
+    }
 
+    function validateCourseInfoForm() {
+        let error = false;
+        dispatchCourseCode({ type: 'handleCheck' })
+        if (courseCodeState.courseCodeError !== null) {
+            error = true;
+        }
+
+        meetingTimeSchedules.forEach((meetingTime, index) => {
+            if (Object.values(meetingTime.days).every(day => day === false)) {
+                setMeetingTimeSchedulesErrors(prev => {
+                    const newErrors = [...prev]
+                    newErrors[index] = 'Please select at least one day'
+                    return newErrors
+                })
+                error = true
+            }
+            else {
+                meetingTimeSchedulesErrors[index] = null
+            }
+
+            if (meetingTime.startTime.isAfter(meetingTime.endTime)) {
+                error = true
+            }
+        })
+        return error
+    }
+
+    function handleSubmit() {
+        const error = validateCourseInfoForm()
+        if (error) {
+            return
+        }
+        test({ id: props.id, courseCode: courseCodeState.courseCode, backgroundColour: backgroundColor, meetingTimes: meetingTimeSchedules, existed: props.existed })
+        updateTimetable()
     }
     return (
         <>
@@ -110,7 +156,7 @@ export default function CourseInfoForm(props: courseInfo) {
 
                         </td>
                         <td>
-                            <ColorSelector name={props.id} options={SESAME.COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
+                            <ColorSelector name={props.id} options={COLORS} handleChange={handleBackgroundColorChange} value={backgroundColor} direction="row" />
                         </td>
                     </tr>
                 </tbody>
@@ -126,10 +172,13 @@ export default function CourseInfoForm(props: courseInfo) {
                     meetingTime={meetingTime}
                     handleRemoveMeetingTime={handleRemoveMeetingTime}
                     handleMeetingTimeSchedulesChange={handleMeetingTimeSchedulesChange}
+                    daysSelectionError={meetingTimeSchedulesErrors[index]}
                 />
             ))}
 
             <Button variant='outlined' color="info" onClick={handleAddMeetingTime} sx={{ margin: '4px' }}>Add Another Meeting Time</Button>
+
+            {existed && <Button color="error" variant="outlined" onClick={handleRemoveCourse} sx={{ margin: '4px' }}>Remove Course</Button>}
 
             <Button type="submit" variant="outlined" color="info" onClick={handleSubmit} sx={{ margin: '4px' }}>Submit</Button>
         </>

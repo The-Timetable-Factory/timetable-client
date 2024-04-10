@@ -63,7 +63,7 @@ function generateEmptyTimetableHours(startTime: Dayjs, endTime: Dayjs) {
     return timetableHours
 }
 
-export function generateEmptyTimetableInfos(daysRange: DaysRange, startTime: Dayjs, endTime: Dayjs) {
+export function generateEmptyTimetableInfos(daysRange: DaysRange, startTime: Dayjs, endTime: Dayjs): timetableInfos {
     const emptyTimetableInfos = {} as Record<keyof daysSelection, timetableHours>;
 
     if (daysRange.mon) {

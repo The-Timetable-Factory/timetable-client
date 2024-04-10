@@ -37,6 +37,7 @@ export default function BuyMeACoffeeButton() {
                 anchorEl={anchorEl}
                 transition
                 onMouseLeave={() => setOpen(false)}
+                sx={{ zIndex: 1000 }}
             >
 
                 {({ TransitionProps }) => (

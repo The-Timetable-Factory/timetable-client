@@ -1,29 +1,63 @@
 import { create } from 'zustand'
 import dayjs from 'dayjs'
 import { courseInfo } from '@/app/lib/interfaces/courses-interfaces'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
+import { meetingTime } from '@/app/lib/interfaces/courses-interfaces'
 
-export const useCoursesStore = create(
+interface CoursesState {
+    courses: courseInfo[],
+    test: (newCourse: courseInfo) => void,
+    removeCourse: (courseId: string) => void
+}
+
+export const useCoursesStore = create<CoursesState>()(
     persist((set, get) => ({
-        courses: [] as courseInfo[],
-        addCourse: (newCourse: courseInfo) => {
-            set((state: any) => {
-                if (newCourse.existed) {
+        courses: [],
+        test: (newCourse: courseInfo) => {
+            if (newCourse.existed) {
+                console.log('existed')
+                set((state: any) => {
                     const index = state.courses.findIndex((course: courseInfo) => course.id === newCourse.id)
                     const newCourses = [...state.courses]
                     newCourses[index] = newCourse
                     return { courses: newCourses }
-                }
-                return { courses: [...state.courses, newCourse] }
-            })
+                })
+            } else {
+                console.log('not existed')
+                newCourse.existed = true
+                set((state: any) => {
+                    return { courses: [...state.courses, newCourse] }
+
+                })
+            }
         },
-        removeCourse: (course: courseInfo) => {
+        removeCourse: (courseId: string) => {
             set((state: any) => {
-                const newCourses = state.courses.filter((c: courseInfo) => c.id !== course.id)
+                const newCourses = state.courses.filter((c: courseInfo) => c.id !== courseId)
                 return { courses: newCourses }
             })
-        }
+        },
     }),
-        { name: 'courses' }
-    ))
+        {
+            name: 'courses',
+            storage: createJSONStorage(() => localStorage, {
+                reviver: (key, value: any) => {
+                    if (value && value.type === 'dayjs') {
+                        console.log('dayjs reviver')
+                        console.log(value.value)
+                        return dayjs(value.value)
+                    }
+                    return value
 
+                },
+                replacer: (key, value) => {
+                    if (key === 'startTime' || key === 'endTime') {
+                        console.log('startTime endTime replacer' + value)
+                        return { type: 'dayjs', value: value }
+                    }
+
+                    return value
+                }
+            })
+        }
+    ))

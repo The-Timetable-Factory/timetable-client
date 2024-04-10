@@ -6,27 +6,27 @@ import DisplaySettings from "./display-settings/display-settings"
 import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import Collapsible from "../../collapsible/Collapsible";
 import { useDisplayStore } from "@/app/lib/store/display-store";
-// import { settingsActions } from "../../../../store/settings-slice";
-// import { getTimetable } from "../../../../store/timetable-action";
-// import { RootState, useDispatch } from '../../../../store';
-// import { getPages } from "../../../../store/pages-action";
-// import { useSelector } from "react-redux";
+import { useTimetableStore } from "@/app/lib/store/timetable-store";
+
+import { useIphoneSettingsStore } from "@/app/lib/store/iphone-settings-store";
+import { useIpadSettingsStore } from "@/app/lib/store/ipad-settings-store";
+import { useLetterSettingsStore } from "@/app/lib/store/letter-settings-store";
+import { useA4SettingsStore } from "@/app/lib/store/a4-settings-store";
+// import { iPhoneSettingsConstants } from "@/app/lib/constants/developer-settings-constants";
+
 
 
 
 export default function PickADisplay() {
-    // const dispatch = useDispatch()
-    // const device = useSelector((state: RootState) => state.settings.device)
+
     const devices = ["iphone", "ipad", "letter", "a4"]
     const display = useDisplayStore((state: any) => state.display)
+    const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
 
-    // console.log("Pick A Display Rendered")
 
     function handleDeviceChange(deviceType: string) {
-        // dispatch(settingsActions.fetchSettings(deviceType))
-        // dispatch(getPages())
-        // dispatch(getTimetable())
         useDisplayStore.setState({ display: deviceType })
+        updateTimetable()
     }
 
     return (
@@ -61,7 +61,16 @@ export default function PickADisplay() {
                     </ToggleButtonGroup>
 
                 </div>
-                <DisplaySettings display={display} />
+                {
+                    display === "iphone" ?
+                        <DisplaySettings display={"iphone"} useDisplaySettingsStore={useIphoneSettingsStore} /> :
+                        display === "ipad" ?
+                            <DisplaySettings display={"ipad"} useDisplaySettingsStore={useIpadSettingsStore} /> :
+                            display === "letter" ?
+                                <DisplaySettings display={"letter"} useDisplaySettingsStore={useLetterSettingsStore} /> :
+                                <DisplaySettings display={"a4"} useDisplaySettingsStore={useA4SettingsStore} />
+
+                }
             </Collapsible>
         </>
     )
