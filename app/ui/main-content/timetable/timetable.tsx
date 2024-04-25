@@ -80,6 +80,7 @@ export default function Timetable(props: TimetableProps) {
 
     return (
         <>
+
             <table className={`${TimetableCSS.table}`} style={{ top: TOP }} id="timetable">
                 <tbody>
                     {
