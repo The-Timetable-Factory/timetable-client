@@ -14,6 +14,11 @@ import Collapsible from "./collapsible/Collapsible";
 import EditIcon from '@mui/icons-material/Edit';
 
 import useStore from "@/app/lib/hooks/useStore";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import TextField from "@mui/material/TextField";
 
 
 export default function Menu() {
