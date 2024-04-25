@@ -1,70 +1,84 @@
-import React, { useState, useRef } from "react"
-// import Swiper and required modules
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/navigation';
-
-//import MUI component and icon
-import IconButton from "@mui/material/IconButton";
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { register } from 'swiper/element/bundle'
+import IconButton from '@mui/material/IconButton';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import TimetableBackground from "../timetable/timetable-background/timetable-background";
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { usePagesStore } from '@/app/lib/store/pages-store';
+import TimetableBackground from '../timetable/timetable-background/timetable-background';
+import Timetable from '../timetable/timetable';
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'swiper-container': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+            'swiper-slide': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+        }
+    }
+}
 
+register();
 
 export default function TimetableCarousel() {
-    const swiperRef = useRef<SwiperType>();
-    const [currPage, setCurrPage] = useState(1);
-    const isPhone = window.innerWidth < 600;
-
-    function handleSlideChange(swiper: any) {
-        const { activeIndex } = swiper;
-        setCurrPage(activeIndex + 1)
-    }
+    const numberOfPages = usePagesStore((state: any) => state.numberOfPages)
 
     return (
         <>
+            <div className="slider-main-container">
 
-            {
-                !isPhone &&
+                <swiper-container
+                    slides-per-view="1"
+                    navigation-next-el=".custom-next-button"
+                    navigation-prev-el=".custom-prev-button"
+                    pagination-clickable="true"
+                    center-slides="true"
 
-                <IconButton
-                    onClick={() => swiperRef.current?.slidePrev()}
-                    sx={{ height: "40px", width: "40px" }}
-                    className="swiper-navigate-prev"
-                    color="info"
-                    data-testid="before-button">
-                    <NavigateBeforeIcon />
-                </IconButton>
-            }
-            <Swiper
-                className="mySwiper"
-                navigation={{
-                    prevEl: 'swiper-navigate-prev',
-                    nextEl: 'swiper-navigate-next',
-                }}
-                onSlideChange={handleSlideChange}
-                onBeforeInit={(swiper: SwiperType) => {
-                    swiperRef.current = swiper;
-                }}
-                data-testid="carousel"
-            >
-                <TimetableBackground id={1} />
+                    style={
+                        {
+                            width: "100%",
+                            "--swiper-pagination-color": "#000",
+                            "--swiper-pagination-bullet-size": "15px",
+                        } as React.CSSProperties
+                    }
+                >
 
-            </Swiper>
 
-            {
-                !isPhone &&
-                <IconButton
-                    onClick={() => swiperRef.current?.slideNext()}
-                    sx={{ height: "40px", width: "40px" }}
-                    className="swiper-navigate-next"
-                    color="info"
-                    data-testid="next-button">
-                    <NavigateNextIcon />
-                </IconButton>
-            }
+                    {
+                        Array.from({ length: numberOfPages }, (_, i) => i + 1).map((page) => {
+                            return (
+                                <swiper-slide key={page}>
+                                    <div style={{ justifyContent: "center", display: "flex", marginBottom: '40px' }}>
+                                        <TimetableBackground id={page}>
+                                            {page !== numberOfPages && <Timetable key={page} currPage={page} />}
+                                        </TimetableBackground>
+                                    </div>
+                                </swiper-slide>
+                            )
+                        })
+                    }
 
+
+                </swiper-container>
+
+                <div className="nav-btn custom-prev-button">
+
+                    <IconButton
+
+                        sx={{ height: "40px", width: "40px", alignSelf: 'center' }}
+
+                        color="info"
+                        data-testid="before-button">
+                        <NavigateBeforeIcon />
+                    </IconButton>
+                </div>
+
+                <div className="nav-btn custom-next-button">
+
+                    <IconButton
+                        sx={{ height: "40px", width: "40px", alignSelf: 'center' }}
+                        color="info"
+                        data-testid="next-button">
+                        <NavigateNextIcon />
+                    </IconButton>
+                </div>
+            </div>
         </>
     )
 }
