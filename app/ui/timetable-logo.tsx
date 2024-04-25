@@ -22,18 +22,18 @@ export default function TimetableLogo() {
                     <Image
                         src={TimetableFactoryBrownLogo}
                         alt="School Is Factory Brown Logo"
-                        height={48}
+                        height={44}
                         style={{}} />
                 ) : (
                     <Image
                         src={TimetableFactoryBlackLogo}
                         alt="School Is Factory Black Logo"
-                        height={48} style={{}} />
+                        height={44} style={{}} />
                 )}
                 {/* Branding and title */}
                 <div className="center" style={{ cursor: "pointer" }}>
-                    <Typography variant="h4" sx={{ fontSize: "1.8rem", lineHeight: 1 }}>Timetable Factory</Typography>
-                    <Typography variant="caption" sx={{ lineHeight: 1 }}>By SCHOOL IS FACTORY</Typography>
+                    <Typography variant="h4" sx={{ fontSize: "x-large", lineHeight: 1 }}>Timetable Factory</Typography>
+                    <Typography variant="caption" sx={{ lineHeight: 1, fontSize: "x-small" }}>By SCHOOL IS FACTORY</Typography>
                 </div>
             </div>
 

@@ -21,13 +21,13 @@ export default function TimetableLogoMobile() {
                     <Image
                         src={TimetableFactoryBrownLogo}
                         alt="School Is Factory Brown Logo"
-                        height={48}
+                        height={44}
                         style={{}} />
                 ) : (
                     <Image
                         src={TimetableFactoryBlackLogo}
                         alt="School Is Factory Black Logo"
-                        height={48} style={{}} />
+                        height={44} style={{}} />
                 )}
             </div>
 
