@@ -1,12 +1,9 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useDarkMode } from "../../ui/context/dark-mode-context";
 import Grid from "@mui/material/Grid";
 import Menu from '../../ui/menu/menu';
 import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetable-carousel";
-import TimetableBackground from "@/app/ui/main-content/timetable/timetable-background/timetable-background";
-import Timetable from "@/app/ui/main-content/timetable/timetable";
-import { useStylingStore } from "@/app/lib/store/styling-store";
 export default function Page() {
     const { darkMode } = useDarkMode()
 
@@ -17,14 +14,10 @@ export default function Page() {
                 <Grid item xs={12} sm={12} md={12} lg={8.5}
                     justifyContent="center"
                     display="flex"
-                    alignItems="center"
+                    sx={{ overflow: "visible" }}
                 >
-
-
+                    <TimetableCarousel />
                     {/* <TimetableCarousel /> */}
-                    <TimetableBackground id={1}>
-                        <Timetable currPage={1} />
-                    </TimetableBackground>
                     {/* <ColorRadioSelection name="deviceDivColor" handleChange={setDeviceDivColor} value={deviceDivColor} options={["#FFFFFF", "#DAD6CE", "#121212", "#000000"]} direction="column" /> */}
                 </Grid>
 
@@ -38,19 +31,3 @@ export default function Page() {
         </div>
     )
 }
-{/* <table style={{ border: '1px black solid', borderCollapse: 'collapse' }}>
-    <tbody>
-        <tr>
-            <td style={{ height: '100px', width: '100px', position: 'relative' }}>
-                <div style={{ height: '70%', width: '100%', backgroundColor: 'pink', border: '1px black solid' }}>
-
-                </div>
-            </td>
-            <td style={{ height: '100px', width: '100px' }}>
-                <div style={{ height: '100%', width: '100%', backgroundColor: 'pink', border: '1px black solid' }}>
-
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table> */}
