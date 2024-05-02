@@ -2,38 +2,37 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
-import { addUser, signInUser } from "./app/lib/data/server";
+import { registerUser, signInUser } from "./app/lib/data/server";
 
 
 const credentialsConfig = CredentialsProvider({
     name: "credentials",
     credentials: {
         username: { label: "Username", type: "string" },
-        password: { label: "Password", type: "password" },
         email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
         action: { label: "Action" }
     },
     async authorize(credentials) {
         console.log('credentials: ', credentials)
 
         if (credentials.action === "signup" && typeof credentials.username === "string" && typeof credentials.email === "string" && typeof credentials.password === "string") {
-            // Add user to server
-            console.log("Adding user")
-            addUser(credentials.username, credentials.email, credentials.password)
+            // Register user
+            console.log("Registering user from auth.ts")
+            const { username, email } = await registerUser(credentials.username, credentials.email, credentials.password)
+            return { id: "1", name: username, email: email }
         }
 
-        if (credentials.email === "test@email.com" && credentials.password === "test1234") {
-            return { id: "1", name: "Test User", email: credentials.email };
-        } else {
-            return null;
-        }
 
         if (credentials.action === "signin" && typeof credentials.email === "string" && typeof credentials.password === "string") {
             // Sign in user
+            console.log('Signing in user from auth.ts')
+            const { username, email } = await signInUser(credentials.email, credentials.password)
+
+            return { id: '1', name: username, email: email }
         }
-        // if ( typeof credentials.username !== "string" && typeof credentials.email !== "string" && typeof credentials.password !== "string") {
-        //     return {error: "An error occured. Please try again."} // Might need to change this to throw an error
-        // }
+
+        return { error: "An error occured. Please try again." } // TODO: change it to throwing an error
     },
 });
 
@@ -64,7 +63,7 @@ const config = {
             else {
                 return false
             }
-        }
+        },
     },
     session: {
         strategy: 'jwt'

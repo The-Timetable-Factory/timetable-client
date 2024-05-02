@@ -73,21 +73,27 @@ export default function SignUp() {
     let signUpDisabled = username.status !== UsernameStatus.AVAILABLE || email.status !== EmailStatus.VALID || password.status !== PasswordStatus.IS_VALID || verifyPassword.status !== VerifyPasswordStatus.IS_VALID
 
 
-    const handleUsernameChange = useDebouncedCallback((e: any) => {
-        e.preventDefault()
+    const handleUsernameChange = useDebouncedCallback(async (e: any) => {
+        e.preventDefault();
+
         if (e.target.value === '') {
-            setUsername(user => ({ ...user, status: UsernameStatus.NULL }))
-            return
+            setUsername(user => ({ ...user, status: UsernameStatus.NULL }));
+            return;
         }
-        setUsername(user => ({ ...user, username: e.target.value, status: UsernameStatus.LOADING }))
+        setUsername(user => ({ ...user, username: e.target.value, status: UsernameStatus.LOADING }));
 
-        //fetch to see if username is avaliable
-        const avaliable = checkUsernameExistance(e.target.value)
+        // Fetch to see if username is available
+        const usernameExistance = await checkUsernameExistance(e.target.value)
 
-        setUsername({ username: e.target.value, status: avaliable ? UsernameStatus.AVAILABLE : UsernameStatus.NOT_AVAILABLE })
-    }, 300)
+        setUsername(user => ({
+            username: e.target.value,
+            status: !usernameExistance ? UsernameStatus.AVAILABLE : UsernameStatus.NOT_AVAILABLE
+        }));
 
-    const handleEmailChange = useDebouncedCallback((e: any) => {
+    }, 300);
+
+
+    const handleEmailChange = useDebouncedCallback(async (e: any) => {
         // Regular expression pattern for validating email address format
         e.preventDefault();
         const emailValue = e.target.value;
@@ -109,7 +115,7 @@ export default function SignUp() {
 
         // Fetch to see if email is already registered
 
-        const registered = checkEmailRegistered(e.target.value)
+        const registered = await checkEmailRegistered(e.target.value)
 
         setEmail({ email: e.target.value, status: registered ? EmailStatus.NOT_AVALIABLE : EmailStatus.VALID })
 
@@ -138,8 +144,6 @@ export default function SignUp() {
             setVerifyPassword({ verifyPassword: e.target.value, status: VerifyPasswordStatus.NULL, error: '' })
             return
         }
-        console.log('password: ', password)
-        console.log('verifyPassword: ', e.target.value)
 
         if (e.target.value !== password.password) {
             setVerifyPassword({ verifyPassword: e.target.value, status: VerifyPasswordStatus.ERROR, error: 'Passwords do not match' })
@@ -161,8 +165,6 @@ export default function SignUp() {
         })
 
         //Redirect to verify email page
-
-
         console.log(res)
     }
     return (

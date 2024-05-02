@@ -38,7 +38,6 @@ export default function Navbar() {
     const pathname = usePathname()
     // if pathname contains /timetables/, then show the Outlined Textfield to edi the title
     const title = pathname.includes("/timetables/") ? true : false
-    console.log(pathname)
     // Get path name
 
     let isDesktop;

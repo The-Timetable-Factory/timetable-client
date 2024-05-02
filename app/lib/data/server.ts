@@ -5,10 +5,28 @@
  * @param username The username to check for existance
  * @returns A boolean if username is avaliable return true, else return false
  */
-export function checkUsernameExistance(username: string): boolean {
-    // fetch to see if username is available
-    console.log('Checking username existance')
-    return true;
+
+export async function checkUsernameExistance(username: string): Promise<boolean> {
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                query {
+                    checkUsernameExistence(username: "${username}")
+                  }
+                `
+            }),
+        });
+
+        const resData = await response.json();
+
+        return resData.data.checkUsernameExistence;
+    } catch (err) {
+        console.log('Database error: ', err);
+        throw new Error('Failed to check username existence');
+    }
 }
 
 /**
@@ -16,21 +34,65 @@ export function checkUsernameExistance(username: string): boolean {
  * @param email The email to check if it is already registered
  * @returns A boolean if email is registered return true, else return false
  */
-export function checkEmailRegistered(email: string): boolean {
+export async function checkEmailRegistered(email: string): Promise<boolean> {
     // fetch to see if email is already registered
-    console.log('Checking email registration')
-    return false;
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                query {
+                    checkEmailRegistered(email: "${email}")
+                  }
+                `
+            }),
+        });
+
+        const resData = await response.json();
+
+        return resData.data.checkUsernameExistence;
+    } catch (err) {
+        console.log('Database error: ', err);
+        throw new Error('Failed to check username existence');
+    }
 }
 
 /**
- * Add a new user to the backend database
+ * Register a new user to the backend database
  * @param username The username of the new user
  * @param email The email of the new user
  * @param password The password of the new user
  */
-export function addUser(username: string, email: string, password: string) {
-    console.log('Adding user to database')
-    // fetch to add user to database
+export async function registerUser(username: string, email: string, password: string): Promise<{ username: string, email: string }> {
+    try {
+        console.log('Registering user from server.ts')
+        console.log('username: ', username)
+        console.log('email: ', email)
+        console.log('password: ', password)
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                mutation{
+                    registerUser(userInput: {username: "${username}", email: "${email}", password: "${password}" }){
+                      username
+                      email
+                    }
+                  }
+                `
+            }),
+        });
+
+        const resData = await response.json();
+        console.log(resData);
+
+        return { username: resData.data.registerUser.username, email: resData.data.registerUser.email };
+    } catch (err) {
+        console.log('Database error: ', err);
+        throw new Error('Failed to add user to database');
+    }
 }
 
 /**
@@ -39,10 +101,36 @@ export function addUser(username: string, email: string, password: string) {
  * @param password The password of the user
  * @returns A user object if the user is signed in, else return null
  */
-export function signInUser(email: string, password: string): any {
+export async function signInUser(email: string, password: string): Promise<{ username: string, email: string }> {
     console.log('Signing in user')
     // fetch to sign in user
-    return { id: "1", name: "Test User" };
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                query {
+                    signIn(signInData: {email:"${email}", password: "${password}"}){
+                      username
+                      email
+                    }
+                  }
+                `
+            }),
+        });
+
+        const resData = await response.json();
+        console.log(resData);
+        return { username: resData.data.signIn.username, email: resData.data.signIn.email };
+
+    } catch (err) {
+        console.log('Database error: ', err);
+        throw new Error('Failed to sign in user');
+
+    }
+
+
 }
 
 interface TimetableTitle {
