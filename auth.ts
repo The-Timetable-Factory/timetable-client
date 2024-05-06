@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
-import { registerUser, signInUser } from "./app/lib/data/server";
+import { registerUser, signInUser, checkEmailRegistered, OAuthSignInUser } from "./app/lib/data/server";
 
 
 const credentialsConfig = CredentialsProvider({
@@ -48,22 +48,34 @@ const config = {
         signIn: '/signin'
     },
     callbacks: {
-        authorized({ auth, request: { nextUrl } }) {
-            const { pathname } = nextUrl
-            if (pathname === "/middleware-example") return !!auth
+        async signIn({ user, account, profile }) {
+            const provider = account!.provider as string
+            const email = user.email as string
+            const token = account!.access_token as string
 
-            console.log(auth)
-            console.log(nextUrl)
-            const isLoggedIn = !!auth?.user // !! converts to boolean
-            if (isLoggedIn) {
-                const email = auth?.user?.email
+            const res = await OAuthSignInUser(provider, email, token)
 
+            if (res) {
                 return true
-            }
-            else {
+            } else {
                 return false
             }
+
         },
+        async jwt({ token, user, account, profile }) {
+            if (account) {
+                token.accessToken = account.access_token
+            }
+            return token
+        },
+        async session({ session, token, user }) {
+
+            //How to add username?
+            session.accessToken = token.accessToken as string
+
+            return session
+        },
+
     },
     session: {
         strategy: 'jwt'
@@ -111,6 +123,40 @@ export const { handlers, auth, signIn, signOut } = NextAuth(config)
 
 
 
+// async authorized({ auth, request: { nextUrl } }) {
+//     const { pathname } = nextUrl
+//     if (pathname === "/middleware-example") return !!auth
+
+//     const isLoggedIn = !!auth?.user // !! converts to boolean
+//     if (isLoggedIn) {
+//         const email = auth?.user?.email
+//         // check if email registered
+
+//         if (email) {
+//             const emailRegistered = await checkEmailRegistered(email)
+
+//             if (emailRegistered) {
+
+
+
+//             } else {
+
+//             }
+//         }
+
+
+
+
+
+
+//         return true
+//     }
+//     else {
+//         return false
+//     }
+//     // console.log(auth)
+//     // console.log(nextUrl)
+// },
 
 
 

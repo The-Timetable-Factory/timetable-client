@@ -133,6 +133,36 @@ export async function signInUser(email: string, password: string): Promise<{ use
 
 }
 
+export async function OAuthSignInUser(provider: string, email: string, token: string): Promise<{ username: string, email: string }> {
+    console.log('Signing in user')
+    // fetch to sign in user
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                query {
+                    OAuthSignIn(provider: "${provider}", email: "${email}", token: "${token}"){
+                      username
+                      email
+                    }
+                  }
+                `
+            }),
+        });
+
+        const resData = await response.json();
+        console.log(resData);
+        return { username: resData.data.OAuthSignIn.username, email: resData.data.OAuthSignIn.email };
+
+    } catch (err) {
+        console.log('Database error: ', err);
+        throw new Error('Failed to sign in user');
+
+    }
+}
+
 interface TimetableTitle {
     title: string,
     id: string
