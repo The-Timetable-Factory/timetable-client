@@ -2,7 +2,13 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
-import { registerUser, signInUser, checkEmailRegistered, OAuthSignInUser } from "./app/lib/data/server";
+import {
+    registerUser,
+    credentialSignInUser,
+    checkEmailRegistered,
+    OAuthSignInUser,
+    OAuthRegisterUser
+} from "./app/lib/data/server";
 
 
 const credentialsConfig = CredentialsProvider({
@@ -19,17 +25,17 @@ const credentialsConfig = CredentialsProvider({
         if (credentials.action === "signup" && typeof credentials.username === "string" && typeof credentials.email === "string" && typeof credentials.password === "string") {
             // Register user
             console.log("Registering user from auth.ts")
-            const { username, email } = await registerUser(credentials.username, credentials.email, credentials.password)
-            return { id: "1", name: username, email: email }
+            const { username, email, accessToken } = await registerUser(credentials.username, credentials.email, credentials.password)
+            return { id: "1", name: username, email: email, accessToken: accessToken }
         }
 
 
         if (credentials.action === "signin" && typeof credentials.email === "string" && typeof credentials.password === "string") {
             // Sign in user
             console.log('Signing in user from auth.ts')
-            const { username, email } = await signInUser(credentials.email, credentials.password)
+            const { username, email, accessToken } = await credentialSignInUser(credentials.email, credentials.password)
 
-            return { id: '1', name: username, email: email }
+            return { id: '1', name: username, email: email, accessToken: accessToken }
         }
 
         return { error: "An error occured. Please try again." } // TODO: change it to throwing an error
@@ -51,20 +57,28 @@ const config = {
         async signIn({ user, account, profile }) {
             const provider = account!.provider as string
             const email = user.email as string
-            const token = account!.access_token as string
+            const emailRegistered = await checkEmailRegistered(email)
 
-            const res = await OAuthSignInUser(provider, email, token)
-
-            if (res) {
+            if (provider !== "credentials" && !emailRegistered) {
+                // Please enter a username before continuing
+                user.isNew = true
+                const { token } = await OAuthRegisterUser(provider, email)
                 return true
-            } else {
-                return false
             }
 
+            if (provider !== "credentials" && emailRegistered) {
+                const { username, token } = await OAuthSignInUser(provider, email)
+                user.name = username
+                user.accessToken = token
+                return true
+            }
+
+            return true
+
         },
-        async jwt({ token, user, account, profile }) {
-            if (account) {
-                token.accessToken = account.access_token
+        async jwt({ token, user }) {
+            if (user) {
+                token.accessToken = user.accessToken
             }
             return token
         },

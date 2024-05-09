@@ -1,5 +1,9 @@
 
-// Sign In function
+// The Timetable Factory Client
+//
+// Author: Anita Cheung
+// Copyright © 2024 Anita Cheung. All rights reserved.
+
 /**
  * Checks if a username exists in the backend database
  * @param username The username to check for existance
@@ -63,8 +67,9 @@ export async function checkEmailRegistered(email: string): Promise<boolean> {
  * @param username The username of the new user
  * @param email The email of the new user
  * @param password The password of the new user
+ * @return The username, email and accessToken of the user
  */
-export async function registerUser(username: string, email: string, password: string): Promise<{ username: string, email: string }> {
+export async function registerUser(username: string, email: string, password: string): Promise<{ username: string, email: string, accessToken: string }> {
     try {
         console.log('Registering user from server.ts')
         console.log('username: ', username)
@@ -76,9 +81,12 @@ export async function registerUser(username: string, email: string, password: st
             body: JSON.stringify({
                 query: `
                 mutation{
-                    registerUser(userInput: {username: "${username}", email: "${email}", password: "${password}" }){
-                      username
-                      email
+                    registerUser(userInput: {username: "${username}", email: "${email}", password: "${password}", provider: CREDENTIALS }){
+                      user{
+                        username
+                        email
+                      }
+                      accessToken
                     }
                   }
                 `
@@ -88,7 +96,7 @@ export async function registerUser(username: string, email: string, password: st
         const resData = await response.json();
         console.log(resData);
 
-        return { username: resData.data.registerUser.username, email: resData.data.registerUser.email };
+        return { username: resData.data.registerUser.user.username, email: resData.data.registerUser.user.email, accessToken: resData.data.registerUser.accessToken };
     } catch (err) {
         console.log('Database error: ', err);
         throw new Error('Failed to add user to database');
@@ -99,10 +107,10 @@ export async function registerUser(username: string, email: string, password: st
  * Sign in a user who uses credentails
  * @param email The email of the user
  * @param password The password of the user
- * @returns A user object if the user is signed in, else return null
+ * @returns The username, email and access token of the user
  */
-export async function signInUser(email: string, password: string): Promise<{ username: string, email: string }> {
-    console.log('Signing in user')
+export async function credentialSignInUser(email: string, password: string): Promise<{ username: string, email: string, accessToken: string }> {
+    console.log('Signing in user credential')
     // fetch to sign in user
     try {
         const response = await fetch('http://localhost:8080/graphql', {
@@ -112,8 +120,11 @@ export async function signInUser(email: string, password: string): Promise<{ use
                 query: `
                 query {
                     signIn(signInData: {email:"${email}", password: "${password}"}){
-                      username
-                      email
+                      user {
+                        username
+                        email
+                      }
+                      accessToken
                     }
                   }
                 `
@@ -122,18 +133,60 @@ export async function signInUser(email: string, password: string): Promise<{ use
 
         const resData = await response.json();
         console.log(resData);
-        return { username: resData.data.signIn.username, email: resData.data.signIn.email };
+        return { username: resData.data.signIn.user.username, email: resData.data.signIn.user.email, accessToken: resData.data.signIn.accessToken };
 
     } catch (err) {
         console.log('Database error: ', err);
         throw new Error('Failed to sign in user');
 
     }
-
-
 }
 
-export async function OAuthSignInUser(provider: string, email: string, token: string): Promise<{ username: string, email: string }> {
+
+/**
+ * Register a user who uses OAuth
+ * @param provider The provider of the user
+ * @param email The email of the user
+ * @returns The token of the user
+ */
+
+export async function OAuthRegisterUser(provider: string, email: string): Promise<{ token: string }> {
+    console.log('Registering user OAuth')
+    // fetch to register user
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: `
+                mutation{
+                    OAuthRegisterUser(provider: "${provider}", email: "${email}"){
+                      token
+                    }
+                  }
+                `
+            }),
+        });
+
+        const resData = await response.json();
+        console.log(resData);
+        return { token: resData.data.OAuthSignUp.token };
+
+    } catch (err) {
+        console.log('Database error: ', err);
+        throw new Error('Failed to register user');
+
+    }
+}
+
+/**
+ * Sign in a user who uses OAuth
+ * @param provider The provider of the user
+ * @param email The email of the user
+ * @returns The username and token of the user
+ */
+
+export async function OAuthSignInUser(provider: string, email: string): Promise<{ username: string, token: string }> {
     console.log('Signing in user')
     // fetch to sign in user
     try {
@@ -143,7 +196,7 @@ export async function OAuthSignInUser(provider: string, email: string, token: st
             body: JSON.stringify({
                 query: `
                 query {
-                    OAuthSignIn(provider: "${provider}", email: "${email}", token: "${token}"){
+                    OAuthSignIn(provider: "${provider}", email: "${email}"){
                       username
                       email
                     }
@@ -154,7 +207,7 @@ export async function OAuthSignInUser(provider: string, email: string, token: st
 
         const resData = await response.json();
         console.log(resData);
-        return { username: resData.data.OAuthSignIn.username, email: resData.data.OAuthSignIn.email };
+        return { username: resData.data.OAuthSignIn.username, token: resData.data.OAuthSignIn.token };
 
     } catch (err) {
         console.log('Database error: ', err);

@@ -90,7 +90,7 @@ export default function SignUp() {
             status: !usernameExistance ? UsernameStatus.AVAILABLE : UsernameStatus.NOT_AVAILABLE
         }));
 
-    }, 300);
+    }, 600);
 
 
     const handleEmailChange = useDebouncedCallback(async (e: any) => {
@@ -119,7 +119,7 @@ export default function SignUp() {
 
         setEmail({ email: e.target.value, status: registered ? EmailStatus.NOT_AVALIABLE : EmailStatus.VALID })
 
-    }, 300)
+    }, 600)
 
     const handlePasswordChange = useDebouncedCallback((e: any) => {
         e.preventDefault()
@@ -135,7 +135,7 @@ export default function SignUp() {
         }
 
         setPassword({ password: e.target.value, status: PasswordStatus.IS_VALID, error: '' })
-    }, 300)
+    }, 600)
 
     const handleVerifyPasswordChange = useDebouncedCallback((e: any) => {
         e.preventDefault()
@@ -151,7 +151,7 @@ export default function SignUp() {
         }
 
         setVerifyPassword({ verifyPassword: e.target.value, status: VerifyPasswordStatus.IS_VALID, error: '' })
-    }, 300)
+    }, 600)
 
     async function handleSignUp() {
 

@@ -76,6 +76,7 @@ export default function SignIn() {
         redirect('/timetables')
     }
 
+
     return (
         <div id='signin'
             // className={`${isHovered ? "menuItemContainer" : ""}`}
@@ -167,7 +168,7 @@ export default function SignIn() {
                                 variant="outlined"
                                 color="info"
                                 fullWidth
-                                onClick={() => { signIn('google', { callbackUrl: '/timetables' }) }}
+                                onClick={() => { signIn('google', { callbackUrl: '/user-redirect-handler' }) }}
                             >
                                 <GoogleIcon sx={{ marginRight: "6px" }} fontSize='small' />
                                 Sign in with Google
@@ -180,6 +181,7 @@ export default function SignIn() {
                                 variant="outlined"
                                 color="info"
                                 fullWidth
+                                onClick={() => { signIn('apple', { callbackUrl: '/user-redirect-handler' }) }}
                             >
                                 <AppleIcon sx={{ marginRight: "6px" }} fontSize='small' />
                                 Sign in with Apple</Button>
