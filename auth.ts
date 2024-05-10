@@ -59,6 +59,10 @@ const config = {
             const email = user.email as string
             const emailRegistered = await checkEmailRegistered(email)
 
+            console.log('email: ', email)
+
+            console.log('email registered: ' + emailRegistered)
+
             if (provider !== "credentials" && !emailRegistered) {
                 // Please enter a username before continuing
                 const { token } = await OAuthRegisterUser(provider, email)
@@ -82,6 +86,7 @@ const config = {
             if (user) {
                 token.accessToken = user.accessToken
                 token.isNew = user.isNew
+                token.name = user.name
 
                 console.log("Token Access Token: ", token.accessToken)
             }
@@ -92,6 +97,7 @@ const config = {
             //How to add username?
             session.user.accessToken = token.accessToken as string
             session.user.isNew = token.isNew as boolean
+            session.user.name = token.name as string
 
             console.log("Session Access Token: ", session.user.accessToken)
 

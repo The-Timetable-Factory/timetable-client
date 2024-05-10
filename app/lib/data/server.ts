@@ -55,7 +55,9 @@ export async function checkEmailRegistered(email: string): Promise<boolean> {
 
         const resData = await response.json();
 
-        return resData.data.checkUsernameExistence;
+        // console.log(resData.data.checkEmailRegistered)
+
+        return resData.data.checkEmailRegistered;
     } catch (err) {
         console.log('Database error: ', err);
         throw new Error('Failed to check username existence');
@@ -196,8 +198,39 @@ export async function OAuthSignInUser(provider: string, email: string): Promise<
             body: JSON.stringify({
                 query: `
                 query {
-                    OAuthSignIn(provider: "${provider}", email: "${email}"){
-                      username
+                    OAuthSignIn(OAuthSignInData: {provider: ${provider.toUpperCase()}, email: "${email}"}){
+                       user {
+                        username
+                       }
+                       accessToken
+                    }
+                  }
+                `
+            }),
+        });
+
+        const resData = await response.json();
+        console.log(resData);
+        return { username: resData.data.OAuthSignIn.username, token: resData.data.OAuthSignIn.accessToken };
+
+    } catch (err) {
+        console.log('Database error: ', err);
+        throw new Error('Failed to sign in user');
+
+    }
+}
+
+export async function updateUsername(username: string, accessToken: string): Promise<{ email: string }> {
+    console.log('Updating username')
+    // fetch to update username
+    try {
+        const response = await fetch('http://localhost:8080/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+            body: JSON.stringify({
+                query: `
+                mutation {
+                    updateUsername(username: "${username}"){
                       email
                     }
                   }
@@ -207,11 +240,11 @@ export async function OAuthSignInUser(provider: string, email: string): Promise<
 
         const resData = await response.json();
         console.log(resData);
-        return { username: resData.data.OAuthSignIn.username, token: resData.data.OAuthSignIn.token };
+        return { email: resData.data.updateUsername.email };
 
     } catch (err) {
         console.log('Database error: ', err);
-        throw new Error('Failed to sign in user');
+        throw new Error('Failed to update username');
 
     }
 }

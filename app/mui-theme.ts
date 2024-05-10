@@ -73,6 +73,10 @@ export function getTheme(darkMode: boolean) {
                 color: darkMode ? "#DAD6CE" : "black",
                 fontWeight: "300"
             },
+            subtitle1: {
+                fontFamily: "'Quicksand', sans-serif",
+                color: darkMode ? "#DAD6CE" : "black",
+            },
             subtitle2: {
                 fontFamily: "'Quicksand', sans-serif",
                 color: darkMode ? "#DAD6CE" : "black",
