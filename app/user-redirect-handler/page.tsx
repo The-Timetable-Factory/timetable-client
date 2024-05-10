@@ -5,7 +5,9 @@ import UsernameInput from "../ui/sign-in/username-input";
 
 
 export default function Page() {
-    const { data: session, status } = useSession()
+    const { data: session } = useSession()
+    console.log(session)
+    console.log(session?.user)
 
     if (!session || !session.user) {
         return <div>Please sign in</div>

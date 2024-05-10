@@ -4,7 +4,7 @@ import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
     registerUser,
-    credentialSignInUser,
+    credentialsSignInUser,
     checkEmailRegistered,
     OAuthSignInUser,
     OAuthRegisterUser
@@ -33,7 +33,7 @@ const credentialsConfig = CredentialsProvider({
         if (credentials.action === "signin" && typeof credentials.email === "string" && typeof credentials.password === "string") {
             // Sign in user
             console.log('Signing in user from auth.ts')
-            const { username, email, accessToken } = await credentialSignInUser(credentials.email, credentials.password)
+            const { username, email, accessToken } = await credentialsSignInUser(credentials.email, credentials.password)
 
             return { id: '1', name: username, email: email, accessToken: accessToken }
         }
@@ -61,13 +61,15 @@ const config = {
 
             if (provider !== "credentials" && !emailRegistered) {
                 // Please enter a username before continuing
-                user.isNew = true
                 const { token } = await OAuthRegisterUser(provider, email)
+                user.isNew = true
+                user.accessToken = token
+                console.log("User Access Token: ", user.accessToken)
                 return true
             }
 
             if (provider !== "credentials" && emailRegistered) {
-                const { username, token } = await OAuthSignInUser(provider, email)
+                const { username, token } = await OAuthSignInUser(provider.toUpperCase(), email)
                 user.name = username
                 user.accessToken = token
                 return true
@@ -79,13 +81,19 @@ const config = {
         async jwt({ token, user }) {
             if (user) {
                 token.accessToken = user.accessToken
+                token.isNew = user.isNew
+
+                console.log("Token Access Token: ", token.accessToken)
             }
             return token
         },
-        async session({ session, token, user }) {
+        async session({ session, token }) {
 
             //How to add username?
-            session.accessToken = token.accessToken as string
+            session.user.accessToken = token.accessToken as string
+            session.user.isNew = token.isNew as boolean
+
+            console.log("Session Access Token: ", session.user.accessToken)
 
             return session
         },

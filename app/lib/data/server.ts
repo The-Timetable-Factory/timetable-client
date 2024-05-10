@@ -109,7 +109,7 @@ export async function registerUser(username: string, email: string, password: st
  * @param password The password of the user
  * @returns The username, email and access token of the user
  */
-export async function credentialSignInUser(email: string, password: string): Promise<{ username: string, email: string, accessToken: string }> {
+export async function credentialsSignInUser(email: string, password: string): Promise<{ username: string, email: string, accessToken: string }> {
     console.log('Signing in user credential')
     // fetch to sign in user
     try {
@@ -119,21 +119,21 @@ export async function credentialSignInUser(email: string, password: string): Pro
             body: JSON.stringify({
                 query: `
                 query {
-                    signIn(signInData: {email:"${email}", password: "${password}"}){
+                    credentialsSignIn(signInData: {email:"${email}", password: "${password}"}){
                       user {
                         username
                         email
                       }
                       accessToken
                     }
-                  }
+                }
                 `
             }),
         });
 
         const resData = await response.json();
         console.log(resData);
-        return { username: resData.data.signIn.user.username, email: resData.data.signIn.user.email, accessToken: resData.data.signIn.accessToken };
+        return { username: resData.data.credentialsSignIn.user.username, email: resData.data.credentialsSignIn.user.email, accessToken: resData.data.credentialsSignIn.accessToken };
 
     } catch (err) {
         console.log('Database error: ', err);
@@ -160,8 +160,8 @@ export async function OAuthRegisterUser(provider: string, email: string): Promis
             body: JSON.stringify({
                 query: `
                 mutation{
-                    OAuthRegisterUser(provider: "${provider}", email: "${email}"){
-                      token
+                    OAuthRegisterUser(OAuthSignInData: {provider: ${provider.toUpperCase()}, email: "${email}"}){
+                      accessToken
                     }
                   }
                 `
@@ -170,7 +170,7 @@ export async function OAuthRegisterUser(provider: string, email: string): Promis
 
         const resData = await response.json();
         console.log(resData);
-        return { token: resData.data.OAuthSignUp.token };
+        return { token: resData.data.OAuthRegisterUser.accessToken };
 
     } catch (err) {
         console.log('Database error: ', err);
