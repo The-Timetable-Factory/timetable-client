@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton"
 import { useRouter } from 'next/navigation'
 
 interface TimetableButtonProps {
+    id: string
     title: string
 }
 
@@ -16,10 +17,20 @@ export default function TimetableButton(props: TimetableButtonProps) {
         position: "relative",
         padding: window.innerWidth > 600 ? "1.2rem" : "0.6rem"
     }
+
+    const router = useRouter()
+
+    function handleClick() {
+        // Redirect to the timetable page /timetables/[id]
+        router.push(`/timetables/:${props.id}/edit`)
+
+    }
+
+
     return (
         <>
             <Card variant="outlined" >
-                <CardActionArea>
+                <CardActionArea onClick={handleClick}>
                     <CardContent style={cardContentStyle}>
                         <Typography variant="h4" style={{ position: "absolute", display: "flex", bottom: "1rem" }}>{props.title}</Typography>
                     </CardContent>

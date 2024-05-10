@@ -54,6 +54,10 @@ th {
     font-family: 'DM Serif Display', serif;
 }
 
+td {
+    text-align: left;
+}
+
 form {
     justify-content: center;
 }
@@ -99,4 +103,73 @@ form {
 
 .downloadContainerDarkMode {
     border: 1px solid #DAD6CE;
+}
+
+table tr:last-child th:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+table tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+
+table tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.swiper-container {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100vh;
+    /* // CSS Grid/Flexbox bug size workaround
+    // @see https://github.com/kenwheeler/slick/issues/982
+    // @see https://github.com/nolimits4web/swiper/issues/3599 */
+    min-height: 0;
+    min-width: 0;
+}
+
+
+.slider-main-container {
+    position: relative;
+    width: 100%;
+}
+
+swiper-slide {
+    width: 100%;
+    height: 100%;
+}
+
+swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nav-btn {
+    display: block;
+    position: absolute;
+    z-index: 20;
+    user-select: none;
+    /* -webkit-user-select: none; */
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+/* .nav-btn:hover {
+    background-color: rgb(255, 165, 0);
+} */
+
+.nav-btn.custom-prev-button {
+    top: 50%;
+    left: 1em;
+}
+
+.nav-btn.custom-next-button {
+    right: 1em;
+    top: 50%;
 }

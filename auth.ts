@@ -2,38 +2,43 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import type { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
-import { addUser, signInUser } from "./app/lib/data/server";
+import {
+    registerUser,
+    credentialsSignInUser,
+    checkEmailRegistered,
+    OAuthSignInUser,
+    OAuthRegisterUser
+} from "./app/lib/data/server";
 
 
 const credentialsConfig = CredentialsProvider({
     name: "credentials",
     credentials: {
         username: { label: "Username", type: "string" },
-        password: { label: "Password", type: "password" },
         email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
         action: { label: "Action" }
     },
     async authorize(credentials) {
         console.log('credentials: ', credentials)
 
         if (credentials.action === "signup" && typeof credentials.username === "string" && typeof credentials.email === "string" && typeof credentials.password === "string") {
-            // Add user to server
-            console.log("Adding user")
-            addUser(credentials.username, credentials.email, credentials.password)
+            // Register user
+            console.log("Registering user from auth.ts")
+            const { username, email, accessToken } = await registerUser(credentials.username, credentials.email, credentials.password)
+            return { id: "1", name: username, email: email, accessToken: accessToken }
         }
 
-        if (credentials.email === "test@email.com" && credentials.password === "test1234") {
-            return { id: "1", name: "Test User", email: credentials.email };
-        } else {
-            return null;
-        }
 
         if (credentials.action === "signin" && typeof credentials.email === "string" && typeof credentials.password === "string") {
             // Sign in user
+            console.log('Signing in user from auth.ts')
+            const { username, email, accessToken } = await credentialsSignInUser(credentials.email, credentials.password)
+
+            return { id: '1', name: username, email: email, accessToken: accessToken }
         }
-        // if ( typeof credentials.username !== "string" && typeof credentials.email !== "string" && typeof credentials.password !== "string") {
-        //     return {error: "An error occured. Please try again."} // Might need to change this to throw an error
-        // }
+
+        return { error: "An error occured. Please try again." } // TODO: change it to throwing an error
     },
 });
 
@@ -49,22 +54,56 @@ const config = {
         signIn: '/signin'
     },
     callbacks: {
-        authorized({ auth, request: { nextUrl } }) {
-            const { pathname } = nextUrl
-            if (pathname === "/middleware-example") return !!auth
+        async signIn({ user, account, profile }) {
+            const provider = account!.provider as string
+            const email = user.email as string
+            const emailRegistered = await checkEmailRegistered(email)
 
-            console.log(auth)
-            console.log(nextUrl)
-            const isLoggedIn = !!auth?.user // !! converts to boolean
-            if (isLoggedIn) {
-                const email = auth?.user?.email
+            console.log('email: ', email)
 
+            console.log('email registered: ' + emailRegistered)
+
+            if (provider !== "credentials" && !emailRegistered) {
+                // Please enter a username before continuing
+                const { token } = await OAuthRegisterUser(provider, email)
+                user.isNew = true
+                user.accessToken = token
+                console.log("User Access Token: ", user.accessToken)
                 return true
             }
-            else {
-                return false
+
+            if (provider !== "credentials" && emailRegistered) {
+                const { username, token } = await OAuthSignInUser(provider.toUpperCase(), email)
+                user.name = username
+                user.accessToken = token
+                return true
             }
-        }
+
+            return true
+
+        },
+        async jwt({ token, user }) {
+            if (user) {
+                token.accessToken = user.accessToken
+                token.isNew = user.isNew
+                token.name = user.name
+
+                console.log("Token Access Token: ", token.accessToken)
+            }
+            return token
+        },
+        async session({ session, token }) {
+
+            //How to add username?
+            session.user.accessToken = token.accessToken as string
+            session.user.isNew = token.isNew as boolean
+            session.user.name = token.name as string
+
+            console.log("Session Access Token: ", session.user.accessToken)
+
+            return session
+        },
+
     },
     session: {
         strategy: 'jwt'
@@ -112,6 +151,40 @@ export const { handlers, auth, signIn, signOut } = NextAuth(config)
 
 
 
+// async authorized({ auth, request: { nextUrl } }) {
+//     const { pathname } = nextUrl
+//     if (pathname === "/middleware-example") return !!auth
+
+//     const isLoggedIn = !!auth?.user // !! converts to boolean
+//     if (isLoggedIn) {
+//         const email = auth?.user?.email
+//         // check if email registered
+
+//         if (email) {
+//             const emailRegistered = await checkEmailRegistered(email)
+
+//             if (emailRegistered) {
+
+
+
+//             } else {
+
+//             }
+//         }
+
+
+
+
+
+
+//         return true
+//     }
+//     else {
+//         return false
+//     }
+//     // console.log(auth)
+//     // console.log(nextUrl)
+// },
 
 
 

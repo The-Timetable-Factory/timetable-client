@@ -6,11 +6,15 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import IconButton from "@mui/material/IconButton"
 import { useRouter } from 'next/navigation'
 import TimetableButton from "../ui/timetables/timetable-button";
+import { fetchTimetableTitles } from "../lib/data/server";
+import Button from "@mui/material/Button";
+
 
 export default function Page() {
     const { darkMode } = useDarkMode()
     const router = useRouter()
-    const timetablesList = ['Fall 2023', 'Winter 2024', 'Summer 2024', 'Fall 2024']
+    // Fetch the user's timetable titles
+    const timetables = fetchTimetableTitles("1")
 
 
     const outerDivStyle = {
@@ -28,20 +32,23 @@ export default function Page() {
         <div style={outerDivStyle}>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }}>
 
-                <Typography variant="h4">Your Timetables</Typography>
-                <IconButton
+                <Typography variant="h4">My Timetables</Typography>
+
+                <Button
+                    variant="outlined"
                     color="info"
                     onClick={() => { router.push('/timetables/create') }}
-                    sx={{ position: "absolute", right: "0" }}>
-                    <AddCircleOutlineIcon />
-                </IconButton>
+                    sx={{ position: "absolute", right: "0" }}
+                    startIcon={<AddCircleOutlineIcon />}>
+                    Add New
+                </Button>
 
             </div>
 
             <div style={timetableButtonsDivStyle}>
                 {
-                    timetablesList.map(timetable => {
-                        return <TimetableButton title={timetable} />
+                    timetables.map(timetable => {
+                        return <TimetableButton title={timetable.title} id={timetable.id} />
                     })
                 }
             </div>
@@ -49,3 +56,4 @@ export default function Page() {
         </div>
     )
 }
+
