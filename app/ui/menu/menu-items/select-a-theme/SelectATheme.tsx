@@ -6,11 +6,13 @@ import { getTheme } from "../../../../lib/utils/styling-theme";
 import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
 import { useThemeStore } from "@/app/lib/store/theme-store";
 import { ThemeState } from "@/app/lib/interfaces/theme-interfaces";
+import { useTranslation } from "react-i18next";
 
 export default function SelectATheme() {
 
     const TITLE = useThemeStore((state: any) => state.theme.TITLE)
     const setThemeColors = useThemeStore((state: any) => state.setThemeColors)
+    const { t } = useTranslation()
 
     function handleChecked(value: string) {
         console.log(value + "from SelectATheme")
@@ -22,7 +24,7 @@ export default function SelectATheme() {
         <>
             {/* <div className="menuItemContainer"> */}
             <Collapsible
-                title="Select A Theme"
+                title={t("select_a_theme")}
                 icon={<StyleOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
                 backgroundColor="#DAD6CE"
                 isCourse={false}

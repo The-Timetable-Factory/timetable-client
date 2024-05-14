@@ -11,6 +11,7 @@ import BuyMeACoffeeButton from "./buy-me-a-coffee-button";
 import TimetableLogoMobile from "../timetable-logo-mobile";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from 'next/navigation'
+import LanguageSelector from "./language-selector";
 
 // import MUI icon
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -30,13 +31,13 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
  *
  * @component
  */
-export default function Navbar() {
+export default function Navbar({ locale }: { locale: string }) {
     // Access the darkMode state and setDarkMode function from the DarkModeContext
     const { darkMode } = useDarkMode();
     const session = useSession()
     const isLoggedIn = session && session.data && session.data.user
     const pathname = usePathname()
-    // if pathname contains /timetables/, then show the Outlined Textfield to edi the title
+    // if pathname contains /timetables/, then show the Outlined Textfield to edit the title
     const title = pathname.includes("/timetables/") ? true : false
     // Get path name
 
@@ -89,8 +90,6 @@ export default function Navbar() {
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
-                                        aria-label="toggle password visibility"
-
                                         //   onMouseDown={handleMouseDownPassword}
                                         edge="end"
                                     >
@@ -108,7 +107,7 @@ export default function Navbar() {
 
                         {isLoggedIn &&
 
-                            <Link href="/timetables">
+                            <Link href="/dashboard">
                                 <IconButton color="info" data-testid="info">
                                     <HomeOutlinedIcon />
                                 </IconButton>
@@ -135,6 +134,7 @@ export default function Navbar() {
                             </IconButton>
 
                         }
+                        <LanguageSelector locale={locale} />
                         <DarkModeToggle />
                     </div>
                 </Toolbar>
