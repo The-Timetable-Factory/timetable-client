@@ -10,6 +10,7 @@ import { useState } from "react";
 import { jsPDF } from "jspdf";
 import { generateBase64Image } from "@/app/lib/utils/download";
 import { UAParser } from "ua-parser-js"
+import { useTranslation } from "react-i18next";
 
 export default function SaveAsPDF() {
     const { darkMode } = useDarkMode()
@@ -25,6 +26,8 @@ export default function SaveAsPDF() {
     const divStyle = {
         boxShadow: isHovered ? `2px 2px 20px #C2B8A3, -2px 2px 20px #C2B8A3` : "",
     }
+
+    const { t } = useTranslation()
 
     async function setDownloadState() {
         for (let i = 0; i < numberOfPages; i++) {
@@ -84,7 +87,7 @@ export default function SaveAsPDF() {
             onMouseLeave={handleMouseLeave}
         >
             <IconButton color="info" onClick={handleSaveAsPDF} sx={{ width: "100%" }}>
-                <Typography variant="h4">Save As PDF</Typography>
+                <Typography variant="h4">{t('save_as_pdf')}</Typography>
                 <PictureAsPdfIcon sx={{ position: "absolute", right: "4%" }} />
             </IconButton>
 

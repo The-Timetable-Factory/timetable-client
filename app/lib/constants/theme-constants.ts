@@ -1,8 +1,8 @@
 import { ThemeState } from '../interfaces/theme-interfaces';
 
 export const MILK_TEA: ThemeState = {
-    TITLE: 'Milk Tea',
-    SUBTITLE: 'A classic silky drink offered by Cha Chaan Teng ',
+    TITLE: 'milk_tea',
+    SUBTITLE: 'milk_tea_description',
     COLORS: [
         '#C8B6A6',
         '#A4907C',
@@ -18,8 +18,8 @@ export const MILK_TEA: ThemeState = {
 }
 
 export const SESAME: ThemeState = {
-    TITLE: 'Sesame',
-    SUBTITLE: "A staple in asian cusine, from desserts to sauces.",
+    TITLE: 'sesame',
+    SUBTITLE: "sesame_description",
     COLORS: [
         '#23201F',
         '#42423D',

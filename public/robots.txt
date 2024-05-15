@@ -1,7 +1,6 @@
 # *
 User-agent: *
 Allow: /
-crawl-delay: 1
 
 # Host
 Host: http://localhost:3000/

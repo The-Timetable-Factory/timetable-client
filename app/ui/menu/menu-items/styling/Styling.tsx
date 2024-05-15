@@ -22,6 +22,7 @@ import Collapsible from "../../collapsible/Collapsible";
 import { useStylingStore } from "@/app/lib/store/styling-store";
 import { useThemeStore } from "@/app/lib/store/theme-store";
 import useStore from "@/app/lib/hooks/useStore";
+import { useTranslation } from "react-i18next";
 
 import { Dayjs } from "dayjs";
 
@@ -38,6 +39,7 @@ export default function Styling() {
     const COLORS = useThemeStore((state: any) => state.theme.COLORS)
     const setStartTime = useStylingStore((state: any) => state.setStartTime)
     const setEndTime = useStylingStore((state: any) => state.setEndTime)
+    const { t } = useTranslation()
 
 
     function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -93,7 +95,7 @@ export default function Styling() {
     return (
         <>
             <Collapsible
-                title="Styling"
+                title={t("styling")}
                 icon={<ColorLensOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
                 backgroundColor="#DAD6CE"
                 isCourse={false}

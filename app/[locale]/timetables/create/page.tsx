@@ -1,6 +1,6 @@
-'use client'
+// 'use client'
 import React from "react";
-import { useDarkMode } from "../../../ui/context/dark-mode-context";
+// import { useDarkMode } from "../../../ui/context/dark-mode-context";
 import Grid from "@mui/material/Grid";
 import Menu from '../../../ui/menu/menu';
 import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetable-carousel";
@@ -10,7 +10,7 @@ import TranslationsProvider from "@/app/translation-provider";
 const i18nNamespaces = ["timetable", "theme", "course"];
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-    const { darkMode } = useDarkMode()
+    // const { darkMode } = useDarkMode()
     const { t, resources } = await initTranslations(locale, i18nNamespaces);
 
     return (

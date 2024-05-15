@@ -4,7 +4,7 @@ import UltimateProvider from "../ultimate-provider";
 import Navbar from "../ui/navbar/navbar";
 import Footer from "../ui/footer/footer";
 import { SessionProvider } from "next-auth/react"
-import { auth } from "../../auth"
+import { auth } from "@/auth"
 import initTranslations from '../i18n';
 import i18nConfig from '@/i18nConfig';
 import { dir } from 'i18next';

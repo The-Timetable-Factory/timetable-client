@@ -1,17 +1,4 @@
-interface DateTimeImageSrc {
-    WHITE: string,
-    BLACK: string
-}
-
-interface DateTimeImageStyle {
-    height: string,
-    top: string
-}
-
-interface DateTimeImage {
-    SRC: DateTimeImageSrc,
-    STYLE: DateTimeImageStyle,
-}
+import { StaticImageData } from "next/image"
 
 interface DeviceMockImageStyle {
     height: string
@@ -20,12 +7,11 @@ interface DeviceMockImageStyle {
 }
 
 interface DeviceMockImage {
-    SRC: string,
+    SRC: StaticImageData,
     STYLE: DeviceMockImageStyle
 }
 
 interface DeviceImages {
-    DATE_TIME: DateTimeImage,
     DEVICE_MOCK: DeviceMockImage
 }
 
