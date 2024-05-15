@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { DaysRange, TimetableSettings } from "@/app/lib/interfaces/settings-interfaces";
+import { DaysRange } from "@/app/lib/interfaces/settings-interfaces";
 import { persist } from 'zustand/middleware'
 import { useTimetableStore } from './timetable-store';
 

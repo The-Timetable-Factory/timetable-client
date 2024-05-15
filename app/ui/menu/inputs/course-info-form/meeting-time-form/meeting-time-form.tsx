@@ -48,6 +48,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
 
 
     const handleChange = (name: string, value: string | Dayjs | daysSelection) => {
+        console.log(value)
         const newMeetingTime: meetingTime = {
             courseType: courseType,
             location: location,

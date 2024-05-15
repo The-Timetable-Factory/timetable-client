@@ -62,11 +62,19 @@ export default function CourseInfoForm(props: courseInfo) {
     const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
     const COLORS = useThemeStore((state: any) => state.theme.COLORS)
     const USED_COLORS = useThemeStore((state: any) => state.theme.USED_COLORS)
+    const addUsedColor = useThemeStore((state: any) => state.addUsedColor)
+    const removeUsedColor = useThemeStore((state: any) => state.removeUsedColor)
     const { t } = useTranslation()
 
 
     function handleBackgroundColorChange(value: string) {
+        if (USED_COLORS.includes(backgroundColor)) {
+
+            removeUsedColor(backgroundColor)
+        }
         setBackgroundColor(value)
+        addUsedColor(value)
+
     }
 
     function handleAddMeetingTime() {
