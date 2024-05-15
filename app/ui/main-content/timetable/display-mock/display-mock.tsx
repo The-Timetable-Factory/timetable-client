@@ -7,6 +7,9 @@ import { isColorDark } from "@/app/lib/utils/color"
 import useStore from "@/app/lib/hooks/useStore"
 import dayjs from "dayjs"
 import localFont from "next/font/local"
+import Image from "next/image"
+// import LandingPageIpad from "@/public/LandingPageIpad.png"
+
 const SFProDisplay = localFont({ src: './SF-Pro.ttf' })
 
 interface DisplayMockProps {
@@ -36,7 +39,7 @@ export default function DisplayMock(props: DisplayMockProps) {
                 DEVICE_IMAGES &&
                 <div style={{ position: 'absolute', display: 'flex', justifyContent: 'center', zIndex: 6 }}>
 
-                    <img
+                    <Image
                         src={DEVICE_IMAGES?.DEVICE_MOCK.SRC}
                         style={DEVICE_IMAGES?.DEVICE_MOCK.STYLE}
                         alt={display} />

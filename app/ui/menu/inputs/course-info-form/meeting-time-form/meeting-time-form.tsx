@@ -24,6 +24,8 @@ import MeetingTimeFormCSS from './meetingTimeForm.module.css'
 // import context
 import { useDarkMode } from "../../../../context/dark-mode-context";
 
+import { useTranslation } from "react-i18next";
+
 
 export interface MeetingTimeFormProps {
     key: number,
@@ -42,6 +44,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
     const endTime = dayjs(props.meetingTime.endTime);
     const days = props.meetingTime.days;
     const { darkMode } = useDarkMode()
+    const { t } = useTranslation()
 
 
     const handleChange = (name: string, value: string | Dayjs | daysSelection) => {
@@ -62,7 +65,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
             <div className={`center ${MeetingTimeFormCSS.div}`} style={{ position: 'relative' }}>
 
                 <div style={{ display: "flex", alignItems: "center", margin: "8px 0px" }} data-testid="meeting-time-form">
-                    <Typography variant="h6"> Meeting Time {props.id + 1}</Typography>
+                    <Typography variant="h6"> {t('course:meeting_time')} {props.id + 1}</Typography>
                     {props.length > 1 &&
                         (<IconButton onClick={() => props.handleRemoveMeetingTime(props.id)} sx={{ position: 'absolute', top: 10, right: 10 }}>
                             <CloseIcon />
@@ -79,7 +82,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <tr>
                                 <td>
-                                    <Typography variant="body1">Start Time: </Typography>
+                                    <Typography variant="body1">{t('course:start_time')}</Typography>
                                 </td>
                                 <td>
                                     <DesktopTimePicker
@@ -99,7 +102,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
                             </tr>
                             <tr>
                                 <td>
-                                    <Typography variant="body1">End Time: </Typography>
+                                    <Typography variant="body1">{t('course:end_time')}</Typography>
                                 </td>
                                 <td>
                                     <DesktopTimePicker
@@ -117,7 +120,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
                         </LocalizationProvider>
                         <tr>
                             <td>
-                                <Typography variant="body1">Course Type: </Typography>
+                                <Typography variant="body1">{t('course:course_type')}</Typography>
                             </td>
                             <td>
                                 <TextField label="(optional)" value={courseType} sx={{ m: "8px" }} onChange={(event) => handleChange("courseType", event.target.value)} data-testid="course-type" />
@@ -125,7 +128,7 @@ function MeetingTimeForm(props: MeetingTimeFormProps) {
                         </tr>
                         <tr>
                             <td>
-                                <Typography variant="body1">Location: </Typography>
+                                <Typography variant="body1">{t('course:location')} </Typography>
                             </td>
                             <td>
                                 <TextField label="(optional)" value={location} sx={{ m: "8px" }} onChange={(event) => handleChange("location", event.target.value)} data-testid="location" />

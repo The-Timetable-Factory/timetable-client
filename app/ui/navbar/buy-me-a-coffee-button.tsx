@@ -9,7 +9,7 @@ import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 
 export default function BuyMeACoffeeButton() {
     const [open, setOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
     function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
         setAnchorEl(event.currentTarget);

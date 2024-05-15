@@ -7,11 +7,14 @@ import LandingPageIphone from "../../public/LandingPageIphone.png"
 import LandingPageIpad from "../../public/LandingPageIpad.png"
 import Image from "next/image";
 import { useRouter } from 'next/navigation'
+import { useTranslation } from "react-i18next";
 
 
 
 export default function LandingPage() {
     const router = useRouter()
+    const { t } = useTranslation()
+
 
     return (
         <>
@@ -19,8 +22,8 @@ export default function LandingPage() {
                 <Grid container direction="row" sx={{ minHeight: "90vh", overflow: "hidden" }}>
                     <Grid item xs={12} md={6} className="center">
                         <div style={{ padding: "0vw 4vw 10vw 8vw", textAlign: "left" }}>
-                            <Typography variant="h3" sx={{ py: "10vh", }}> Timetables That Perfectly Fit Your Iphone and Ipad Lockscreen</Typography>
-                            <Button variant="contained" color="info" size="large" onClick={() => router.push('/timetables/create')}> Create Now</Button>
+                            <Typography variant="h3" sx={{ py: "10vh", }}> {t("slogan")}</Typography>
+                            <Button variant="contained" color="info" size="large" onClick={() => router.push('/timetables/create')}>{t("create_now")}</Button>
                         </div>
                     </Grid>
                     <Grid item xs={12} md={6} style={{ display: "flex", alignItems: "center" }}>

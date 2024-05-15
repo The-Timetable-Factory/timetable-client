@@ -12,6 +12,7 @@ import { useIphoneSettingsStore } from "@/app/lib/store/iphone-settings-store";
 import { useIpadSettingsStore } from "@/app/lib/store/ipad-settings-store";
 import { useLetterSettingsStore } from "@/app/lib/store/letter-settings-store";
 import { useA4SettingsStore } from "@/app/lib/store/a4-settings-store";
+import { useTranslation } from "react-i18next";
 // import { iPhoneSettingsConstants } from "@/app/lib/constants/developer-settings-constants";
 
 
@@ -22,6 +23,7 @@ export default function PickADisplay() {
     const devices = ["iphone", "ipad", "letter", "a4"]
     const display = useDisplayStore((state: any) => state.display)
     const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
+    const { t } = useTranslation()
 
 
     function handleDeviceChange(deviceType: string) {
@@ -33,7 +35,7 @@ export default function PickADisplay() {
         <>
 
             <Collapsible
-                title="Pick A Display"
+                title={t("pick_a_display")}
                 icon={<DevicesOutlinedIcon sx={{ position: "absolute", right: "4%" }} />}
                 backgroundColor="#DAD6CE"
                 isCourse={false}

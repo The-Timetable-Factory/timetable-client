@@ -1,4 +1,7 @@
 import DeveloperSettings from '../interfaces/developer-settings-interfaces'
+import iPhone14LockScreen from '@/public/iphone-14-lock-screen.png'
+import iPad13 from '@/public/ipad-pro-13.png'
+
 
 export const iPhoneSettingsConstants: DeveloperSettings = {
     ASPECT_RATIO: 9 / 19.5,
@@ -16,19 +19,8 @@ export const iPhoneSettingsConstants: DeveloperSettings = {
         tablet: 1
     },
     DEVICE_IMAGES: {
-        DATE_TIME: {
-            SRC: {
-                WHITE: "/iPhoneDateTimeWhite.svg",
-                BLACK: "/iPhoneDateTimeBlack.svg"
-
-            },
-            STYLE: {
-                height: "120px",
-                top: "160px"
-            }
-        },
         DEVICE_MOCK: {
-            SRC: "/iphone-14-lock-screen.png",
+            SRC: iPhone14LockScreen,
             STYLE: {
                 height: "774px",
                 top: "-48px"
@@ -53,19 +45,8 @@ export const iPhoneWithWidgetsSettingsConstants: DeveloperSettings = {
         tablet: 1
     },
     DEVICE_IMAGES: {
-        DATE_TIME: {
-            SRC: {
-                WHITE: "/iPhoneDateTimeWhite.svg",
-                BLACK: "/iPhoneDateTimeBlack.svg"
-
-            },
-            STYLE: {
-                height: "120px",
-                top: "66px"
-            }
-        },
         DEVICE_MOCK: {
-            SRC: "/iphone-14-lock-screen.png",
+            SRC: iPhone14LockScreen,
             STYLE: {
                 top: "-48px",
                 height: "774px"
@@ -90,19 +71,8 @@ export const iPadSettingsConstants: DeveloperSettings = {
         tablet: 1
     },
     DEVICE_IMAGES: {
-        DATE_TIME: {
-            SRC: {
-                WHITE: "/iPhoneDateTimeWhite.svg",
-                BLACK: "/iPhoneDateTimeBlack.svg"
-
-            },
-            STYLE: {
-                height: "110px",
-                top: "68px"
-            }
-        },
         DEVICE_MOCK: {
-            SRC: "/ipad-pro-13.png",
+            SRC: iPad13,
             STYLE: {
                 top: "-48px",
                 height: "734px"

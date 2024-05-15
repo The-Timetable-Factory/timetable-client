@@ -19,6 +19,8 @@ import { useStylingStore } from "@/app/lib/store/styling-store";
 
 import ImagePopUp from "./image-pop-up/image-pop-up";
 
+import { useTranslation } from "react-i18next"
+
 
 
 export default function DownloadImage() {
@@ -33,6 +35,8 @@ export default function DownloadImage() {
     const [open, setOpen] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
     const [timetableImgs, setTimetableImgs] = useState<Array<string>>([]);
+
+    const { t } = useTranslation()
 
     const divStyle = {
         boxShadow: isHovered ? `2px 2px 20px #C2B8A3, -2px 2px 20px #C2B8A3` : "",
@@ -117,7 +121,7 @@ export default function DownloadImage() {
             onMouseLeave={handleMouseLeave}
         >
             <IconButton color="info" onClick={handleDownload} sx={{ width: "100%" }}>
-                <Typography variant="h4">Download Image</Typography>
+                <Typography variant="h4">{t("download_image")}</Typography>
                 <DownloadIcon sx={{ position: "absolute", right: "4%" }} />
             </IconButton>
 

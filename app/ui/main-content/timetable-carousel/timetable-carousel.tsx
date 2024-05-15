@@ -1,3 +1,4 @@
+'use client'
 import { register } from 'swiper/element/bundle'
 import IconButton from '@mui/material/IconButton';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';

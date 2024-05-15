@@ -19,6 +19,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography";
 
+import { useTranslation } from "react-i18next";
+
 import { SESAME } from "@/app/lib/constants/theme-constants";
 
 interface CourseCodeState {
@@ -60,6 +62,7 @@ export default function CourseInfoForm(props: courseInfo) {
     const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
     const COLORS = useThemeStore((state: any) => state.theme.COLORS)
     const USED_COLORS = useThemeStore((state: any) => state.theme.USED_COLORS)
+    const { t } = useTranslation()
 
 
     function handleBackgroundColorChange(value: string) {
@@ -136,7 +139,7 @@ export default function CourseInfoForm(props: courseInfo) {
                 <tbody>
                     <tr>
                         <td>
-                            <Typography variant="body1">Course Code : </Typography>
+                            <Typography variant="body1">{t('course:course_code')} :</Typography>
                         </td>
                         <td>
                             <TextField
@@ -146,13 +149,14 @@ export default function CourseInfoForm(props: courseInfo) {
                                 sx={{ m: "8px", maxWidth: "160px" }}
                                 helperText={courseCodeState.courseCodeError}
                                 error={courseCodeState.courseCodeError !== null}
+                                fullWidth
 
                             />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <Typography variant="body1">Grid Colour : </Typography>
+                            <Typography variant="body1">{t('course:grid_colour')} : </Typography>
 
                         </td>
                         <td>
@@ -176,11 +180,11 @@ export default function CourseInfoForm(props: courseInfo) {
                 />
             ))}
 
-            <Button variant='outlined' color="info" onClick={handleAddMeetingTime} sx={{ margin: '4px' }}>Add Another Meeting Time</Button>
+            <Button variant='outlined' color="info" onClick={handleAddMeetingTime} sx={{ margin: '4px' }}>{t('course:add_another_meeting_time')}</Button>
 
             {existed && <Button color="error" variant="outlined" onClick={handleRemoveCourse} sx={{ margin: '4px' }}>Remove Course</Button>}
 
-            <Button type="submit" variant="outlined" color="info" onClick={handleSubmit} sx={{ margin: '4px' }}>Submit</Button>
+            <Button type="submit" variant="outlined" color="info" onClick={handleSubmit} sx={{ margin: '4px' }}>{t('course:submit')}</Button>
         </>
     );
 }

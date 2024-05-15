@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useDarkMode } from "../../../../context/dark-mode-context";
 import { ThemeState } from "../../../../../lib/interfaces/theme-interfaces"
+import { useTranslation } from "react-i18next";
 
 
 interface ColorPalletesProps {
@@ -18,6 +19,7 @@ interface ColorPalletesProps {
 export default function ColorPalattes(props: ColorPalletesProps) {
     const checked = props.checked
     const { TITLE, SUBTITLE, COLORS } = props.theme
+    const { t } = useTranslation()
 
     console.log("Checked" + checked)
 
@@ -61,10 +63,10 @@ export default function ColorPalattes(props: ColorPalletesProps) {
                             </div>
 
                             <Typography variant="h6">
-                                {TITLE}
+                                {t(`theme:${TITLE}`)}
                             </Typography>
                             <Typography variant="subtitle2">
-                                {SUBTITLE}
+                                {t(`theme:${SUBTITLE}`)}
                             </Typography>
 
                         </CardContent>
