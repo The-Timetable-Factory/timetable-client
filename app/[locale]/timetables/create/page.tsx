@@ -7,7 +7,7 @@ import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetabl
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/app/translation-provider";
 
-const i18nNamespaces = ["timetable", "theme", "course", "common", "styling"];
+const i18nNamespaces = ["timetable", "theme", "course", "common", "styling", "settings"];
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
     // const { darkMode } = useDarkMode()

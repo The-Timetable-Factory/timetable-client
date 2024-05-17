@@ -11,6 +11,7 @@ import Widgets from "./widgets/widgets";
 
 import { DaysRange } from "@/app/lib/interfaces/settings-interfaces";
 import { UseBoundStore } from "zustand";
+import { useTranslation } from "react-i18next";
 
 interface SettingsProps {
     display: string
@@ -41,6 +42,7 @@ export default function Settings(props: SettingsProps) {
     const decreaseCourseGridHeight = useDisplaySettingsStore((state: any) => state.decreaseCourseGridHeight)
 
     const setDaysRange = useDisplaySettingsStore((state: any) => state.setDaysRange)
+    const {t} = useTranslation()
 
 
     function handleDaysChange(name: string, value: DaysRange) {
@@ -66,7 +68,7 @@ export default function Settings(props: SettingsProps) {
         <>
             <div className="center menuItemInnerInput" data-testid="setting">
 
-                <Typography variant="h6">{props.display} Display Settings</Typography>
+                <Typography variant="h6">{props.display}{t('settings:display_settings')}</Typography>
 
                 {errorMessage && <Alert severity="error" onClose={() => { setErrorMessage("") }}>{errorMessage}</Alert>}
                 <DaysSelection days={daysRange} handleChange={handleDaysChange} />
@@ -75,7 +77,7 @@ export default function Settings(props: SettingsProps) {
                     <tbody>
                         <tr>
                             <th>
-                                <Typography variant="body1">Grid Width: </Typography>
+                                <Typography variant="body1">{t('settings:grid_width')}: </Typography>
                             </th>
                             <td>
 
@@ -88,7 +90,7 @@ export default function Settings(props: SettingsProps) {
                         </tr>
                         <tr>
                             <th>
-                                <Typography variant="body1">Grid Height: </Typography>
+                                <Typography variant="body1">{t('settings:grid_height')}: </Typography>
                             </th>
                             <td>
                                 <GridSizing
@@ -106,7 +108,7 @@ export default function Settings(props: SettingsProps) {
                             props.display === "iphone" &&
                             <tr>
                                 <th>
-                                    <Typography variant="body1">Widgets: </Typography>
+                                    <Typography variant="body1">{t('settings:widgets')}: </Typography>
                                 </th>
                                 <td style={{ textAlign: "left" }}>
                                     <Widgets value={widgets} handleChange={handleWidgetsChange} />
@@ -117,9 +119,9 @@ export default function Settings(props: SettingsProps) {
                 </table>
 
 
-                <Button variant="outlined" color="info" onClick={resetToDefault} sx={{ margin: '4px' }}>Reset to default</Button>
+                <Button variant="outlined" color="info" onClick={resetToDefault} sx={{ margin: '4px' }}>{t('settings:reset_to_default')}</Button>
 
-                <Button type="submit" variant="outlined" color="info" onClick={onSubmit} sx={{ margin: '4px' }}>Update</Button>
+                <Button type="submit" variant="outlined" color="info" onClick={onSubmit} sx={{ margin: '4px' }}>{t('settings:update')}</Button>
             </div>
         </>
     )
