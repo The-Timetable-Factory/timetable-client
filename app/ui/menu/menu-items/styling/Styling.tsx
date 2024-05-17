@@ -107,7 +107,7 @@ export default function Styling() {
 
                             <tr>
                                 <th>
-                                    <Typography variant="body1">Title: </Typography>
+                                    <Typography variant="body1">{t('common:title')}</Typography>
                                 </th>
                                 <td>
                                     <TextField label="(optional)" onChange={handleTitleChange} value={title} sx={{ m: "8px", maxWidth: "160px" }} />
@@ -116,7 +116,7 @@ export default function Styling() {
 
                             <tr>
                                 <th>
-                                    <Typography variant="body1">Start Time: </Typography>
+                                    <Typography variant="body1">{t('common:start_time')}</Typography>
                                 </th>
                                 <td>
                                     <DesktopTimePicker
@@ -130,7 +130,7 @@ export default function Styling() {
                             </tr>
                             <tr>
                                 <th>
-                                    <Typography variant="body1">End Time:</Typography>
+                                    <Typography variant="body1">{t('common:end_time')}</Typography>
                                 </th>
                                 <td>
 
@@ -147,7 +147,7 @@ export default function Styling() {
                             </tr>
                             <tr>
                                 <th >
-                                    <Typography variant="body1">Background Color: </Typography>
+                                    <Typography variant="body1">{t('styling:background_colour')}</Typography>
 
                                 </th>
                                 <td>
@@ -158,7 +158,7 @@ export default function Styling() {
 
                             <tr>
                                 <th>
-                                    <Typography variant="body1">Header Color: </Typography>
+                                    <Typography variant="body1">{t('styling:header_colour')}</Typography>
 
                                 </th>
                                 <td >
@@ -167,7 +167,7 @@ export default function Styling() {
                             </tr>
                             <tr>
                                 <th>
-                                    <Typography variant="body1">Clock Type: </Typography>
+                                    <Typography variant="body1">{t('styling:clock_type')}</Typography>
                                 </th>
                                 <td>
                                     <YesNoRadio
@@ -179,7 +179,7 @@ export default function Styling() {
                             </tr>
                             <tr>
                                 <th>
-                                    <Typography variant="body1">Display Time: </Typography>
+                                    <Typography variant="body1">{t('styling:display_time')}</Typography>
                                 </th>
                                 <td>
                                     <YesNoRadio

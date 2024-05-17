@@ -1,20 +1,19 @@
 'use client'
-import React, { useState, useEffect } from "react";
+
 import { useDarkMode } from "../../ui/context/dark-mode-context";
+import { useRouter } from 'next/navigation'
 import Typography from "@mui/material/Typography"
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import IconButton from "@mui/material/IconButton"
-import { useRouter } from 'next/navigation'
-import TimetableButton from "../../ui/dashboard/timetable-button";
-import { fetchTimetableTitles } from "../../lib/data/server";
+import { fetchTimetableTitles } from '@/app/lib/data/server'
+import TimetableButton from "@/app/ui/dashboard/timetable-button";
 import Button from "@mui/material/Button";
+import { useTranslation } from "react-i18next";
 
-
-export default function Page() {
-    const { darkMode } = useDarkMode()
+export default function Dashboard() {
     const router = useRouter()
     // Fetch the user's timetable titles
     const timetables = fetchTimetableTitles("1")
+    const { t } = useTranslation()
 
 
     const outerDivStyle = {
@@ -32,7 +31,7 @@ export default function Page() {
         <div style={outerDivStyle}>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }}>
 
-                <Typography variant="h4">My Timetables</Typography>
+                <Typography variant="h4">{t('my_timetables')}</Typography>
 
                 <Button
                     variant="outlined"
@@ -40,7 +39,7 @@ export default function Page() {
                     onClick={() => { router.push('/timetables/create') }}
                     sx={{ position: "absolute", right: "0" }}
                     startIcon={<AddCircleOutlineIcon />}>
-                    Add New
+                    {t('add_new')}
                 </Button>
 
             </div>
@@ -56,4 +55,3 @@ export default function Page() {
         </div>
     )
 }
-

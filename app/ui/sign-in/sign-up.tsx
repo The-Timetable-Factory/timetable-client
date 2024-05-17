@@ -14,6 +14,7 @@ import { checkUsernameExistance, checkEmailRegistered } from "@/app/lib/data/ser
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonIcon from '@mui/icons-material/Person';
 import Tooltip from '@mui/material/Tooltip';
+import { useTranslation } from "react-i18next";
 
 enum UsernameStatus {
     AVAILABLE = 'available',
@@ -71,6 +72,7 @@ export default function SignUp() {
     const [password, setPassword] = useState<Password>({ password: '', status: PasswordStatus.NULL, error: '' });
     const [verifyPassword, setVerifyPassword] = useState<VerifyPassword>({ verifyPassword: '', status: VerifyPasswordStatus.NULL, error: '' });
     let signUpDisabled = username.status !== UsernameStatus.AVAILABLE || email.status !== EmailStatus.VALID || password.status !== PasswordStatus.IS_VALID || verifyPassword.status !== VerifyPasswordStatus.IS_VALID
+    const { t } = useTranslation()
 
 
     const handleUsernameChange = useDebouncedCallback(async (e: any) => {
@@ -179,12 +181,12 @@ export default function SignUp() {
                         <tr>
                             <td>
 
-                                <Typography variant="h4" sx={{ textAlign: 'left' }}>Sign Up</Typography>
+                                <Typography variant="h4" sx={{ textAlign: 'left' }}>{t('sign_up')}</Typography>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <Typography variant="body1">Username:</Typography>
+                                <Typography variant="body1">{t('username')}:</Typography>
                             </td>
                             <td>
                                 <OutlinedInput
@@ -195,11 +197,11 @@ export default function SignUp() {
                                     endAdornment={
                                         <InputAdornment position='end'>
                                             {username.status === UsernameStatus.AVAILABLE ?
-                                                <Tooltip title="Username is available" arrow>
+                                                <Tooltip title={t('username_is_avaliable')} arrow>
                                                     <CheckIcon />
                                                 </Tooltip> :
                                                 username.status === UsernameStatus.NOT_AVAILABLE ?
-                                                    <Tooltip title="Username is not available" arrow>
+                                                    <Tooltip title={t('username_is_not_avaliable')} arrow>
                                                         <CloseIcon color='error' />
                                                     </Tooltip> :
                                                     username.status == UsernameStatus.LOADING ?
@@ -212,7 +214,7 @@ export default function SignUp() {
                         </tr>
                         <tr>
                             <td>
-                                <Typography variant="body1">Email:</Typography>
+                                <Typography variant="body1">{t('email')}:</Typography>
                             </td>
                             <td>
                                 <OutlinedInput
@@ -225,15 +227,15 @@ export default function SignUp() {
                                         <InputAdornment position='end'>
 
                                             {email.status === EmailStatus.VALID ?
-                                                <Tooltip title="Valid email" arrow>
+                                                <Tooltip title={t('valid_email')} arrow>
                                                     <CheckIcon />
                                                 </Tooltip> :
                                                 email.status === EmailStatus.INVALID ?
-                                                    <Tooltip title="Invalid email" arrow>
+                                                    <Tooltip title={t('invalid_email')} arrow>
                                                         <CloseIcon color='error' />
                                                     </Tooltip> :
                                                     email.status === EmailStatus.NOT_AVALIABLE ?
-                                                        <Tooltip title="Email is already registered" arrow>
+                                                        <Tooltip title={t('email_is_already_registered')} arrow>
                                                             <PersonIcon color='error' />
                                                         </Tooltip> :
                                                         email.status == EmailStatus.LOADING ?
@@ -246,7 +248,7 @@ export default function SignUp() {
                         </tr>
                         <tr>
                             <td>
-                                <Typography variant="body1">Password:</Typography>
+                                <Typography variant="body1">{t('password')}:</Typography>
                             </td>
                             <td>
                                 <OutlinedInput
@@ -262,7 +264,7 @@ export default function SignUp() {
                                                     <CloseIcon color='error' />
                                                 </Tooltip> :
                                                 password.status === PasswordStatus.IS_VALID ?
-                                                    <Tooltip title="Password is valid" arrow>
+                                                    <Tooltip title={t('password_is_valid')} arrow>
                                                         <CheckIcon />
                                                     </Tooltip> :
                                                     ''
@@ -274,7 +276,7 @@ export default function SignUp() {
                         </tr>
                         <tr>
                             <td>
-                                <Typography variant="body1">Verify Password:</Typography>
+                                <Typography variant="body1">{t('verify_password')}:</Typography>
                             </td>
                             <td>
                                 <OutlinedInput
@@ -290,7 +292,7 @@ export default function SignUp() {
                                                     <CloseIcon color='error' />
                                                 </Tooltip> :
                                                 verifyPassword.status === VerifyPasswordStatus.IS_VALID ?
-                                                    <Tooltip title="Password is valid" arrow>
+                                                    <Tooltip title={t('password_is_valid')} arrow>
                                                         <CheckIcon />
                                                     </Tooltip> :
                                                     ''
@@ -311,7 +313,7 @@ export default function SignUp() {
 
                                 >
                                     <PersonAddAlt1Icon sx={{ marginRight: "6px" }} fontSize='small' />
-                                    Sign Up
+                                    {t('sign_up')}
                                 </Button>
                             </td>
                         </tr>

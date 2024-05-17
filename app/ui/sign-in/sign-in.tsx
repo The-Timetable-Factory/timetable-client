@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 
 enum EmailStatus {
@@ -34,6 +35,8 @@ export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState<Email>({ email: '', status: EmailStatus.NULL });
     const [password, setPassword] = useState('');
+
+    const { t } = useTranslation()
 
     const handleEmailChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -90,13 +93,13 @@ export default function SignIn() {
                 <tbody>
                     <tr>
                         <td colSpan={2}>
-                            <Typography variant="h4">Sign In</Typography>
+                            <Typography variant="h4">{t('sign_in')}</Typography>
 
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <Typography variant="body1">Email:</Typography>
+                            <Typography variant="body1">{t('email')}:</Typography>
                         </td>
                         <td>
                             <OutlinedInput
@@ -110,7 +113,7 @@ export default function SignIn() {
 
                                         {
                                             email.status === EmailStatus.INVALID ?
-                                                <Tooltip title="Invalid email" arrow>
+                                                <Tooltip title={t('invalid_email')} arrow>
                                                     <CloseIcon color='error' />
                                                 </Tooltip> :
                                                 ''}
@@ -122,7 +125,7 @@ export default function SignIn() {
                     </tr>
                     <tr>
                         <td>
-                            <Typography variant="body1">Password:</Typography>
+                            <Typography variant="body1">{t('password')}:</Typography>
                         </td>
                         <td>
                             <OutlinedInput
@@ -157,9 +160,9 @@ export default function SignIn() {
                                 onClick={() => { handleSignIn() }}
                             >
                                 <LoginIcon sx={{ marginRight: "6px" }} fontSize='small' />
-                                Sign In
+                                {t('sign_in')}
                             </Button>
-                            <Typography variant="body2" sx={{ marginTop: "20px" }}>Or</Typography>
+                            <Typography variant="body2" sx={{ marginTop: "20px" }}>{t('or')}</Typography>
                         </td>
                     </tr>
                     <tr>
@@ -171,7 +174,7 @@ export default function SignIn() {
                                 onClick={() => { signIn('google', { callbackUrl: '/user-redirect-handler' }) }}
                             >
                                 <GoogleIcon sx={{ marginRight: "6px" }} fontSize='small' />
-                                Sign in with Google
+                                {t('sign_in_with_google')}
                             </Button>
                         </td>
                     </tr>
@@ -184,7 +187,7 @@ export default function SignIn() {
                                 onClick={() => { signIn('apple', { callbackUrl: '/user-redirect-handler' }) }}
                             >
                                 <AppleIcon sx={{ marginRight: "6px" }} fontSize='small' />
-                                Sign in with Apple</Button>
+                                {t('sign_in_with_apple')}</Button>
                         </td>
                     </tr>
                 </tbody>

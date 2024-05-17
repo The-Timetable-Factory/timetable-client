@@ -7,7 +7,7 @@ import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetabl
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/app/translation-provider";
 
-const i18nNamespaces = ["timetable", "theme", "course"];
+const i18nNamespaces = ["timetable", "theme", "course", "common", "styling"];
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
     // const { darkMode } = useDarkMode()
@@ -27,8 +27,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                         sx={{ overflow: "visible" }}
                     >
                         <TimetableCarousel />
-                        {/* <TimetableCarousel /> */}
-                        {/* <ColorRadioSelection name="deviceDivColor" handleChange={setDeviceDivColor} value={deviceDivColor} options={["#FFFFFF", "#DAD6CE", "#121212", "#000000"]} direction="column" /> */}
+
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={12} lg={3.5}
