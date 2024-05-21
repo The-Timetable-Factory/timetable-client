@@ -28,8 +28,8 @@ export async function checkUsernameExistance(username: string): Promise<boolean>
 
         return resData.data.checkUsernameExistence;
     } catch (err) {
-        console.log('Database error: ', err);
-        throw new Error('Failed to check username existence');
+        console.log('Database error: ', (err as Error).message);
+        throw new Error((err as Error).message);
     }
 }
 
@@ -60,7 +60,7 @@ export async function checkEmailRegistered(email: string): Promise<boolean> {
         return resData.data.checkEmailRegistered;
     } catch (err) {
         console.log('Database error: ', err);
-        throw new Error('Failed to check username existence');
+        throw new Error((err as Error).message);
     }
 }
 
