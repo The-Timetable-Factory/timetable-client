@@ -10,6 +10,10 @@
  * @returns A boolean if username is avaliable return true, else return false
  */
 
+import * as error from '../exceptions';
+
+// import { ServerError,  } from "../exceptions";
+
 export async function checkUsernameExistance(username: string): Promise<boolean> {
     try {
         const response = await fetch('http://localhost:8080/graphql', {
@@ -28,8 +32,7 @@ export async function checkUsernameExistance(username: string): Promise<boolean>
 
         return resData.data.checkUsernameExistence;
     } catch (err) {
-        console.log('Database error: ', (err as Error).message);
-        throw new Error((err as Error).message);
+        throw new error.ServerError((err as Error).message);
     }
 }
 
@@ -58,9 +61,8 @@ export async function checkEmailRegistered(email: string): Promise<boolean> {
         // console.log(resData.data.checkEmailRegistered)
 
         return resData.data.checkEmailRegistered;
-    } catch (err) {
-        console.log('Database error: ', err);
-        throw new Error((err as Error).message);
+    } catch (err: any) {
+        throw new error.ServerError(err.message);
     }
 }
 
@@ -99,9 +101,12 @@ export async function registerUser(username: string, email: string, password: st
         console.log(resData);
 
         return { username: resData.data.registerUser.user.username, email: resData.data.registerUser.user.email, accessToken: resData.data.registerUser.accessToken };
-    } catch (err) {
-        console.log('Database error: ', err);
-        throw new Error('Failed to add user to database');
+    } catch (err: any) {
+        if (err.message === 'Email already exists') {
+            throw new error.EmailAlreadyExistsError();
+        } else {
+            throw new error.ServerError(err instanceof Error ? err.message : 'Unknown error');
+        }
     }
 }
 
@@ -137,10 +142,17 @@ export async function credentialsSignInUser(email: string, password: string): Pr
         console.log(resData);
         return { username: resData.data.credentialsSignIn.user.username, email: resData.data.credentialsSignIn.user.email, accessToken: resData.data.credentialsSignIn.accessToken };
 
-    } catch (err) {
-        console.log('Database error: ', err);
-        throw new Error('Failed to sign in user');
-
+    } catch (err: any) {
+        switch (err.message) {
+            case 'ACCOUNT_NOT_FOUND':
+                throw new error.AccountNotFoundError();
+            case 'INVALID_CREDENTIALS':
+                throw new error.InvalidCredentialError();
+            case 'PROVIDER_MISMATCH':
+                throw new error.ProviderMismatchError();
+            default:
+                throw new error.ServerError(err.message);
+        }
     }
 }
 
@@ -174,10 +186,15 @@ export async function OAuthRegisterUser(provider: string, email: string): Promis
         console.log(resData);
         return { token: resData.data.OAuthRegisterUser.accessToken };
 
-    } catch (err) {
-        console.log('Database error: ', err);
-        throw new Error('Failed to register user');
-
+    } catch (err: any) {
+        switch (err.message) {
+            case 'EMAIL_ALREADY_EXISTS':
+                throw new error.EmailAlreadyExistsError();
+            case 'USER_REGISTRATION_FAILED':
+                throw new error.UserRegistrationFailedError();
+            default:
+                throw new error.ServerError(err.message);
+        }
     }
 }
 
@@ -213,9 +230,15 @@ export async function OAuthSignInUser(provider: string, email: string): Promise<
         console.log(resData);
         return { username: resData.data.OAuthSignIn.username, token: resData.data.OAuthSignIn.accessToken };
 
-    } catch (err) {
-        console.log('Database error: ', err);
-        throw new Error('Failed to sign in user');
+    } catch (err: any) {
+        switch (err.message) {
+            case 'ACCOUNT_NOT_FOUND':
+                throw new error.AccountNotFoundError();
+            case 'PROVIDER_MISMATCH':
+                throw new error.ProviderMismatchError();
+            default:
+                throw new error.ServerError(err.message);
+        }
 
     }
 }
@@ -242,9 +265,17 @@ export async function updateUsername(username: string, accessToken: string): Pro
         console.log(resData);
         return { email: resData.data.updateUsername.email };
 
-    } catch (err) {
-        console.log('Database error: ', err);
-        throw new Error('Failed to update username');
+    } catch (err: any) {
+        switch (err.message) {
+
+            case 'USERNAME_ALREADY_EXISTS':
+                throw new error.UsernameAlreadyExistsError();
+            case 'ACCOUNT_NOT_FOUND':
+                throw new error.AccountNotFoundError();
+            default:
+                throw new error.ServerError(err.message);
+
+        }
 
     }
 }
