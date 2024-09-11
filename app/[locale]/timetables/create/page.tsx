@@ -6,6 +6,7 @@ import Menu from '../../../ui/menu/menu';
 import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetable-carousel";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/app/translation-provider";
+import TimetablePage from "@/app/ui/timetable-page";
 
 const i18nNamespaces = ["timetable", "theme", "course", "common", "styling", "settings"];
 
@@ -18,26 +19,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             namespaces={i18nNamespaces}
             locale={locale}
             resources={resources}>
-            <div>
-
-                <Grid container direction="row" sx={{ minHeight: "780px" }}>
-                    <Grid item xs={12} sm={12} md={12} lg={8.5}
-                        justifyContent="center"
-                        display="flex"
-                        sx={{ overflow: "visible" }}
-                    >
-                        <TimetableCarousel />
-
-                    </Grid>
-
-                    <Grid item xs={12} sm={12} md={12} lg={3.5}
-                    // sx={{ borderRadius: "10px 0px 0px 10px", borderStyle: "none none none solid", borderColor: `${darkMode ? "#232323" : "#C2B8A3"}`, borderWidth: "1px" }}
-                    >
-                        {/* I want to make this grid scrollable */}
-                        <Menu />
-                    </Grid>
-                </Grid>
-            </div>
+            <TimetablePage />
         </TranslationsProvider>
     )
 }

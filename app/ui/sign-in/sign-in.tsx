@@ -19,6 +19,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { createClient } from '@/utils/supabase/client';
 
 
 enum EmailStatus {
@@ -32,11 +33,15 @@ interface Email {
 
 export default function SignIn() {
     // const [isHovered, setIsHovered] = useState(false)
+    const supabase = createClient();
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState<Email>({ email: '', status: EmailStatus.NULL });
     const [password, setPassword] = useState('');
+    const router = useRouter()
 
     const { t } = useTranslation()
+
+    // redirect('/')
 
     const handleEmailChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -60,24 +65,34 @@ export default function SignIn() {
     }, 1000)
 
     function handleClickShowPassword() {
-        setShowPassword((show) => !show)
+        setShowPassword((show) => !show);
     }
+
 
     async function handleSignIn() {
         if (email.status !== EmailStatus.VALID) {
             return;
         }
-        const res = await signIn('credentials', {
+
+        let { data, error } = await supabase.auth.signInWithPassword({
             email: email.email,
-            password: password,
-            action: 'signin',
-            callbackUrl: '/timetables'
+            password: password
         })
 
-        console.log('res: ', res)
+        console.log(data)
 
-        redirect('/timetables')
+        if (error) {
+            console.log(error)
+            throw new Error(error.message)
+            // router.push('/error')
+        } else {
+            // redirect('/')
+            router.push('/dashboard')
+        }
+
     }
+
+
 
 
     return (
@@ -103,7 +118,7 @@ export default function SignIn() {
                         </td>
                         <td>
                             <OutlinedInput
-                                id="sign-up-email"
+                                id="sign-in-email"
                                 type="email"
                                 fullWidth
                                 onChange={handleEmailChange}

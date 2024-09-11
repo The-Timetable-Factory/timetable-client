@@ -43,7 +43,7 @@ export default function Menu() {
                                 key={course.id}
                                 title={course.courseCode}
                                 icon={<EditIcon sx={{ position: "absolute", right: "4%" }} />}
-                                backgroundColor={course.backgroundColour}
+                                backgroundColor={course.backgroundColor}
                                 isCourse={true}
                             >
                                 <CourseInfoForm

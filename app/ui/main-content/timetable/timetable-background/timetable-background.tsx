@@ -42,7 +42,8 @@ export default function TimetableBackground(props: TimetableBackgroundProps) {
         borderRadius: BORDER_RADIUS,
         border: "solid 1px",
         borderColor: "info.main",
-        transform: `scale(${getScale(SCALE, WIDTH)})`
+        transform: `scale(${getScale(SCALE, WIDTH)})`,
+        top: "-6px",
     }
     return (
         <>

@@ -2,17 +2,17 @@ import { create } from 'zustand'
 import dayjs, { Dayjs } from "dayjs"
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { useTimetableStore } from './timetable-store';
-import { ClockType } from '../interfaces/styling-interfaces';
+import { ClockType, StylingState } from '../interfaces/styling-interfaces';
 
-interface StylingState {
-    title: string,
+interface StylingStoreState {
+    title: boolean,
     startTime: Dayjs,
     endTime: Dayjs,
     backgroundColor: string,
     headerColor: string,
     clockType: ClockType,
     displayTime: boolean,
-    setTitle: (newTitle: string) => void,
+    setTitle: (newTitle: boolean) => void,
     setStartTime: (newStartTime: Dayjs) => void,
     setEndTime: (newEndTime: Dayjs) => void,
     setBackgroundColor: (newColor: string) => void,
@@ -22,16 +22,16 @@ interface StylingState {
 
 }
 
-export const useStylingStore = create<StylingState>()(
+export const useStylingStore = create<StylingStoreState>()(
     persist((set, get) => ({
-        title: '',
+        title: true,
         startTime: dayjs('2022-04-17T09:00'),
         endTime: dayjs('2022-04-17T21:00'),
         backgroundColor: "#D6D0C2",
         headerColor: "#C2B8A3",
         clockType: ClockType.TWELVE_HOUR,
         displayTime: true,
-        setTitle: (newTitle: string) => {
+        setTitle: (newTitle: boolean) => {
             set(() => ({ title: newTitle }))
         },
         setStartTime: (newStartTime: Dayjs) => {
@@ -56,13 +56,24 @@ export const useStylingStore = create<StylingState>()(
         },
         resetToDefault: () => {
             set(() => ({
-                title: '',
+                title: true,
                 startTime: dayjs('2022-04-17T09:00'),
                 endTime: dayjs('2022-04-17T21:00'),
                 backgroundColor: "#D6D0C2",
                 headerColor: "#C2B8A3",
                 clockType: ClockType.TWELVE_HOUR,
                 displayTime: true
+            }))
+        },
+        setStyling: (newStyling: StylingState) => {
+            set(() => ({
+                title: newStyling.title,
+                startTime: newStyling.startTime,
+                endTime: newStyling.endTime,
+                backgroundColor: newStyling.backgroundColor,
+                headerColor: newStyling.headerColor,
+                clockType: newStyling.clockType,
+                displayTime: newStyling.displayTime
             }))
         }
     }),

@@ -24,11 +24,11 @@ import { useThemeStore } from "@/app/lib/store/theme-store";
 import useStore from "@/app/lib/hooks/useStore";
 import { useTranslation } from "react-i18next";
 
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 export default function Styling() {
 
-    const title = useStore(useStylingStore, (state: any) => state.title)
+    const title = useStore(useStylingStore, (state: any) => state.title) === true ? "Yes" : "No"
     const startTime = useStylingStore((state: any) => state.startTime)
     const endTime = useStylingStore((state: any) => state.endTime)
     const backgroundColor = useStore(useStylingStore, (state: any) => state.backgroundColor)
@@ -42,8 +42,15 @@ export default function Styling() {
     const { t } = useTranslation()
 
 
-    function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        useStylingStore.setState({ title: event.target.value })
+    function handleTitleChange(value: string) {
+        let title;
+        if (value === "Yes") {
+            title = true
+        }
+        else {
+            title = false
+        }
+        useStylingStore.setState({ title: title })
         // setTitle(event.target.value)
     }
 
@@ -110,7 +117,12 @@ export default function Styling() {
                                     <Typography variant="body1">{t('common:title')}</Typography>
                                 </th>
                                 <td>
-                                    <TextField label="(optional)" onChange={handleTitleChange} value={title} sx={{ m: "8px", maxWidth: "160px" }} />
+                                    {/* <TextField label="(optional)" onChange={handleTitleChange} value={title} sx={{ m: "8px", maxWidth: "160px" }} /> */}
+                                    <YesNoRadio
+                                        value={title}
+                                        optionA={"Yes"}
+                                        optionB={"No"}
+                                        handleChange={(value: string) => handleTitleChange(value)} />
                                 </td>
                             </tr>
 
@@ -120,8 +132,8 @@ export default function Styling() {
                                 </th>
                                 <td>
                                     <DesktopTimePicker
-                                        value={startTime}
-                                        maxTime={endTime}
+                                        value={dayjs(startTime)}
+                                        maxTime={dayjs(endTime)}
                                         minutesStep={60}
                                         skipDisabled={true}
                                         onChange={handleStartTimeChange}
@@ -135,14 +147,14 @@ export default function Styling() {
                                 <td>
 
                                     <DesktopTimePicker
-                                        value={endTime}
-                                        minTime={startTime}
+                                        value={dayjs(endTime)}
+                                        minTime={dayjs(startTime)}
                                         minutesStep={60}
                                         skipDisabled={true}
                                         onChange={handleEndTimeChange}
                                         sx={{ m: 1 }} />
 
-                                    {startTime.isAfter(endTime) && <Typography variant="caption" color="error">Start time must be before end time.</Typography>}
+                                    {dayjs(startTime).isAfter(endTime) && <Typography variant="caption" color="error">Start time must be before end time.</Typography>}
                                 </td>
                             </tr>
                             <tr>

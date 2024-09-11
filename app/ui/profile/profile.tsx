@@ -1,5 +1,4 @@
 "use client"
-import { useSession } from "next-auth/react"
 import { useTranslation } from "react-i18next"
 import Typography from '@mui/material/Typography'
 import TextField from "@mui/material/TextField"
@@ -8,14 +7,31 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import EmailIcon from '@mui/icons-material/Email';
 import NumbersIcon from '@mui/icons-material/Numbers';
+import { createClient } from "@/utils/supabase/client";
+import { useCallback, useEffect, useState } from "react"
+import { type User } from '@supabase/supabase-js'
+import { metadata } from "@/app/[locale]/layout"
 
-export default function Profile() {
-    const { data: session, update, status } = useSession()
+
+export default function Profile({ user }: { user: User | null }) {
+    // const { data: session, update, status } = useSession()
     const { t } = useTranslation()
+    const supabase = createClient();
+    const [loading, setLoading] = useState(true)
+    const [username, setUsername] = useState<string | null>(null)
+    const [email, setEmail] = useState<string | null>(null)
 
-    if (!session || !session.user) {
-        return <div> Please sign in</div>
-    }
+    const getProfile = useCallback(async () => {
+        const { data: { user } } = await supabase.auth.getUser()
+        let metadata = user?.user_metadata
+        setUsername(metadata?.username)
+        setEmail(metadata?.email)
+
+    }, [])
+
+    useEffect(() => {
+        getProfile()
+    }, [])
 
     return (
         <>
@@ -45,7 +61,7 @@ export default function Profile() {
                                     }}
                                     variant="outlined"
                                     disabled
-                                    defaultValue={session?.user?.name}
+                                    defaultValue={username}
                                     fullWidth
                                 />
                             </td>
@@ -62,7 +78,7 @@ export default function Profile() {
                                     }}
                                     variant="outlined"
                                     disabled
-                                    defaultValue={session?.user?.email}
+                                    defaultValue={email}
                                     fullWidth
                                 />
                             </td>

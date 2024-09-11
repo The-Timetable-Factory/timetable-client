@@ -22,6 +22,7 @@ import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 
 import { SESAME } from "@/app/lib/constants/theme-constants";
+import dayjs from "dayjs";
 
 interface CourseCodeState {
     courseCode: string,
@@ -54,7 +55,7 @@ export default function CourseInfoForm(props: courseInfo) {
 
     const { id, existed, } = props
     const [courseCodeState, dispatchCourseCode] = useReducer(courseCodeReducer, { courseCode: props.courseCode || '', courseCodeError: null });
-    const [backgroundColor, setBackgroundColor] = useState<string>(props.backgroundColour)
+    const [backgroundColor, setBackgroundColor] = useState<string>(props.backgroundColor)
     const [meetingTimeSchedules, setMeetingTimeSchedules] = useState<Array<meetingTime>>(props.meetingTimes)
     const [meetingTimeSchedulesErrors, setMeetingTimeSchedulesErrors] = useState<Array<string | null>>(new Array(meetingTimeSchedules.length).fill(null))
     const test = useCoursesStore((state: any) => state.test)
@@ -125,7 +126,7 @@ export default function CourseInfoForm(props: courseInfo) {
                 meetingTimeSchedulesErrors[index] = null
             }
 
-            if (meetingTime.startTime.isAfter(meetingTime.endTime)) {
+            if (dayjs(meetingTime.startTime).isAfter(meetingTime.endTime)) {
                 error = true
             }
         })
@@ -137,7 +138,7 @@ export default function CourseInfoForm(props: courseInfo) {
         if (error) {
             return
         }
-        test({ id: props.id, courseCode: courseCodeState.courseCode, backgroundColour: backgroundColor, meetingTimes: meetingTimeSchedules, existed: props.existed })
+        test({ id: props.id, courseCode: courseCodeState.courseCode, backgroundColor: backgroundColor, meetingTimes: meetingTimeSchedules, existed: props.existed })
         updateTimetable()
     }
     return (

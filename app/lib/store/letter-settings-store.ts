@@ -22,6 +22,7 @@ interface LetterSettingsState {
     decreaseCourseGridWidth: () => void,
     increaseCourseGridHeight: () => void,
     decreaseCourseGridHeight: () => void,
+    setLetterDisplaySettings: (newSettings: any) => void
 }
 
 export const useLetterSettingsStore = create<LetterSettingsState>()(
@@ -45,6 +46,9 @@ export const useLetterSettingsStore = create<LetterSettingsState>()(
         decreaseCourseGridHeight: () => {
             set(state => ({ courseGridHeight: state.courseGridHeight - 1 }))
         },
+        setLetterDisplaySettings: (newSettings: any) => {
+            set(() => ({ ...newSettings }))
+        }
     }),
         { name: 'letter-display-settings' }
     ))

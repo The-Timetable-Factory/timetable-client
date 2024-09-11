@@ -1,6 +1,6 @@
 import { courseInfo, meetingTime } from "@/app/lib/interfaces/courses-interfaces";
 import { generateEmptyTimetableInfos, timetableHours, timetableInfos } from "@/app/lib/interfaces/timetable-interfaces";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { CourseGridInfos, haveCourseGrid } from "@/app/lib/interfaces/courses-interfaces";
 
 import { DaysRange } from "@/app/lib/interfaces/settings-interfaces";
@@ -161,6 +161,7 @@ export function formatTimetableInfos(coursesData: courseInfo[], daysRange: DaysR
     let timetableInfos: timetableInfos = generateEmptyTimetableInfos(daysRange, startTime, endTime);
 
     for (const course of coursesData) {
+        console.log('format timetable', course.meetingTimes)
         for (const meetingTime of course.meetingTimes) {
             for (const day in meetingTime.days) {
 
@@ -190,15 +191,15 @@ export function formatTimetableInfos(coursesData: courseInfo[], daysRange: DaysR
                     else if (meetingTime.endTime > endTime.add(1, 'hour')) {
                         // console.log("condition 2")
                         // meetingTime.endTime = endTime
-                        timetableInfos[day as keyof timetableInfos] = addMeetingTimeToDay(timetableInfos[day as keyof timetableInfos]!, meetingTime, course.courseCode, course.backgroundColour, meetingTime.startTime, endTime.add(1, 'hour'))
+                        timetableInfos[day as keyof timetableInfos] = addMeetingTimeToDay(timetableInfos[day as keyof timetableInfos]!, meetingTime, course.courseCode, course.backgroundColor, dayjs(meetingTime.startTime), dayjs(endTime).add(1, 'hour'))
                     }
                     else if (meetingTime.startTime < startTime) {
                         // console.log("condition 3")
-                        timetableInfos[day as keyof timetableInfos] = addMeetingTimeToDay(timetableInfos[day as keyof timetableInfos]!, meetingTime, course.courseCode, course.backgroundColour, startTime, meetingTime.endTime)
+                        timetableInfos[day as keyof timetableInfos] = addMeetingTimeToDay(timetableInfos[day as keyof timetableInfos]!, meetingTime, course.courseCode, course.backgroundColor, dayjs(startTime), dayjs(meetingTime.endTime))
                     }
                     else {
                         // console.log("condition 4")
-                        timetableInfos[day as keyof timetableInfos] = addMeetingTimeToDay(timetableInfos[day as keyof timetableInfos]!, meetingTime, course.courseCode, course.backgroundColour, meetingTime.startTime, meetingTime.endTime)
+                        timetableInfos[day as keyof timetableInfos] = addMeetingTimeToDay(timetableInfos[day as keyof timetableInfos]!, meetingTime, course.courseCode, course.backgroundColor, dayjs(meetingTime.startTime), dayjs(meetingTime.endTime))
                     }
 
                 }

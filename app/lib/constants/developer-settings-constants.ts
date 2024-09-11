@@ -7,7 +7,7 @@ export const iPhoneSettingsConstants: DeveloperSettings = {
     ASPECT_RATIO: 9 / 19.5,
     HEIGHT: "699px",
     WIDTH: 404,
-    WATERMARK_POSITION: "18px",
+    WATERMARK_POSITION: "10px",
     BORDER_RADIUS: "24px",
     LENGTH_LIMIT: 460,
     PDF_SETTINGS: {

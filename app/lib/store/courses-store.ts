@@ -8,6 +8,7 @@ interface CoursesState {
     courses: courseInfo[],
     test: (newCourse: courseInfo) => void,
     removeCourse: (courseId: string) => void
+    setCourses: (newCourses: courseInfo[]) => void
 }
 
 export const useCoursesStore = create<CoursesState>()(
@@ -37,6 +38,13 @@ export const useCoursesStore = create<CoursesState>()(
                 return { courses: newCourses }
             })
         },
+        setCourses: (newCourses: courseInfo[]) => {
+            set((state: any) => {
+                console.log('newCourses ', newCourses)
+
+                return { courses: newCourses }
+            })
+        }
     }),
         {
             name: 'courses',

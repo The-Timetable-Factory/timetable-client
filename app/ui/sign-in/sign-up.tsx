@@ -15,6 +15,7 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonIcon from '@mui/icons-material/Person';
 import Tooltip from '@mui/material/Tooltip';
 import { useTranslation } from "react-i18next";
+import { createClient } from '@/utils/supabase/client';
 
 enum UsernameStatus {
     AVAILABLE = 'available',
@@ -67,12 +68,14 @@ interface VerifyPassword {
 
 
 export default function SignUp() {
+    const supabase = createClient();
     const [username, setUsername] = useState<User>({ username: '', status: UsernameStatus.NULL });
     const [email, setEmail] = useState<Email>({ email: '', status: EmailStatus.NULL });
     const [password, setPassword] = useState<Password>({ password: '', status: PasswordStatus.NULL, error: '' });
     const [verifyPassword, setVerifyPassword] = useState<VerifyPassword>({ verifyPassword: '', status: VerifyPasswordStatus.NULL, error: '' });
     let signUpDisabled = username.status !== UsernameStatus.AVAILABLE || email.status !== EmailStatus.VALID || password.status !== PasswordStatus.IS_VALID || verifyPassword.status !== VerifyPasswordStatus.IS_VALID
     const { t } = useTranslation()
+    const redirectUrl = `${window.location.origin}/dashboard}`
 
 
     const handleUsernameChange = useDebouncedCallback(async (e: any) => {
@@ -84,12 +87,13 @@ export default function SignUp() {
         }
         setUsername(user => ({ ...user, username: e.target.value, status: UsernameStatus.LOADING }));
 
-        // Fetch to see if username is available
-        const usernameExistance = await checkUsernameExistance(e.target.value)
+        const { data, error } = await supabase.rpc('username_exists', { username_to_check: e.target.value })
+
+        console.log(data, error)
 
         setUsername(user => ({
             username: e.target.value,
-            status: !usernameExistance ? UsernameStatus.AVAILABLE : UsernameStatus.NOT_AVAILABLE
+            status: !data ? UsernameStatus.AVAILABLE : UsernameStatus.NOT_AVAILABLE
         }));
 
     }, 600);
@@ -117,9 +121,9 @@ export default function SignUp() {
 
         // Fetch to see if email is already registered
 
-        const registered = await checkEmailRegistered(e.target.value)
+        const { data, error } = await supabase.rpc('email_exists', { email_to_check: e.target.value })
 
-        setEmail({ email: e.target.value, status: registered ? EmailStatus.NOT_AVALIABLE : EmailStatus.VALID })
+        setEmail({ email: e.target.value, status: data ? EmailStatus.NOT_AVALIABLE : EmailStatus.VALID })
 
     }, 600)
 
@@ -156,18 +160,25 @@ export default function SignUp() {
     }, 600)
 
     async function handleSignUp() {
-
-        console.log('sign up')
-        const res = await signIn('credentials', {
-            username: username.username,
+        let { data, error } = await supabase.auth.signUp({
             email: email.email,
             password: password.password,
-            action: 'signup',
-            redirect: false
+            options: {
+                data: {
+                    username: username.username,
+                    email: email.email,
+                    first_name: 'Apple',
+                    last_name: 'Bees'
+                },
+                emailRedirectTo: redirectUrl //redirect to /dashboard by using useRouter()
+            }
         })
 
-        //Redirect to verify email page
-        console.log(res)
+        //TODO: NEED TO HANDLE ERROR
+        // email already registered
+
+        console.log(data)
+        console.log(error)
     }
     return (
         <>

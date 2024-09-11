@@ -21,7 +21,7 @@ export interface meetingTime {
 export interface courseInfo {
     id: string,
     courseCode: string,
-    backgroundColour: string,
+    backgroundColor: string,
     meetingTimes: meetingTime[],
     existed: boolean
 }

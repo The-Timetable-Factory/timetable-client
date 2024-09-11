@@ -8,7 +8,7 @@ export enum ClockType {
 }
 
 export interface StylingState {
-    title: string,
+    title: boolean,
     startTime: Dayjs,
     endTime: Dayjs,
     backgroundColor: string,

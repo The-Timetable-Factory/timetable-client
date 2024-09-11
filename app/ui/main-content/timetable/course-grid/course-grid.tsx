@@ -3,6 +3,7 @@ import { useStylingStore } from '@/app/lib/store/styling-store';
 import { useDisplayStore } from '@/app/lib/store/display-store';
 import { ClockType } from '@/app/lib/interfaces/styling-interfaces';
 import style from './course-grid.module.css'
+import dayjs from 'dayjs';
 
 interface CourseGridProps extends CourseGridInfos {
     top: number;
@@ -43,12 +44,12 @@ export default function CourseGrid(props: CourseGridProps) {
             {displayTime &&
                 (display === "iphone" ?
                     <>
-                        <p className={`${style.courseInput}`}>{props.startTime.format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
+                        <p className={`${style.courseInput}`}>{dayjs(props.startTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
                         <p className={`${style.courseInput} ${style.label}`}>  - </p>
-                        <p className={`${style.courseInput}`}> {props.endTime.format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
+                        <p className={`${style.courseInput}`}> {dayjs(props.endTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
                     </> :
                     <>
-                        <p className={`${style.courseInput}`}>{props.startTime.format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)} - {props.endTime.format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
+                        <p className={`${style.courseInput}`}>{dayjs(props.startTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)} - {dayjs(props.endTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
                     </>)
 
             }

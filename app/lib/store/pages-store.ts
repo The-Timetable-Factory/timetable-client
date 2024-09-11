@@ -12,12 +12,12 @@ import dayjs, { Dayjs } from "dayjs"
 
 function generatePages(startTime: any, endTime: any, numberOfRows: number): any {
     let pages = []
-    let remainingTime = endTime.diff(startTime, 'hour') + 1
+    let remainingTime = dayjs(endTime).diff(startTime, 'hour') + 1
     let currPageNumber = 1
 
     while (remainingTime > 0) {
         const pageStartTime = startTime
-        const pageEndTime = startTime.add(Math.min(remainingTime, numberOfRows) - 1, 'hour')
+        const pageEndTime = dayjs(startTime).add(Math.min(remainingTime, numberOfRows) - 1, 'hour')
         const page = {
             pageNumber: currPageNumber,
             startTime: pageStartTime,
@@ -58,8 +58,8 @@ export const usePagesStore = create<PagesState>((set) => ({
         // Get start time and end time from styling store
         const startTime = (useStylingStore.getState() as { startTime: Dayjs }).startTime;
         const endTime = (useStylingStore.getState() as { endTime: Dayjs }).endTime;
-        const startTimeHour = startTime.hour();
-        const endTimeHour = endTime.hour() + 1; // End time is inclusive, e.g. End time is 18:00, it should be 18:00 - 19:00
+        const startTimeHour = dayjs(startTime).hour();
+        const endTimeHour = dayjs(endTime).hour() + 1; // End time is inclusive, e.g. End time is 18:00, it should be 18:00 - 19:00
         const title = (useStylingStore.getState() as { title: string }).title;
 
 
