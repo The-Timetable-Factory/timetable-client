@@ -54,7 +54,7 @@ export const useThemeStore = create((set) => ({
                 existed: true // This is to prevent the course is added to the timetable again
             };
 
-            useCoursesStore.getState().test(updatedCourse)
+            useCoursesStore.getState().upsertCourse(updatedCourse)
 
             i === theme.COLORS.length - 1 ? i = 2 : i += 1 // If the pointer is at the end of the array, reset it to 2, else increment it by 1
         }
