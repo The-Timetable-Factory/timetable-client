@@ -22,7 +22,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 namespaces={i18nNamespaces}
                 locale={locale}
                 resources={resources}>
-                <Profile />
+                <Profile user={null}/>
 
 
             </TranslationsProvider>
