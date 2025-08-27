@@ -20,9 +20,7 @@ export default function AddACourse() {
             backgroundColor="#DAD6CE"
             isCourse={false}
         >
-
-
-            <CourseInfoForm id={v4()} courseCode="" backgroundColour={backgroundColor} meetingTimes={[generateEmptyMeetingTime()]} existed={false} />
+            <CourseInfoForm id={v4()} courseCode="" backgroundColor={backgroundColor} meetingTimes={[generateEmptyMeetingTime()]} existed={false} />
         </Collapsible>
 
     )

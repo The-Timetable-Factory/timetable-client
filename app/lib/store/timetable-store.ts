@@ -12,6 +12,9 @@ import { useDisplayStore } from './display-store';
 import useStore from '../hooks/useStore';
 import { generateTimetables } from '../utils/format-timetable';
 
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
+
 const initialDaysRange = {
     mon: true,
     tue: true,
@@ -22,7 +25,7 @@ const initialDaysRange = {
     sun: false
 }
 
-export const initialTimetableState = [generateEmptyTimetableInfos(initialDaysRange, dayjs('2022-04-17T09:00'), dayjs('2022-04-17T18:00'))]
+export const initialTimetableState = [generateEmptyTimetableInfos(initialDaysRange, dayjs.utc('2022-04-17T09:00'), dayjs.utc('2022-04-17T18:00'))]
 
 interface TimetableState {
     timetable: timetableInfos[],

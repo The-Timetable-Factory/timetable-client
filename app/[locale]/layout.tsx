@@ -4,7 +4,7 @@ import UltimateProvider from "../ultimate-provider";
 import Navbar from "../ui/navbar/navbar";
 import Footer from "../ui/footer/footer";
 import { SessionProvider } from "next-auth/react"
-import { auth } from "@/auth"
+// import { auth } from "@/auth"
 import initTranslations from '../i18n';
 import i18nConfig from '@/i18nConfig';
 import { dir } from 'i18next';
@@ -94,25 +94,25 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }>) {
-  const session = await auth()
+  // const session = await auth()
   // const { t, resources } = await initTranslations(locale, i18nNamespaces)
   return (
 
     <html lang={locale} dir={dir(locale)} suppressHydrationWarning>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <SessionProvider session={session}>
+      {/* <SessionProvider session={session}> */}
 
-        <UltimateProvider>
-          <body>
-            <main>
+      <UltimateProvider>
+        <body>
+          <main>
 
-              <Navbar locale={locale} />
-              {children}
-            </main>
-            <Footer />
-          </body>
-        </UltimateProvider>
-      </SessionProvider>
+            <Navbar locale={locale} />
+            {children}
+          </main>
+          <Footer />
+        </body>
+      </UltimateProvider>
+      {/* </SessionProvider> */}
     </html>
   );
 }

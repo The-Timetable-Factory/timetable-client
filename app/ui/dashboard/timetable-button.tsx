@@ -22,7 +22,7 @@ export default function TimetableButton(props: TimetableButtonProps) {
 
     function handleClick() {
         // Redirect to the timetable page /timetables/[id]
-        router.push(`/timetables/:${props.id}/edit`)
+        router.push(`/timetables/${props.id}/edit`)
 
     }
 

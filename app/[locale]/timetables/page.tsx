@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography"
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import IconButton from "@mui/material/IconButton"
 import { useRouter } from 'next/navigation'
-import TimetableButton from "../../ui/timetables/timetable-button";
+import TimetableButton from "../../ui/dashboard/timetable-button";
 import { fetchTimetableTitles } from "../../lib/data/server";
 import Button from "@mui/material/Button";
 

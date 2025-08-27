@@ -1,5 +1,9 @@
+// Supabase Auth Middleware
+
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+
 // Auth Import
-import { auth } from "./auth"
+
 import {
     DEFAULT_LOGIN_REDIRECT,
     apiAuthPrefix,
@@ -10,29 +14,25 @@ import {
 // Internationalization import
 import { i18nRouter } from 'next-i18n-router'
 import i18nConfig from './i18nConfig';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 
-export default auth((req): any => {
-    const { nextUrl } = req;
-    const isLoggedIn = !!req.auth;
+export async function supabaseMiddleware(req: NextRequest) {
+    const res = NextResponse.next();
+    const supabase = createMiddlewareClient({ req, res });
 
-    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-    const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-    const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+    const { data: { session } } = await supabase.auth.getSession();
 
-    if (isApiAuthRoute) {
-        return null;
+    console.log(session)
+
+    if (session) {
+        return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT))
     }
 
-    if (isAuthRoute) {
-        if (isLoggedIn) {
-            return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT))
-        }
-        return null;
-    }
+    return res;
 
-})
+}
+
 
 export function middleware(request: NextRequest) {
     return i18nRouter(request, i18nConfig);

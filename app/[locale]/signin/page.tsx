@@ -1,28 +1,31 @@
-'use client'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import GoogleIcon from '@mui/icons-material/Google';
-import AppleIcon from '@mui/icons-material/Apple';
-import TextField from '@mui/material/TextField';
-import OutlinedInput from '@mui/material/OutlinedInput';
+// 'use client'
+
 // import { GoogleSignIn } from '../ui/sign-in/auth-components';
 import { signIn } from 'next-auth/react'
-import React, { useState } from 'react'
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 import SignIn from '@/app/ui/sign-in/sign-in';
 import SignUp from '@/app/ui/sign-in/sign-up';
+import initTranslations from '@/app/i18n';
+import TranslationsProvider from '@/app/translation-provider';
 
-export default function Page() {
+const i18nNamespaces = ["signin"];
+
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+    const { t, resources } = await initTranslations(locale, i18nNamespaces)
 
     return (
         <>
-            <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', columnGap: '120px', marginLeft: '240px', marginRight: '240px', marginTop: '100px' }}>
-                <SignUp />
-                <SignIn />
-            </div>
+            <TranslationsProvider
+                namespaces={i18nNamespaces}
+                locale={locale}
+                resources={resources}
+            >
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', columnGap: '120px', marginLeft: '240px', marginRight: '240px', marginTop: '100px' }}>
+                    <SignUp />
+                    <SignIn />
+                </div>
+            </TranslationsProvider>
         </>
     )
 }

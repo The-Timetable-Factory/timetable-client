@@ -22,7 +22,7 @@ interface A4SettingsState {
     decreaseCourseGridWidth: () => void,
     increaseCourseGridHeight: () => void,
     decreaseCourseGridHeight: () => void,
-
+    setA4DisplaySettings: (newSettings: any) => void
 }
 
 export const useA4SettingsStore = create<A4SettingsState>()(
@@ -46,6 +46,9 @@ export const useA4SettingsStore = create<A4SettingsState>()(
         decreaseCourseGridHeight: () => {
             set(state => ({ courseGridHeight: state.courseGridHeight - 1 }))
         },
+        setA4DisplaySettings: (newSettings: any) => {
+            set(() => ({ ...newSettings }))
+        }
     }),
         { name: 'a4-display-settings' }
     ))

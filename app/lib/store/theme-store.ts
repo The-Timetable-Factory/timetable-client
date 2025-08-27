@@ -50,7 +50,7 @@ export const useThemeStore = create((set) => ({
         for (const course of courses) {
             const updatedCourse = {
                 ...course,
-                backgroundColour: theme.COLORS[i],
+                backgroundColor: theme.COLORS[i],
                 existed: true // This is to prevent the course is added to the timetable again
             };
 

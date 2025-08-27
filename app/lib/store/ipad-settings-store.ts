@@ -22,6 +22,7 @@ interface IpadSettingsState {
     decreaseCourseGridWidth: () => void,
     increaseCourseGridHeight: () => void,
     decreaseCourseGridHeight: () => void,
+    setIpadDisplaySettings: (newSettings: any) => void
 }
 
 /**
@@ -50,6 +51,9 @@ export const useIpadSettingsStore = create<IpadSettingsState>()(
         decreaseCourseGridHeight: () => {
             set(state => ({ courseGridHeight: state.courseGridHeight - 1 }))
         },
+        setIpadDisplaySettings: (newSettings: any) => {
+            set(() => ({ ...newSettings }))
+        }
     }),
         { name: 'ipad-display-settings' }
     ))

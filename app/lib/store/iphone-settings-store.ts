@@ -24,6 +24,7 @@ interface IphoneSettingsState {
     increaseCourseGridHeight: () => void,
     decreaseCourseGridHeight: () => void,
     setWidgets: (newWidgets: boolean) => void
+    setIphoneDisplaySettings: (newSettings: any) => void
 }
 
 export const useIphoneSettingsStore = create<IphoneSettingsState>()(
@@ -51,6 +52,9 @@ export const useIphoneSettingsStore = create<IphoneSettingsState>()(
         },
         setWidgets: (newWidgets: boolean) => {
             set(() => ({ widgets: newWidgets }))
+        },
+        setIphoneDisplaySettings: (newSettings: any) => {
+            set(() => ({ ...newSettings }))
         }
     }),
         { name: 'iphone-display-settings' }

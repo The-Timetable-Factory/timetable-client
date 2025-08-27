@@ -23,6 +23,17 @@ import { useTranslation } from "react-i18next";
 
 import { SESAME } from "@/app/lib/constants/theme-constants";
 
+import { createClient } from "@/utils/supabase/client";
+
+import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+import { useParams } from "next/navigation";
+import { time } from "console";
+
+import { v4 } from 'uuid'
+
+dayjs.extend(utc)
+
 interface CourseCodeState {
     courseCode: string,
     courseCodeError: string | null;
@@ -51,13 +62,13 @@ function courseCodeReducer(state: CourseCodeState, action: CourseCodeHandleChang
 }
 
 export default function CourseInfoForm(props: courseInfo) {
-
-    const { id, existed, } = props
+    const { id: timetable_id } = useParams()
+    const { id, existed } = props
     const [courseCodeState, dispatchCourseCode] = useReducer(courseCodeReducer, { courseCode: props.courseCode || '', courseCodeError: null });
-    const [backgroundColor, setBackgroundColor] = useState<string>(props.backgroundColour)
+    const [backgroundColor, setBackgroundColor] = useState<string>(props.backgroundColor)
     const [meetingTimeSchedules, setMeetingTimeSchedules] = useState<Array<meetingTime>>(props.meetingTimes)
     const [meetingTimeSchedulesErrors, setMeetingTimeSchedulesErrors] = useState<Array<string | null>>(new Array(meetingTimeSchedules.length).fill(null))
-    const test = useCoursesStore((state: any) => state.test)
+    const upsertCourse = useCoursesStore((state: any) => state.upsertCourse)
     const removeCourse = useCoursesStore((state: any) => state.removeCourse)
     const updateTimetable = useTimetableStore((state: any) => state.updateTimetable)
     const COLORS = useThemeStore((state: any) => state.theme.COLORS)
@@ -65,16 +76,20 @@ export default function CourseInfoForm(props: courseInfo) {
     const addUsedColor = useThemeStore((state: any) => state.addUsedColor)
     const removeUsedColor = useThemeStore((state: any) => state.removeUsedColor)
     const { t } = useTranslation()
+    const supabase = createClient()
+
+    console.log('course id abc', id)
+
+    let timeoutBackgroundColorId: ReturnType<typeof setTimeout>;
 
 
-    function handleBackgroundColorChange(value: string) {
+    async function handleBackgroundColorChange(value: string) {
         if (USED_COLORS.includes(backgroundColor)) {
 
             removeUsedColor(backgroundColor)
         }
         setBackgroundColor(value)
         addUsedColor(value)
-
     }
 
     function handleAddMeetingTime() {
@@ -125,20 +140,93 @@ export default function CourseInfoForm(props: courseInfo) {
                 meetingTimeSchedulesErrors[index] = null
             }
 
-            if (meetingTime.startTime.isAfter(meetingTime.endTime)) {
+            if (dayjs.utc(meetingTime.startTime).isAfter(meetingTime.endTime)) {
                 error = true
             }
         })
         return error
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         const error = validateCourseInfoForm()
         if (error) {
             return
         }
-        test({ id: props.id, courseCode: courseCodeState.courseCode, backgroundColour: backgroundColor, meetingTimes: meetingTimeSchedules, existed: props.existed })
+        upsertCourse({ id: props.id, courseCode: courseCodeState.courseCode, backgroundColor: backgroundColor, meetingTimes: meetingTimeSchedules, existed: props.existed })
         updateTimetable()
+
+
+        let { data: upsertCourseData, error: upsertCourseError } = await supabase.rpc('upsertcourse', { course_data: { id: v4(), timetable_id: timetable_id, course_code: courseCodeState.courseCode, background_color: backgroundColor } })
+        if (error) console.error(`Error upserting course: ${upsertCourseError}`)
+        else console.log(`Course upserted: ${upsertCourseData}`)
+
+        // for meetingTime in meetingTimes
+        // 
+
+
+
+
+
+        // if (!existed) {
+        //     console.log(`course-info-form: not existed`)
+        //     const { data: courseData, error: courseError } = await supabase.from('courses').insert([{ id: id, timetable_id: timetable_id, course_code: courseCodeState.courseCode, background_color: backgroundColor }])
+
+        //     if (courseError) {
+        //         console.error('Error adding course:', courseError)
+        //     } else {
+        //         console.log('Course added:', courseData)
+        //     }
+
+        //     meetingTimeSchedules.map(async (meetingTime) => {
+        //         const { data: meetingTimeData, error: meetingTimeError } = await supabase.from('meeting_times').insert({
+        //             id: meetingTime.id,
+        //             course_id: id,
+        //             startTime: meetingTime.startTime,
+        //             endTime: meetingTime.endTime,
+        //             days_selection: meetingTime.days,
+        //             location: meetingTime.location
+        //         })
+
+        //         if (error) {
+        //             console.error('Error adding meeting time:', meetingTimeError)
+        //         } else {
+        //             console.log('Meeting time added:', meetingTimeData)
+        //         }
+        //     })
+
+        //     // const { data: meetingTimeData1, error: meetingTimeError1 } = await supabase.from('meeting_times').insert({
+        //     //     course_id: id,
+        //     //     start_time: dayjs.utc('2022-01-01T00:00:00Z'),
+        //     //     end_time: dayjs.utc('2022-01-01T00:00:00Z'),
+        //     //     days: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
+        //     // })
+
+        // } else {
+        //     console.log(`course-info-form: existed`)
+        //     const { data: courseData, error: courseError } = await supabase.from('courses').update({ courseCode: courseCodeState.courseCode, backgroundColor: backgroundColor }).eq('id', id)
+
+        //     if (courseError) {
+        //         console.error('Error updating course:', courseError)
+        //     } else {
+        //         console.log('Course updated:', courseData)
+        //     }
+
+        //     meetingTimeSchedules.map(async (meetingTime) => {
+        //         const { data: meetingTimeData, error: meetingTimeError } = await supabase.from('meeting_times').update({
+        //             course_id: id,
+        //             startTime: meetingTime.startTime,
+        //             endTime: meetingTime.endTime,
+        //             days_selection: [meetingTime.days.mon, meetingTime.days.tue, meetingTime.days.wed, meetingTime.days.thu, meetingTime.days.fri, meetingTime.days.sat, meetingTime.days.sun],
+        //             location: meetingTime.location
+        //         }).eq('id', meetingTime.id)
+
+        //         if (error) {
+        //             console.error('Error adding meeting time:', meetingTimeError)
+        //         } else {
+        //             console.log(`Meeting time added: ${meetingTimeData}, meetingTime.id: ${meetingTime.id}`)
+        //         }
+        //     })
+        // }
     }
     return (
         <>

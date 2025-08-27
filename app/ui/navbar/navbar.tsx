@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import DarkModeToggle from "./dark-mode-toggle";
@@ -9,9 +9,11 @@ import TimetableLogo from "../timetable-logo";
 import Link from "next/link";
 import BuyMeACoffeeButton from "./buy-me-a-coffee-button";
 import TimetableLogoMobile from "../timetable-logo-mobile";
-import { useSession, signOut } from "next-auth/react";
 import { usePathname } from 'next/navigation'
 import LanguageSelector from "./language-selector";
+import { useTitleStore } from "@/app/lib/store/title-store";
+import { useDebouncedCallback } from "use-debounce";
+import { useParams } from "next/navigation";
 
 // import MUI icon
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -25,31 +27,56 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { createClient } from "@/utils/supabase/client";
+import { User } from '@supabase/supabase-js'
 
-/**
- * The `Navbar` component displays a navigation bar with branding, a title, and dark mode toggle functionality.
- *
- * @component
- */
-export default function Navbar({ locale }: { locale: string }) {
-    // Access the darkMode state and setDarkMode function from the DarkModeContext
+
+
+
+const NavbarContent = ({ locale, isLoggedIn, initialTitle }: { locale: string, isLoggedIn: boolean, initialTitle: string | boolean }) => {
     const { darkMode } = useDarkMode();
-    const session = useSession()
-    const isLoggedIn = session && session.data && session.data.user
     const pathname = usePathname()
-    // if pathname contains /timetables/, then show the Outlined Textfield to edit the title
-    const title = pathname.includes("/timetables/") ? true : false
-    // Get path name
+    const supabase = createClient();
+    const [title, setTitle] = useState(initialTitle)
+    const setStoreTitle = useTitleStore((state: any) => state.setTitle);
+    const { id } = useParams()
+    let timeoutId: ReturnType<typeof setTimeout>;
 
-    let isDesktop;
-    if (typeof window !== "undefined") {
-        isDesktop = window.innerWidth > 600
 
+    async function signOut() {
+        await supabase.auth.signOut();
+    }
+
+    // const handleTitleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     e.preventDefault();
+    //     setTitle(e.target.value)
+    //     setStoreTitle(e.target.value)
+    //     console.log(id)
+    //     const { data, error } = await supabase.from('timetables').update({ title: e.target.value }).eq('id', id).select()
+    //     console.log('handleTitleChange Error: ', error)
+    //     console.log("handltTitleChange Data: ", data)
+
+    // }, 2000)
+
+    async function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        e.preventDefault();
+        setTitle(e.target.value)
+        setStoreTitle(e.target.value)
+        // console.log(id)
+
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+        }
+
+        timeoutId = setTimeout(async () => {
+            const { data, error } = await supabase.from('timetables').update({ title: e.target.value }).eq('id', id).select()
+            // TODO: handle error
+            // TODO: handle success
+        }, 2000)
     }
 
     return (
         <>
-            {/* The top navigation bar */}
             <AppBar
                 position="static"
                 color="secondary"
@@ -62,9 +89,7 @@ export default function Navbar({ locale }: { locale: string }) {
                 }}
             >
                 <Toolbar>
-                    {
-                        isDesktop ? <TimetableLogo /> : <TimetableLogoMobile />
-                    }
+                    <TimetableLogo />
                     <Link href="/about">
                         <IconButton color="info" data-testid="info">
                             <InfoOutlinedIcon fontSize="small" />
@@ -76,8 +101,8 @@ export default function Navbar({ locale }: { locale: string }) {
                     <BuyMeACoffeeButton />
 
                     {
-                        title &&
-
+                        pathname.includes('/timetables/') &&
+                        // Why the title does not change when I type in the input field?
                         <OutlinedInput
                             inputProps={{ min: 0, style: { textAlign: 'center' } }}
                             fullWidth
@@ -87,6 +112,8 @@ export default function Navbar({ locale }: { locale: string }) {
                             id="outlined-adornment-password"
                             placeholder="title"
                             type='text'
+                            defaultValue={title}
+                            onChange={handleTitleChange}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -100,9 +127,6 @@ export default function Navbar({ locale }: { locale: string }) {
                         />
 
                     }
-
-
-
                     <div style={{ marginLeft: "auto" }}>
 
                         {isLoggedIn &&
@@ -120,16 +144,9 @@ export default function Navbar({ locale }: { locale: string }) {
                             </IconButton>
                         </Link>
 
-                        {/* {session && session.data && session.data.user &&
+                        {isLoggedIn &&
 
-                            <IconButton color="info" data-testid="info">
-                                <SettingsOutlinedIcon fontSize="small" />
-                            </IconButton>
-
-                        } */}
-                        {session && session.data && session.data.user &&
-
-                            <IconButton color="info" data-testid="info" onClick={() => signOut({ callbackUrl: '/signin' })}>
+                            <IconButton color="info" data-testid="info" onClick={signOut}>
                                 <LogoutIcon fontSize="small" />
                             </IconButton>
 
@@ -141,4 +158,23 @@ export default function Navbar({ locale }: { locale: string }) {
             </AppBar>
         </>
     )
+}
+
+
+export default function Navbar({ locale }: { locale: string }) {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // const [title, setTitle] = useState(false);
+    const title = useTitleStore((state: any) => state.title);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const supabase = createClient();
+            const { data: { user }, } = await supabase.auth.getUser();
+            setIsLoggedIn(user ? true : false);
+        };
+
+        checkAuth();
+    }, []);
+
+    return <NavbarContent locale={locale} isLoggedIn={isLoggedIn} initialTitle={title} />;
 }

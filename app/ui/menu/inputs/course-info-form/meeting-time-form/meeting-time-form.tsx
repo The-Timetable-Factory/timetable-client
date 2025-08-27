@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 
+
 // import styles
 import MeetingTimeFormCSS from './meetingTimeForm.module.css'
 
@@ -26,9 +27,11 @@ import { useDarkMode } from "../../../../context/dark-mode-context";
 
 import { useTranslation } from "react-i18next";
 
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
+
 
 export interface MeetingTimeFormProps {
-    key: number,
     id: number,
     length: number,
     handleRemoveMeetingTime: (index: number) => void,
@@ -40,16 +43,16 @@ export interface MeetingTimeFormProps {
 function MeetingTimeForm(props: MeetingTimeFormProps) {
     const courseType = props.meetingTime.courseType;
     const location = props.meetingTime.location;
-    const startTime = dayjs(props.meetingTime.startTime);
-    const endTime = dayjs(props.meetingTime.endTime);
+    const startTime = dayjs.utc(props.meetingTime.startTime);
+    const endTime = dayjs.utc(props.meetingTime.endTime);
     const days = props.meetingTime.days;
     const { darkMode } = useDarkMode()
     const { t } = useTranslation()
 
 
     const handleChange = (name: string, value: string | Dayjs | daysSelection) => {
-        console.log(value)
         const newMeetingTime: meetingTime = {
+            id: props.meetingTime.id,
             courseType: courseType,
             location: location,
             startTime: startTime,
