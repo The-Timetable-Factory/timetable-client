@@ -12,6 +12,8 @@ import TimetableLogoMobile from "../timetable-logo-mobile";
 import { usePathname } from 'next/navigation'
 import LanguageSelector from "./language-selector";
 import { useTitleStore } from "@/app/lib/store/title-store";
+import { useDebouncedCallback } from "use-debounce";
+import { useParams } from "next/navigation";
 
 // import MUI icon
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -29,13 +31,48 @@ import { createClient } from "@/utils/supabase/client";
 import { User } from '@supabase/supabase-js'
 
 
-const NavbarContent = ({ locale, isLoggedIn, title }: { locale: string, isLoggedIn: boolean, title: boolean }) => {
+
+
+const NavbarContent = ({ locale, isLoggedIn, initialTitle }: { locale: string, isLoggedIn: boolean, initialTitle: string | boolean }) => {
     const { darkMode } = useDarkMode();
     const pathname = usePathname()
     const supabase = createClient();
+    const [title, setTitle] = useState(initialTitle)
+    const setStoreTitle = useTitleStore((state: any) => state.setTitle);
+    const { id } = useParams()
+    let timeoutId: ReturnType<typeof setTimeout>;
+
 
     async function signOut() {
         await supabase.auth.signOut();
+    }
+
+    // const handleTitleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     e.preventDefault();
+    //     setTitle(e.target.value)
+    //     setStoreTitle(e.target.value)
+    //     console.log(id)
+    //     const { data, error } = await supabase.from('timetables').update({ title: e.target.value }).eq('id', id).select()
+    //     console.log('handleTitleChange Error: ', error)
+    //     console.log("handltTitleChange Data: ", data)
+
+    // }, 2000)
+
+    async function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        e.preventDefault();
+        setTitle(e.target.value)
+        setStoreTitle(e.target.value)
+        // console.log(id)
+
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+        }
+
+        timeoutId = setTimeout(async () => {
+            const { data, error } = await supabase.from('timetables').update({ title: e.target.value }).eq('id', id).select()
+            // TODO: handle error
+            // TODO: handle success
+        }, 2000)
     }
 
     return (
@@ -64,8 +101,8 @@ const NavbarContent = ({ locale, isLoggedIn, title }: { locale: string, isLogged
                     <BuyMeACoffeeButton />
 
                     {
-                        title &&
-
+                        pathname.includes('/timetables/') &&
+                        // Why the title does not change when I type in the input field?
                         <OutlinedInput
                             inputProps={{ min: 0, style: { textAlign: 'center' } }}
                             fullWidth
@@ -75,7 +112,8 @@ const NavbarContent = ({ locale, isLoggedIn, title }: { locale: string, isLogged
                             id="outlined-adornment-password"
                             placeholder="title"
                             type='text'
-                            value={title}
+                            defaultValue={title}
+                            onChange={handleTitleChange}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -138,10 +176,5 @@ export default function Navbar({ locale }: { locale: string }) {
         checkAuth();
     }, []);
 
-    useEffect(() => {
-        const pathname = window.location.pathname;
-        // setTitle(pathname.includes("/timetables/"));
-    }, []);
-
-    return <NavbarContent locale={locale} isLoggedIn={isLoggedIn} title={title} />;
+    return <NavbarContent locale={locale} isLoggedIn={isLoggedIn} initialTitle={title} />;
 }

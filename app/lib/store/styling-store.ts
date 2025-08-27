@@ -3,6 +3,8 @@ import dayjs, { Dayjs } from "dayjs"
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { useTimetableStore } from './timetable-store';
 import { ClockType, StylingState } from '../interfaces/styling-interfaces';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
 
 interface StylingStoreState {
     title: boolean,
@@ -25,8 +27,8 @@ interface StylingStoreState {
 export const useStylingStore = create<StylingStoreState>()(
     persist((set, get) => ({
         title: true,
-        startTime: dayjs('2022-04-17T09:00'),
-        endTime: dayjs('2022-04-17T21:00'),
+        startTime: dayjs.utc('2022-04-17T09:00'),
+        endTime: dayjs.utc('2022-04-17T21:00'),
         backgroundColor: "#D6D0C2",
         headerColor: "#C2B8A3",
         clockType: ClockType.TWELVE_HOUR,
@@ -57,8 +59,8 @@ export const useStylingStore = create<StylingStoreState>()(
         resetToDefault: () => {
             set(() => ({
                 title: true,
-                startTime: dayjs('2022-04-17T09:00'),
-                endTime: dayjs('2022-04-17T21:00'),
+                startTime: dayjs.utc('2022-04-17T09:00'),
+                endTime: dayjs.utc('2022-04-17T21:00'),
                 backgroundColor: "#D6D0C2",
                 headerColor: "#C2B8A3",
                 clockType: ClockType.TWELVE_HOUR,
@@ -83,7 +85,7 @@ export const useStylingStore = create<StylingStoreState>()(
                 reviver: (key, value) => {
                     if (key === "startTime" || key === "endTime") {
                         if (typeof value === "string") {
-                            return dayjs(value);
+                            return dayjs.utc(value);
                         }
                     }
 

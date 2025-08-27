@@ -1,6 +1,8 @@
 import { daysSelection, haveCourseGrid } from "./courses-interfaces"
 import dayjs, { Dayjs } from "dayjs"
 import { DaysRange } from './settings-interfaces';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
 
 export interface timetableTdInsertion {
     // timetableTd: React.FunctionComponent<timetableTdProps>,
@@ -54,8 +56,8 @@ const emptyTimetableTdInsertion: timetableTdInsertion = {
 function generateEmptyTimetableHours(startTime: Dayjs, endTime: Dayjs) {
     const timetableHours: Record<number, typeof emptyTimetableTdInsertion> = {}
 
-    const currentHour = dayjs(startTime).hour();
-    const endHour = dayjs(endTime).hour();
+    const currentHour = dayjs.utc(startTime).hour();
+    const endHour = dayjs.utc(endTime).hour();
 
     for (let hour = currentHour; hour <= endHour; hour++) {
         timetableHours[hour] = { ...emptyTimetableTdInsertion }

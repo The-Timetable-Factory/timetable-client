@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import ToggleButton from "@mui/material/ToggleButton"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 import { ClockType } from "@/app/lib/interfaces/styling-interfaces"
@@ -13,15 +13,17 @@ interface YesNoRadioProps {
 
 function YesNoRadio(props: YesNoRadioProps) {
     // const [displayTime, setDisplayTime] = useState<boolean>(props.value)
+    const [value, setValue] = useState(props.value)
 
-    function handleYesNoChange(newDisplayTime: string) {
+    function handleYesNoChange(newValue: string) {
         // setDisplayTime(newDisplayTime)
-        props.handleChange(newDisplayTime)
+        setValue(newValue)
+        props.handleChange(newValue)
     }
     return (
         <>
             <div >
-                <ToggleButtonGroup color="info" value={props.value} size="small">
+                <ToggleButtonGroup color="info" value={value} size="small">
 
 
                     <ToggleButton

@@ -1,5 +1,7 @@
 'use client'
 import React, { use, useState } from "react"
+import { useDebouncedCallback } from "use-debounce";
+import { createClient } from "@/utils/supabase/client";
 // import MUI components
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -11,6 +13,7 @@ import { ClockType } from "@/app/lib/interfaces/styling-interfaces";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import utc from 'dayjs/plugin/utc';
 
 // import components
 import ColorSelector from "../../inputs/color-selector/color-selector";
@@ -25,9 +28,17 @@ import useStore from "@/app/lib/hooks/useStore";
 import { useTranslation } from "react-i18next";
 
 import dayjs, { Dayjs } from "dayjs";
+import { useParams } from "next/navigation";
+
+dayjs.extend(utc)
+
+//TODO: function resetToDefault need to update database
+
 
 export default function Styling() {
-
+    const supabase = createClient()
+    const { id } = useParams()
+    const { t } = useTranslation()
     const title = useStore(useStylingStore, (state: any) => state.title) === true ? "Yes" : "No"
     const startTime = useStylingStore((state: any) => state.startTime)
     const endTime = useStylingStore((state: any) => state.endTime)
@@ -39,23 +50,41 @@ export default function Styling() {
     const COLORS = useThemeStore((state: any) => state.theme.COLORS)
     const setStartTime = useStylingStore((state: any) => state.setStartTime)
     const setEndTime = useStylingStore((state: any) => state.setEndTime)
-    const { t } = useTranslation()
 
+    let timeoutTitleId: ReturnType<typeof setTimeout>;
+    let timeoutStartTimeId: ReturnType<typeof setTimeout>;
+    let timeoutEndTimeId: ReturnType<typeof setTimeout>;
+    let timeoutBackgroundColorId: ReturnType<typeof setTimeout>;
+    let timeoutHeaderColorId: ReturnType<typeof setTimeout>;
+    let timeoutClockTypeId: ReturnType<typeof setTimeout>;
+    let timeoutDisplayTimeId: ReturnType<typeof setTimeout>;
 
-    function handleTitleChange(value: string) {
-        let title;
-        if (value === "Yes") {
-            title = true
-        }
-        else {
-            title = false
-        }
+    async function handleTitleChange(value: string) {
+
+        let title = value === "Yes"
         useStylingStore.setState({ title: title })
-        // setTitle(event.target.value)
+
+
+        if (timeoutTitleId) {
+            clearTimeout(timeoutTitleId)
+        }
+
+        timeoutTitleId = setTimeout(async () => {
+            const { data, error } = await supabase.from('styling').update({ title: title }).eq('timetable_id', id).select() // only run this if no change in 2 seconds
+            if (error) {
+                console.log('Update failed: ', error)
+                //TODO: Add error handling
+            } else {
+                console.log('Update succeeded: ', data)
+                //TODO: Add success handling
+
+            }
+        }, 2000)
+
     }
 
     function validateStartTimeEndTime() {
-        if (startTime.isAfter(endTime)) {
+        if (dayjs.utc(startTime).isAfter(endTime)) {
             return false
         }
         return true
@@ -64,6 +93,22 @@ export default function Styling() {
     function handleStartTimeChange(value: Dayjs | null) {
         if (value && validateStartTimeEndTime()) {
             setStartTime(value)
+
+            if (timeoutStartTimeId) {
+                clearTimeout(timeoutStartTimeId)
+            }
+
+            timeoutStartTimeId = setTimeout(async () => {
+                // console.log('stylingHandleStartTimeChange: ', JSON.stringify(value))
+
+                const { data, error } = await supabase.from('styling').update({ startTime: JSON.stringify(value) }).eq('timetable_id', id).select() // only run this if no change in 2 seconds
+                if (error) {
+                    console.log('Update failed: ', error)
+                } else {
+                    console.log('Update succeeded: ', data)
+                }
+            }, 2000)
+
         }
     }
 
@@ -71,32 +116,96 @@ export default function Styling() {
         if (value && validateStartTimeEndTime()) {
             setEndTime(value)
         }
+
+        if (timeoutEndTimeId) {
+            clearTimeout(timeoutEndTimeId)
+        }
+
+        timeoutEndTimeId = setTimeout(async () => {
+            const { data, error } = await supabase.from('styling').update({ endTime: JSON.stringify(value) }).eq('timetable_id', id).select() // only run this if no change in 2 seconds
+            if (error) {
+                console.log('Update failed: ', error)
+            } else {
+                console.log('Update succeeded: ', data)
+            }
+        }, 2000)
     }
 
     function handleBackgroundColorChange(value: string) {
         // setBackgroundColor(value)
         useStylingStore.setState({ backgroundColor: value })
+
+        if (timeoutBackgroundColorId) {
+            clearTimeout(timeoutBackgroundColorId)
+        }
+
+        timeoutBackgroundColorId = setTimeout(async () => {
+
+            const { data, error } = await supabase.from('styling').update({ backgroundColor: value }).eq('timetable_id', id).select() // only run this if no change in 2 seconds
+            if (error) {
+                console.log('Update failed: ', error)
+            } else {
+                console.log('Update succeeded: ', data)
+            }
+        }, 1000)
     }
 
     function handleHeaderColorChange(value: string) {
         // setHeaderColor(value)
         useStylingStore.setState({ headerColor: value })
+
+        if (timeoutHeaderColorId) {
+            clearTimeout(timeoutHeaderColorId)
+        }
+
+        timeoutHeaderColorId = setTimeout(async () => {
+
+            const { data, error } = await supabase.from('styling').update({ headerColor: value }).eq('timetable_id', id).select() // only run this if no change in 2 seconds
+            if (error) {
+                console.log('Update failed: ', error)
+            } else {
+                console.log('Update succeeded: ', data)
+            }
+        }, 1000)
     }
 
     function handleClockTypeChange(value: ClockType) {
         // setClockType(value)
         useStylingStore.setState({ clockType: value })
+
+        if (timeoutClockTypeId) {
+            clearTimeout(timeoutClockTypeId)
+        }
+
+        timeoutClockTypeId = setTimeout(async () => {
+
+            const { data, error } = await supabase.from('styling').update({ clockType: value }).eq('timetable_id', id).select() // only run this if no change in 2 seconds
+            if (error) {
+                console.log('Update failed: ', error)
+            } else {
+                console.log('Update succeeded: ', data)
+            }
+        }, 1000)
     }
 
     function handleDisplayTimeChange(value: string) {
-        let displayTime;
-        if (value === "Yes") {
-            displayTime = true
-        }
-        else {
-            displayTime = false
-        }
+        let displayTime = value === "Yes"
         useStylingStore.setState({ displayTime: displayTime })
+
+        if (timeoutDisplayTimeId) {
+            clearTimeout(timeoutDisplayTimeId)
+        }
+
+        timeoutDisplayTimeId = setTimeout(async () => {
+
+            const { data, error } = await supabase.from('styling').update({ displayTime: displayTime }).eq('timetable_id', id).select() // only run this if no change in 2 seconds
+            if (error) {
+                console.log('Update failed: ', error)
+            } else {
+                console.log('Update succeeded: ', data)
+            }
+        }, 1000)
+
     }
 
     return (
@@ -132,11 +241,12 @@ export default function Styling() {
                                 </th>
                                 <td>
                                     <DesktopTimePicker
-                                        value={dayjs(startTime)}
-                                        maxTime={dayjs(endTime)}
+                                        value={dayjs.utc(startTime)}
+                                        maxTime={dayjs.utc(endTime)}
                                         minutesStep={60}
                                         skipDisabled={true}
                                         onChange={handleStartTimeChange}
+                                        timezone="UTC"
                                         sx={{ m: 1 }} />
                                 </td>
                             </tr>
@@ -147,14 +257,17 @@ export default function Styling() {
                                 <td>
 
                                     <DesktopTimePicker
-                                        value={dayjs(endTime)}
-                                        minTime={dayjs(startTime)}
+                                        value={dayjs.utc(endTime)}
+                                        minTime={dayjs.utc(startTime)}
                                         minutesStep={60}
                                         skipDisabled={true}
                                         onChange={handleEndTimeChange}
+                                        timezone="UTC"
                                         sx={{ m: 1 }} />
 
-                                    {dayjs(startTime).isAfter(endTime) && <Typography variant="caption" color="error">Start time must be before end time.</Typography>}
+                                    {/* Why is the value shifted by 4 hours? */}
+
+                                    {dayjs.utc(startTime).isAfter(endTime) && <Typography variant="caption" color="error">Start time must be before end time.</Typography>}
                                 </td>
                             </tr>
                             <tr>

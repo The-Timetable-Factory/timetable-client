@@ -1,4 +1,8 @@
 import dayjs, { Dayjs } from 'dayjs';
+import { v4 } from 'uuid';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc)
 
 export interface daysSelection {
     mon: boolean,
@@ -11,6 +15,7 @@ export interface daysSelection {
 }
 
 export interface meetingTime {
+    id: string,
     courseType: string,
     location: string,
     startTime: Dayjs,
@@ -56,10 +61,11 @@ const initialDaysSelection: daysSelection = {
 
 export function generateEmptyMeetingTime() {
     const emptyMeetingTime = {
+        id: v4(),
         courseType: "",
         location: "",
-        startTime: dayjs('2022-04-17T09:00'),
-        endTime: dayjs('2022-04-17T11:00'),
+        startTime: dayjs.utc('2022-04-17T09:00'),
+        endTime: dayjs.utc('2022-04-17T11:00'),
         days: initialDaysSelection
     }
 

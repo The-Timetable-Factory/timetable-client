@@ -4,6 +4,8 @@ import { useDisplayStore } from '@/app/lib/store/display-store';
 import { ClockType } from '@/app/lib/interfaces/styling-interfaces';
 import style from './course-grid.module.css'
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
 
 interface CourseGridProps extends CourseGridInfos {
     top: number;
@@ -20,9 +22,6 @@ export default function CourseGrid(props: CourseGridProps) {
     // const courseGridHeight = displaySettingsStore((state: any) => state.courseGridHeight)
     const clockType = useStylingStore((state: any) => state.clockType)
     const display = useDisplayStore((state: any) => state.display)
-
-    console.log('ClockType ' + ClockType.TWELVE_HOUR + ' from interface')
-    console.log('clockType ' + clockType + ' from store')
 
     function calculateHeight() {
         const rowspan = props.rowspan ? props.rowspan : 1
@@ -44,12 +43,12 @@ export default function CourseGrid(props: CourseGridProps) {
             {displayTime &&
                 (display === "iphone" ?
                     <>
-                        <p className={`${style.courseInput}`}>{dayjs(props.startTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
+                        <p className={`${style.courseInput}`}>{dayjs.utc(props.startTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
                         <p className={`${style.courseInput} ${style.label}`}>  - </p>
-                        <p className={`${style.courseInput}`}> {dayjs(props.endTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
+                        <p className={`${style.courseInput}`}> {dayjs.utc(props.endTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
                     </> :
                     <>
-                        <p className={`${style.courseInput}`}>{dayjs(props.startTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)} - {dayjs(props.endTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
+                        <p className={`${style.courseInput}`}>{dayjs.utc(props.startTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)} - {dayjs.utc(props.endTime).format(`${clockType === ClockType.TWELVE_HOUR ? "hh:mm A" : "HH:mm"}`)}</p>
                     </>)
 
             }

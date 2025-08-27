@@ -19,6 +19,8 @@ import useStore from "@/app/lib/hooks/useStore";
 import { useCoursesStore } from "@/app/lib/store/courses-store";
 import { useTitleStore } from "@/app/lib/store/title-store";
 
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
 
 
 interface TimetableProps {
@@ -30,9 +32,9 @@ function generateHours(startTime: Dayjs, endTime: Dayjs) {
     const hours = [];
 
     let tempTime = startTime;
-    while (dayjs(tempTime).isBefore(endTime) || tempTime.isSame(endTime)) {
+    while (dayjs.utc(tempTime).isBefore(endTime) || dayjs.utc(tempTime).isSame(endTime)) {
         hours.push(tempTime);
-        tempTime = dayjs(tempTime).add(1, "hour")
+        tempTime = dayjs.utc(tempTime).add(1, "hour")
     }
 
     return hours
@@ -106,10 +108,10 @@ export default function Timetable(props: TimetableProps) {
                     </tr>
 
                     {hours.map(time => (
-                        <tr className={TimetableCSS.tr} key={dayjs(time).hour()} style={{ height: courseGridHeight }}>
-                            <th className={TimetableCSS.th} style={{ backgroundColor: headerColor, width: 32 }}>{clockType === ClockType.TWELVE_HOUR ? dayjs(time).format("hh:mm \n A") : time.format("HH:mm")}</th>
+                        <tr className={TimetableCSS.tr} key={dayjs.utc(time).hour()} style={{ height: courseGridHeight }}>
+                            <th className={TimetableCSS.th} style={{ backgroundColor: headerColor, width: 32 }}>{clockType === ClockType.TWELVE_HOUR ? dayjs.utc(time).format("hh:mm \n A") : time.format("HH:mm")}</th>
                             {Object.keys(timetable).map((day) => {
-                                const timetableHour = timetable[day as keyof timetableInfos]![dayjs(time).hour() as unknown as keyof timetableHours];
+                                const timetableHour = timetable[day as keyof timetableInfos]![dayjs.utc(time).hour() as unknown as keyof timetableHours];
                                 return (
                                     timetableHour &&
                                     <TimetableTd

@@ -1,6 +1,8 @@
 import { createClient } from '@/utils/supabase/server'
 import dayjs from 'dayjs'
 import { courseInfo } from '@/app/lib/interfaces/courses-interfaces'
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
 
 
 export async function fetchTimetableData(id: string) {
@@ -40,8 +42,8 @@ export async function fetchTimetableData(id: string) {
                     sat: days_selection[5],
                     sun: days_selection[6],
                 },
-                startTime: dayjs(meetingTime.startTime),
-                endTime: dayjs(meetingTime.endTime),
+                startTime: dayjs.utc(meetingTime.startTime),
+                endTime: dayjs.utc(meetingTime.endTime),
             }))
 
             return {
@@ -130,8 +132,8 @@ export async function fetchTimetableData(id: string) {
         const { id, timetable_id, created_at, startTime, endTime, ...restStyling } = styling
         styling = {
             ...restStyling,
-            startTime: dayjs(startTime),
-            endTime: dayjs(endTime),
+            startTime: dayjs.utc(startTime),
+            endTime: dayjs.utc(endTime),
         }
     }
 

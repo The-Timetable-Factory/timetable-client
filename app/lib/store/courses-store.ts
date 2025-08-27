@@ -3,10 +3,12 @@ import dayjs from 'dayjs'
 import { courseInfo } from '@/app/lib/interfaces/courses-interfaces'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { meetingTime } from '@/app/lib/interfaces/courses-interfaces'
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
 
 interface CoursesState {
     courses: courseInfo[],
-    test: (newCourse: courseInfo) => void,
+    upsertCourse: (newCourse: courseInfo) => void,
     removeCourse: (courseId: string) => void
     setCourses: (newCourses: courseInfo[]) => void
 }
@@ -14,7 +16,7 @@ interface CoursesState {
 export const useCoursesStore = create<CoursesState>()(
     persist((set, get) => ({
         courses: [],
-        test: (newCourse: courseInfo) => {
+        upsertCourse: (newCourse: courseInfo) => {
             if (newCourse.existed) {
                 console.log('existed')
                 set((state: any) => {
@@ -51,16 +53,13 @@ export const useCoursesStore = create<CoursesState>()(
             storage: createJSONStorage(() => localStorage, {
                 reviver: (key, value: any) => {
                     if (value && value.type === 'dayjs') {
-                        console.log('dayjs reviver')
-                        console.log(value.value)
-                        return dayjs(value.value)
+                        return dayjs.utc(value.value)
                     }
                     return value
 
                 },
                 replacer: (key, value) => {
                     if (key === 'startTime' || key === 'endTime') {
-                        console.log('startTime endTime replacer' + value)
                         return { type: 'dayjs', value: value }
                     }
 
