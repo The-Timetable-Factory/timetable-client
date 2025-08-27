@@ -1,8 +1,10 @@
 
 import LandingPage from "../ui/landing-page";
-import { auth } from "../../auth"
+// import { auth } from "../../auth";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/app/translation-provider";
+
+export const dynamic = 'force-dynamic'; // Force dynamic rendering
 
 const i18nNamespaces = ["landing-page"];
 
