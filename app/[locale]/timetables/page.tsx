@@ -16,7 +16,6 @@ export default function Page() {
     // Fetch the user's timetable titles
     const timetables = fetchTimetableTitles("1")
 
-
     const outerDivStyle = {
         padding: window.innerWidth > 600 ? "1rem 4rem" : "1rem 2rem",
     }
