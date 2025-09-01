@@ -23,8 +23,8 @@ export function getDisplayConstant(device: string, widget: boolean) {
     return constantDevice
 }
 
-export function getScale(SCALE: { phone: number, tablet: number }, WIDTH: number): number {
-    const deviceWidth = window.innerWidth;
+export function getScale(SCALE: { phone: number, tablet: number }, deviceWidth: number, WIDTH: number): number {
+    // const deviceWidth = window.innerWidth;
 
     if (deviceWidth < 600) {
         return (0.96 * deviceWidth) / WIDTH

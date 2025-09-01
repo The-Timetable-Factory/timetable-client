@@ -2,7 +2,7 @@
 import { PropsWithChildren, useState, useEffect } from "react"
 import { useDisplayStore } from "@/app/lib/store/display-store"
 import { useStylingStore } from "@/app/lib/store/styling-store"
-import { getDisplayConstant, getScale } from "@/app/lib/utils/developer-display"
+import { getDisplayConstant } from "@/app/lib/utils/developer-display"
 import { isColorDark } from "@/app/lib/utils/color"
 import useStore from "@/app/lib/hooks/useStore"
 import dayjs from "dayjs"

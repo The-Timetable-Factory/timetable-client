@@ -39,7 +39,7 @@ export default function SaveAsPDF() {
     function revertDownloadState() {
         for (let i = 0; i < numberOfPages; i++) {
             const deviceDiv = document.getElementById(`${display}${i + 1}`);
-            deviceDiv!.style.transform = `scale(${getScale(SCALE, WIDTH)})`;
+            deviceDiv!.style.transform = `scale(${getScale(SCALE, window.innerWidth, WIDTH)})`;
         }
     }
 
