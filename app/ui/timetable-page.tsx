@@ -88,7 +88,7 @@ export default function TimetablePage(props: TimetablePageProps) {
                     display="flex"
                     sx={{ overflow: "visible" }}
                 >
-                    {/* <TimetableCarousel /> */}
+                    <TimetableCarousel />
 
                 </Grid>
 
