@@ -1,9 +1,9 @@
 // 'use client'
 import React from "react";
 // import { useDarkMode } from "../../../ui/context/dark-mode-context";
-import Grid from "@mui/material/Grid";
-import Menu from '../../../ui/menu/menu';
-import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetable-carousel";
+// import Grid from "@mui/material/Grid";
+// import Menu from '../../../ui/menu/menu';
+// import TimetableCarousel from "@/app/ui/main-content/timetable-carousel/timetable-carousel";
 import initTranslations from "@/app/i18n";
 import TranslationsProvider from "@/app/translation-provider";
 import TimetablePage from "@/app/ui/timetable-page";
