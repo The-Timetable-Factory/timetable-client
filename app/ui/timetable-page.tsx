@@ -96,7 +96,7 @@ export default function TimetablePage(props: TimetablePageProps) {
                 // sx={{ borderRadius: "10px 0px 0px 10px", borderStyle: "none none none solid", borderColor: `${darkMode ? "#232323" : "#C2B8A3"}`, borderWidth: "1px" }}
                 >
                     {/* I want to make this grid scrollable */}
-                    <Menu />
+                    {/* <Menu /> */}
                 </Grid>
             </Grid>
 
