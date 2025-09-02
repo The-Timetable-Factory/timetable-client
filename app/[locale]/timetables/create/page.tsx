@@ -19,10 +19,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             namespaces={i18nNamespaces}
             locale={locale}
             resources={resources}>
-                <div>
-                    
-                </div>
-            {/* <TimetablePage /> */}
+            <TimetablePage />
         </TranslationsProvider>
     )
 }
