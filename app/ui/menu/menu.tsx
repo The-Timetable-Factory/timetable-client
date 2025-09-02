@@ -32,7 +32,7 @@ export default function Menu() {
 
                 <PickADisplay />
 
-                {/* <SelectATheme /> */}
+                <SelectATheme />
 
                 {/* <AddACourse /> */}
 
