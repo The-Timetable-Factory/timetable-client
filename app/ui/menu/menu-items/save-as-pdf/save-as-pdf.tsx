@@ -37,11 +37,17 @@ export default function SaveAsPDF() {
     }
 
     function revertDownloadState() {
+        if (typeof window === 'undefined') return; // ✅ Prevent SSR crash
+
         for (let i = 0; i < numberOfPages; i++) {
             const deviceDiv = document.getElementById(`${display}${i + 1}`);
-            deviceDiv!.style.transform = `scale(${getScale(SCALE, window.innerWidth, WIDTH)})`;
+            if (deviceDiv) {
+                const scale = getScale(SCALE, window.innerWidth, WIDTH);
+                deviceDiv.style.transform = `scale(${scale})`;
+            }
         }
     }
+
 
 
     async function handleSaveAsPDF() {
