@@ -43,6 +43,7 @@ export default function DownloadImage() {
     }
 
     async function handleDownload() {
+        if (typeof window === 'undefined') return; // prevent SSR crash
         const parser = new UAParser(window.navigator.userAgent);
         const isLaptop = parser.getDevice().type !== "mobile" && parser.getDevice().type !== "tablet";
 
