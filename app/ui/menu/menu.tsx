@@ -32,11 +32,11 @@ export default function Menu() {
 
                 <PickADisplay />
 
-                <SelectATheme />
+                {/* <SelectATheme /> */}
 
-                <AddACourse />
+                {/* <AddACourse /> */}
 
-                {
+                {/* {
                     courses.map((course: courseInfo) => {
                         return (
                             <Collapsible
@@ -53,13 +53,13 @@ export default function Menu() {
                             </Collapsible>
                         )
                     })
-                }
+                } */}
 
-                <Styling />
+                {/* <Styling /> */}
 
-                <DownloadImage />
+                {/* <DownloadImage /> */}
 
-                <SaveAsPDF />
+                {/* <SaveAsPDF /> */}
             </div>
         </>
     )
