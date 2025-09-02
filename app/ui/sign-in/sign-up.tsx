@@ -2,7 +2,7 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputAdornment from '@mui/material/InputAdornment';
 import { signIn } from 'next-auth/react'
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -75,7 +75,13 @@ export default function SignUp() {
     const [verifyPassword, setVerifyPassword] = useState<VerifyPassword>({ verifyPassword: '', status: VerifyPasswordStatus.NULL, error: '' });
     let signUpDisabled = username.status !== UsernameStatus.AVAILABLE || email.status !== EmailStatus.VALID || password.status !== PasswordStatus.IS_VALID || verifyPassword.status !== VerifyPasswordStatus.IS_VALID
     const { t } = useTranslation()
-    const redirectUrl = `${window.location.origin}/dashboard}`
+    const [redirectUrl, setRedirectUrl] = useState<string>("");
+
+    useEffect(() => {
+    if (typeof window !== "undefined") {
+        setRedirectUrl(`${window.location.origin}/dashboard`);
+    }
+    }, []);
 
 
     const handleUsernameChange = useDebouncedCallback(async (e: any) => {

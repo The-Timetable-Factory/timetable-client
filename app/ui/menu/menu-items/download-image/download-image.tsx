@@ -77,10 +77,13 @@ export default function DownloadImage() {
         }
     }
     function revertDownloadState() {
+        if (typeof window === 'undefined') return;
 
         for (let i = 0; i < numberOfPages; i++) {
             const deviceDiv = document.getElementById(`${display}${i + 1}`);
-            deviceDiv!.style.transform = `scale(${getScale(SCALE, window.innerWidth, WIDTH)})`;
+            if (deviceDiv) {
+                deviceDiv.style.transform = `scale(${getScale(SCALE, window.innerWidth, WIDTH)})`;
+            }
         }
     }
 
