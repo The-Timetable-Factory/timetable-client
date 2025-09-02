@@ -34,7 +34,7 @@ export default function Menu() {
 
                 <SelectATheme />
 
-                {/* <AddACourse /> */}
+                <AddACourse />
 
                 {/* {
                     courses.map((course: courseInfo) => {
