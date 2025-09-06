@@ -59,7 +59,7 @@ export default function Menu() {
 
                 <DownloadImage />
 
-                {/* <SaveAsPDF /> */}
+                <SaveAsPDF />
             </div>
         </>
     )
