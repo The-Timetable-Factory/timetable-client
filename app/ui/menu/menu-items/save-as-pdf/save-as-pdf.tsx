@@ -8,7 +8,7 @@ import { useDisplayStore } from "@/app/lib/store/display-store";
 import { usePagesStore } from "@/app/lib/store/pages-store";
 import { getDisplayConstant } from "@/app/lib/utils/developer-display";
 import { getScale } from "@/app/lib/utils/developer-display";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import { generateBase64Image } from "@/app/lib/utils/download";
 import { UAParser } from "ua-parser-js"
@@ -22,8 +22,15 @@ export default function SaveAsPDF() {
     const { PDF_SETTINGS, SCALE, WIDTH } = getDisplayConstant(display, widgets)
     const [isHovered, setIsHovered] = useState(false)
 
-    const parser = new UAParser(window.navigator.userAgent);
-    const isLaptop = parser.getDevice().type !== "mobile" && parser.getDevice().type !== "tablet";
+    const [isLaptop, setIsLaptop] = useState(true); // Assume laptop by default
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const parser = new UAParser(window.navigator.userAgent);
+            const deviceType = parser.getDevice().type;
+            setIsLaptop(deviceType !== "mobile" && deviceType !== "tablet");
+        }
+    }, []);
 
     const divStyle = {
         boxShadow: isHovered ? `2px 2px 20px #C2B8A3, -2px 2px 20px #C2B8A3` : "",
