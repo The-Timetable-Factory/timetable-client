@@ -57,7 +57,7 @@ export default function Menu() {
 
                 <Styling />
 
-                {/* <DownloadImage /> */}
+                <DownloadImage />
 
                 {/* <SaveAsPDF /> */}
             </div>
