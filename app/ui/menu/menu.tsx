@@ -36,7 +36,7 @@ export default function Menu() {
 
                 <AddACourse />
 
-                {/* {
+                {
                     courses.map((course: courseInfo) => {
                         return (
                             <Collapsible
@@ -53,7 +53,7 @@ export default function Menu() {
                             </Collapsible>
                         )
                     })
-                } */}
+                }
 
                 {/* <Styling /> */}
 
