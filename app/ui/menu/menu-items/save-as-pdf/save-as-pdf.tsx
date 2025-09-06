@@ -1,3 +1,5 @@
+'use client'
+
 import { useDarkMode } from "@/app/ui/context/dark-mode-context";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
