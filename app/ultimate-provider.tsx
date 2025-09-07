@@ -20,6 +20,8 @@ export default function UltimateProvider({ children }: { children: React.ReactNo
                 {children}
             </ThemeProvider>
         </DarkMode.Provider>
+
+        
         // </I18nextProvider>
     )
 }

@@ -8,6 +8,8 @@ import { SessionProvider } from "next-auth/react"
 import initTranslations from '../i18n';
 import i18nConfig from '@/i18nConfig';
 import { dir } from 'i18next';
+import { Analytics } from '@vercel/analytics/next';
+
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -110,6 +112,7 @@ export default async function RootLayout({
             {children}
           </main>
           <Footer />
+          <Analytics />
         </body>
       </UltimateProvider>
       {/* </SessionProvider> */}
