@@ -4,7 +4,7 @@ export function getTheme(theme: string) {
     switch (theme) {
         case "Milk Tea":
             return MILK_TEA
-        case "Sesame":
+        case "sesame":
             return SESAME
         default:
             return MILK_TEA

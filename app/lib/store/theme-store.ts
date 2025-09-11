@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { ThemeState } from "@/app/lib/interfaces/theme-interfaces";
-import { MILK_TEA } from '../constants/theme-constants'
+import { MILK_TEA, SESAME } from '../constants/theme-constants'
 import { getTheme } from '../utils/styling-theme';
 import { useStylingStore } from './styling-store'
 import { useCoursesStore } from './courses-store';
@@ -38,6 +38,7 @@ export const useThemeStore = create((set) => ({
         localStorage.setItem('theme', newTheme)
 
         const theme = getTheme(newTheme)
+        console.log("setThemeColors: ", theme)
         set({ theme: theme })
 
         const courses = useCoursesStore.getState().courses
