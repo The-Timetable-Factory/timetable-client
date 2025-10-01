@@ -9,6 +9,7 @@ import initTranslations from '../i18n';
 import i18nConfig from '@/i18nConfig';
 import { dir } from 'i18next';
 import { Analytics } from '@vercel/analytics/next';
+import { dmSerifDisplay, quicksand } from "../ui/fonts";
 
 
 export const viewport: Viewport = {
@@ -100,7 +101,7 @@ export default async function RootLayout({
   // const { t, resources } = await initTranslations(locale, i18nNamespaces)
   return (
 
-    <html lang={locale} dir={dir(locale)} suppressHydrationWarning>
+    <html lang={locale} dir={dir(locale)} suppressHydrationWarning className={`${dmSerifDisplay.variable} ${quicksand.variable}`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* <SessionProvider session={session}> */}
 
