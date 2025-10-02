@@ -1,3 +1,5 @@
+'use client';
+
 import { PaletteColorOptions, createTheme } from '@mui/material/styles';
 import { DM_Serif_Display, Quicksand } from "next/font/google";
 import { dmSerifDisplay } from './ui/fonts';
