@@ -43,15 +43,15 @@ export function getTheme(darkMode: boolean) {
         },
         typography: {
             h1: {
-                fontFamily: "'DM Serif Display', serif",
+                fontFamily: "var(--font-dm-serif-display)",
                 color: darkMode ? "#DAD6CE" : "black"
             },
             h3: {
-                fontFamily: "'DM Serif Display', serif",
+                fontFamily: "var(--font-dm-serif-display)",
                 color: darkMode ? "#DAD6CE" : "black"
             },
             h4: {
-                fontFamily: "'DM Serif Display', serif",
+                fontFamily: "var(--font-dm-serif-display)",
                 color: darkMode ? "#DAD6CE" : "black",
                 fontSize: "2rem"
             },
