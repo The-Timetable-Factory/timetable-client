@@ -1,5 +1,6 @@
 import { PaletteColorOptions, createTheme } from '@mui/material/styles';
 import { DM_Serif_Display, Quicksand } from "next/font/google";
+import { dmSerifDisplay } from './ui/fonts';
 
 declare module '@mui/material/styles' {
     interface TypographyVariants {
@@ -43,11 +44,11 @@ export function getTheme(darkMode: boolean) {
         },
         typography: {
             h1: {
-                fontFamily: "var(--font-dm-serif-display)",
+                fontFamily: dmSerifDisplay.variable,
                 color: darkMode ? "#DAD6CE" : "black"
             },
             h3: {
-                fontFamily: "var(--font-dm-serif-display)",
+                fontFamily: dmSerifDisplay.variable,
                 color: darkMode ? "#DAD6CE" : "black"
             },
             h4: {
