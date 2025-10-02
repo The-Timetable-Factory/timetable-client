@@ -48,7 +48,7 @@ export function getTheme(darkMode: boolean) {
                 color: darkMode ? "#DAD6CE" : "black"
             },
             h3: {
-                fontFamily: dmSerifDisplay.variable,
+                fontFamily: dmSerifDisplay.style.fontFamily,
                 color: darkMode ? "#DAD6CE" : "black"
             },
             h4: {
